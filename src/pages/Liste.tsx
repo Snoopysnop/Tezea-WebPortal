@@ -5,8 +5,10 @@ import { Container, Row, Col, Table, InputGroup, Button, Form } from 'react-boot
 const Liste: React.FC = () => {
 
   enum TaskStatus {
-    Active = "active",
-    NotActive = "notActive"
+    toComplete = "toComplete",
+    inProgress = "inProgress",
+    Terminate = "terminate",
+    Archiver = "archiver",
   }
 
   interface Task {
@@ -20,18 +22,73 @@ const Liste: React.FC = () => {
   }
 
   const tasks: Task[] = [
-    { id: 1, name: "Chantier 1", date: "10/10/2024", startHours: "5PM", endHour: "9PM", address: "2 Fox Street, NY", status: TaskStatus.Active },
-    { id: 2, name: "Chantier 2", date: "11/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: TaskStatus.Active },
-    { id: 3, name: "Chantier 3", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: TaskStatus.NotActive }
-  ]
+    { id: 1, name: "Chantier 1", date: "10/10/2024", startHours: "5PM", endHour: "9PM", address: "2 Fox Street, NY", status: TaskStatus.toComplete },
+    { id: 2, name: "Chantier 2", date: "11/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: TaskStatus.inProgress },
+    { id: 3, name: "Chantier 3", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: TaskStatus.Archiver },
+    { id: 4, name: "Chantier Test 1", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: TaskStatus.Terminate },
+    { id: 5, name: "Chantier Test 2", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: TaskStatus.Terminate },
+    { id: 6, name: "Chantier Test 3", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: TaskStatus.Terminate },
+    { id: 4, name: "Chantier Test 14", date: "10/11/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: TaskStatus.Archiver },
+    { id: 5, name: "Chantier Test 24", date: "10/11/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: TaskStatus.Archiver },
+    { id: 6, name: "Chantier Test 35", date: "10/11/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: TaskStatus.Archiver },
+  ];
 
-  const SquareDiv = () => {
+  const SquareDiv: React.FC<{ taskName: string }> = ({ taskName }) => {
     return (
-      <div className="square-container">
-        <div style={{ width: '200px', height: '50px', backgroundColor: 'red', borderRadius: '10px' }}></div>
+      <div className="square-container" style={{ marginBottom: '20px' }}>
+        <div style={{ width: '120px', height: '120px', backgroundColor: 'grey', borderRadius: '10px' }}>
+          <p>{taskName}</p>
+        </div>
       </div>
-    )
-  }
+    );
+  };
+
+  const renderTaskRowsByDate = (tasks: Task[]) => {
+    // Grouper les tâches par date
+    const tasksByDate: { [key: string]: Task[] } = {};
+    tasks.forEach(task => {
+      if (!tasksByDate[task.date]) {
+        tasksByDate[task.date] = [];
+      }
+      tasksByDate[task.date].push(task);
+    });
+
+    // Créer les lignes pour chaque date avec max 2 éléments par ligne
+    const rows: JSX.Element[] = [];
+    for (const date in tasksByDate) {
+      const tasksForDate = tasksByDate[date];
+      const rowsForDate: JSX.Element[] = [];
+
+      for (let i = 0; i < tasksForDate.length; i += 2) {
+        rowsForDate.push(
+          <Row key={`${date}_${i}`}>
+            <Col>
+              <SquareDiv taskName={tasksForDate[i].name} />
+            </Col>
+            {i + 1 < tasksForDate.length && (
+              <Col>
+                <SquareDiv taskName={tasksForDate[i + 1].name} />
+              </Col>
+            )}
+          </Row>
+        );
+      }
+
+      rows.push(
+        <React.Fragment key={date}>
+          <tr>
+            <td colSpan={4} className="text-center"><b>{date}</b></td>
+          </tr>
+          <tr>
+            <td colSpan={4}>
+              {rowsForDate}
+            </td>
+          </tr>
+        </React.Fragment>
+      );
+    }
+    return rows;
+  };
 
   return (
     <Container>
@@ -43,52 +100,29 @@ const Liste: React.FC = () => {
               aria-label="Example text with button addon"
               aria-describedby="basic-addon1"
             />
-            <SquareDiv/>
+
             <Button variant="outline-secondary" id="button-addon1">
               Button
             </Button>
-
           </InputGroup>
         </Col>
       </Row>
 
-      <Row className="mt-4">
+      <Row className="mt-4 col-lg-12">
         <Col>
-          <Table className="table table-transparent">
-            <thead>
-              <tr>
-                <th>
-                  <Row className="justify-content-between">
-                    <Col><div className="square-container"></div></Col>
-                    <Col><div className="square-container"></div></Col>
-                  </Row>
-                </th>
-                <th>
-                  <Row className="justify-content-between">
-                    <Col><div className="square-container"></div></Col>
-                    <Col><div className="square-container"></div></Col>
-                  </Row>
-                </th>
-                <th>
-                  <Row className="justify-content-between">
-                    <Col><div className="square-container"></div></Col>
-                    <Col><div className="square-container"></div></Col>
-                  </Row>
-                </th>
-                <th>
-                  <Row className="justify-content-between">
-                    <Col><div className="square-container"></div></Col>
-                    <Col><div className="square-container"></div></Col>
-                  </Row>
-                </th>
-              </tr>
-            </thead>
+          <Table>
             <tbody>
               <tr>
-                <td>A compléter</td>
-                <td>En cours</td>
-                <td>Terminer</td>
-                <td>Archiver</td>
+                <th>A compléter</th>
+                <th>En cours</th>
+                <th>Terminer</th>
+                <th>Archiver</th>
+              </tr>
+              <tr>
+                <td>{renderTaskRowsByDate(tasks.filter(task => task.status === TaskStatus.toComplete))}</td>
+                <td>{renderTaskRowsByDate(tasks.filter(task => task.status === TaskStatus.inProgress))}</td>
+                <td>{renderTaskRowsByDate(tasks.filter(task => task.status === TaskStatus.Terminate))}</td>
+                <td>{renderTaskRowsByDate(tasks.filter(task => task.status === TaskStatus.Archiver))}</td>
               </tr>
             </tbody>
           </Table>
@@ -96,6 +130,6 @@ const Liste: React.FC = () => {
       </Row>
     </Container>
   );
-}
+};
 
 export default Liste;
