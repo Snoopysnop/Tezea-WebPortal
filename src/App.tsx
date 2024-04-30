@@ -10,29 +10,14 @@ import Liste from './pages/Liste';
 function App() {
   return (
     <Router>
-      <div className="App">
-        <div className="sidebar">
-          {/* Contenu de la barre latérale */}
-          <ul>
-            <li><Link to="/liste">Liste</Link></li>
-            <li><Link to="/incidents">Incidents</Link></li>
-            <li><Link to="/creer">Créer</Link></li>
-            <li><Link to="/parametres">Paramètres</Link></li>
-          </ul>
-        </div>
-        <div className="content">
-          {/* Contenu principal */}
-          <header className="App-header">
             <Routes>
+            <Route path="/incidents" element={<Incidents />} />
+
               <Route path="/liste" element={<Liste />} />
-              <Route path="/incidents" element={<Incidents />} />
               <Route path="/creer" element={<Creer />} />
               <Route path="/parametres" element={<Parametres />} />
             </Routes>
             <Test />
-          </header>
-        </div>
-      </div>
     </Router>
   );
 }
