@@ -8,8 +8,13 @@ const WorkSitesListStatusPage: React.FC = () => {
   
   const tasks: Task[] = [
     { id: 1, name: "Chantier 1", date: "10/10/2024", startHours: "5PM", endHour: "9PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Standby },
+    { id: 1, name: "Chantier 2", date: "10/10/2024", startHours: "5PM", endHour: "9PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Standby },
+    { id: 1, name: "Chantier 2", date: "10/10/2024", startHours: "5PM", endHour: "9PM", address: "2 Fox Street, NY", status: WorkSiteStatus.InProgress },
+
     { id: 2, name: "Chantier 2", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.InProgress },
     { id: 3, name: "Chantier 3", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Canceled },
+    { id: 3, name: "Chantier 3", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Canceled },
+
     { id: 4, name: "Chantier Test 1", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Done },
     { id: 5, name: "Chantier Test 2", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Done },
     { id: 6, name: "Chantier Test 3", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Done },
@@ -98,59 +103,115 @@ const WorkSitesListStatusPage: React.FC = () => {
   </Row>
 
   <Container className="mt-4">
-    <Table>
-      <thead>
-        <tr style={{ background: 'transparent' }}>
-          {selectedStatus.length > 0 && <th style={{ background: 'transparent' }}>Date</th>}
-          {selectedStatus.includes(WorkSiteStatus.Standby) && <th style={{ background: 'transparent' }}>A compléter</th>}
-          {selectedStatus.includes(WorkSiteStatus.InProgress) && <th style={{ background: 'transparent' }}>En cours</th>}
-          {selectedStatus.includes(WorkSiteStatus.Done) && <th style={{ background: 'transparent' }}>Terminé</th>}
-          {selectedStatus.includes(WorkSiteStatus.Canceled) && <th style={{ background: 'transparent' }}>Archivé</th>}
-        </tr>
-      </thead>
-      <tbody>
-        {Array.from(mapDateTasks.entries()).map(([date, tasks]) => (
-          tasks.some(task => selectedStatus.includes(task.status)) && // Vérifie s'il y a des tâches à afficher
-          <tr key={date}>
-            {selectedStatus.length > 0 && <td style={{ background: 'transparent' }}>{date}</td>}
-            {selectedStatus.includes(WorkSiteStatus.Standby) && (
-              <td style={{ background: 'transparent' }}>
+  <Table>
+    <thead>
+      <tr>
+        {selectedStatus.length > 0 && <th>Date</th>}
+        {selectedStatus.includes(WorkSiteStatus.Standby) && <th>A compléter</th>}
+        {selectedStatus.includes(WorkSiteStatus.InProgress) && <th>En cours</th>}
+        {selectedStatus.includes(WorkSiteStatus.Done) && <th>Terminé</th>}
+        {selectedStatus.includes(WorkSiteStatus.Canceled) && <th>Archivé</th>}
+      </tr>
+    </thead>
+    <tbody>
+      {Array.from(mapDateTasks.entries()).map(([date, tasks]) => (
+        tasks.some(task => selectedStatus.includes(task.status)) && // Vérifie s'il y a des tâches à afficher
+        <tr key={date}>
+          {selectedStatus.length > 0 && <td>{date}</td>}
+          {selectedStatus.includes(WorkSiteStatus.Standby) && (
+            <td>
+              <Row>
                 {tasks
                   .filter(task => task.status === WorkSiteStatus.Standby)
-                  .map(task => <TaskComponent id={task.id} name={task.name} date={task.date} startHours={task.startHours} endHour={task.endHour} address={task.address} status={task.status} category={Category.CreaPalette}/>)
-                }
-              </td>
-            )}
-            {selectedStatus.includes(WorkSiteStatus.InProgress) && (
-              <td style={{ background: 'transparent' }}>
+                  .map(task => (
+                    <Col key={task.id} lg={6}>
+                      <TaskComponent
+                        id={task.id}
+                        name={task.name}
+                        date={task.date}
+                        startHours={task.startHours}
+                        endHour={task.endHour}
+                        address={task.address}
+                        status={task.status}
+                        category={Category.CreaPalette}
+                      />
+                    </Col>
+                  ))}
+              </Row>
+            </td>
+          )}
+          {selectedStatus.includes(WorkSiteStatus.InProgress) && (
+            <td>
+              <Row>
                 {tasks
                   .filter(task => task.status === WorkSiteStatus.InProgress)
-                  .map(task =><TaskComponent id={task.id} name={task.name} date={task.date} startHours={task.startHours} endHour={task.endHour} address={task.address} status={task.status} category={Category.CreaPalette}/>)
-                }
-              </td>
-            )}
-            {selectedStatus.includes(WorkSiteStatus.Done) && (
-              <td style={{ background: 'transparent' }}>
+                  .map(task => (
+                    <Col key={task.id} lg={6}>
+                      <TaskComponent
+                        id={task.id}
+                        name={task.name}
+                        date={task.date}
+                        startHours={task.startHours}
+                        endHour={task.endHour}
+                        address={task.address}
+                        status={task.status}
+                        category={Category.CreaPalette}
+                      />
+                    </Col>
+                  ))}
+              </Row>
+            </td>
+          )}
+          {selectedStatus.includes(WorkSiteStatus.Done) && (
+            <td>
+              <Row>
                 {tasks
                   .filter(task => task.status === WorkSiteStatus.Done)
-                  .map(task => <TaskComponent id={task.id} name={task.name} date={task.date} startHours={task.startHours} endHour={task.endHour} address={task.address} status={task.status} category={Category.CreaPalette}/>)
-                }
-              </td>
-            )}
-            {selectedStatus.includes(WorkSiteStatus.Canceled) && (
-              <td style={{ background: 'transparent' }}>
+                  .map(task => (
+                    <Col key={task.id} lg={6}>
+                      <TaskComponent
+                        id={task.id}
+                        name={task.name}
+                        date={task.date}
+                        startHours={task.startHours}
+                        endHour={task.endHour}
+                        address={task.address}
+                        status={task.status}
+                        category={Category.CreaPalette}
+                      />
+                    </Col>
+                  ))}
+              </Row>
+            </td>
+          )}
+          {selectedStatus.includes(WorkSiteStatus.Canceled) && (
+            <td>
+              <Row>
                 {tasks
                   .filter(task => task.status === WorkSiteStatus.Canceled)
-                  .map(task => <TaskComponent id={task.id} name={task.name} date={task.date} startHours={task.startHours} endHour={task.endHour} address={task.address} status={task.status} category={Category.CreaPalette}/>)
-                }
-              </td>
-            )}
-          </tr>
-        ))}
+                  .map(task => (
+                    <Col key={task.id} lg={6}>
+                      <TaskComponent
+                        id={task.id}
+                        name={task.name}
+                        date={task.date}
+                        startHours={task.startHours}
+                        endHour={task.endHour}
+                        address={task.address}
+                        status={task.status}
+                        category={Category.CreaPalette}
+                      />
+                    </Col>
+                  ))}
+              </Row>
+            </td>
+          )}
+        </tr>
+      ))}
+    </tbody>
+  </Table>
+</Container>
 
-      </tbody>
-    </Table>
-  </Container>
 </Container>
 
 

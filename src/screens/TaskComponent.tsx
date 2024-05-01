@@ -19,7 +19,7 @@ type TaskProps = {
 const TaskComponent: React.FC<TaskProps> = ({ id, name, date, startHours, endHour, address, status, category }) => {
 
     return (
-        <Container style={{ borderColor: '#c2c2c2', borderStyle: 'solid', borderWidth: '2px', borderRadius: '10px', overflow: 'hidden' }}>
+        <Container style={{ borderColor: '#c2c2c2', borderStyle: 'solid', borderWidth: '2px', borderRadius: '10px', overflow: 'hidden', marginBottom: '10px'}}>
             <Row className='mb-3' style={{ backgroundColor: getStatusColor(status), height: '15px' }} />
             <Row>
                 <Col className='d-flex align-items-center' xs='auto'>
