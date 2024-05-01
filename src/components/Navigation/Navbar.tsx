@@ -1,8 +1,9 @@
-// Navbar.tsx
-import React from 'react';
+// Importez Link de react-router-dom
 import { Link } from 'react-router-dom';
 
-const Navbar: React.FC = () => {
+// Dans votre composant Navbar.tsx, remplacez les MenuItem qui contiennent des liens par des éléments Link
+
+function Navbar() {
   return (
     <nav>
       <ul>
