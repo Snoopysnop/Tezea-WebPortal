@@ -1,24 +1,25 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router} from 'react-router-dom';
 import './App.css';
-import Test from './screens/test';
-import Incidents from './pages/Incidents';
-import Creer from './pages/Creer';
-import Parametres from './pages/Parametres';
-import Lisr from './pages/TaskContainer';
-import TaskContainer from './pages/TaskContainer';
+
+import Navigation from './components/Navigation/Navigation';
+import Navbar from './components/Navigation/Navbar';
 
 function App() {
   return (
     <Router>
-            <Routes>
-            <Route path="/incidents" element={<Incidents />} />
-
-              <Route path="/liste" element={<TaskContainer/>} />
-              <Route path="/creer" element={<Creer />} />
-              <Route path="/parametres" element={<Parametres />} />
-            </Routes>
-            <Test />
+      <div className="App">
+        <div className="sidebar">
+          {/* Contenu de la barre latérale */}
+          <Navbar />
+        </div>
+        <div className="content">
+          {/* Contenu principal */}
+          <header className="App-header">
+            <Navigation />
+          </header>
+        </div>
+      </div>
     </Router>
   );
 }
