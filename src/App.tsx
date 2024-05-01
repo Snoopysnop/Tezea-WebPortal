@@ -15,7 +15,7 @@ function App() {
         </div>
         <div className="content">
           {/* Contenu principal */}
-          <header className="App-header">
+          <header className="App-">
             <Navigation />
           </header>
         </div>
