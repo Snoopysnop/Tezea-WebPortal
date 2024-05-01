@@ -1,3 +1,9 @@
+:root {
+  --primary: #6a6a6a; /* Rouge */
+  --secondary: #8d8d8d;
+  --light-grey: #b1b1b1;
+}
+
 .App {
   text-align: center;
 }
@@ -67,4 +73,37 @@
 
 .sidebar li a:hover {
   text-decoration: underline;
+}
+
+.lineTitle{
+  border: 0.1em solid;
+  border-top: none;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 48.96%, rgba(0, 0, 0, 0) 100%);
+}
+
+.divider {
+  border-radius: 40px;
+  height: 75%;
+  width: 2px;
+  background-color: var(--light-grey);
+}
+
+.divider-half {
+  border-radius: 40px;
+  height: 50%;
+  width: 2px;
+  background-color: var(--light-grey);
+}
+
+.container-xxl {
+  max-width: 1920px !important;
+}
+
+.primary {
+  color: var(--primary);
+}
+
+.secondary {
+  color: var(--secondary);
 }
