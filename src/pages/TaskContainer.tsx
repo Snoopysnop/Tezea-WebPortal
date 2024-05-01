@@ -62,8 +62,8 @@ const TaskContainer: React.FC = () => {
     setSelectedStatus(Object.keys(updatedCheckboxes).filter(key => updatedCheckboxes[key as TaskStatus]) as TaskStatus[]);
   };
 
+  //Use effect pour refresh les checkbox en temps réel
   useEffect(() => {
-    // Rafraîchir les cases à cocher ici
     const updatedCheckboxes: { [key in TaskStatus]?: boolean } = {};
     selectedStatus.forEach(status => {
       updatedCheckboxes[status] = true;
@@ -71,20 +71,17 @@ const TaskContainer: React.FC = () => {
     setCheckboxes(updatedCheckboxes);
   }, [selectedStatus]);
 
+  //Use effect pour initialiser les checkbox a true
   useEffect(() => {
     // Initialiser les cases à cocher ici
     const initialCheckboxes: { [key in TaskStatus]?: boolean } = {};
     allStatus.forEach(status => {
       initialCheckboxes[status] = true;
     });
-    
     setSelectedStatus(allStatus);
     setCheckboxes(initialCheckboxes);
-  
-    // Sélectionner tous les statuts par défaut
-    
   }, []);
-  
+
 
   return (
     <Container>
@@ -138,6 +135,7 @@ const TaskContainer: React.FC = () => {
           </thead>
           <tbody>
             {Array.from(mapDateTasks.entries()).map(([date, tasks]) => (
+              tasks.some(task => selectedStatus.includes(task.status)) && // Vérifie s'il y a des tâches à afficher
               <tr key={date}>
                 {selectedStatus.length > 0 && <td>{date}</td>}
                 {selectedStatus.includes(TaskStatus.toComplete) && (
@@ -174,6 +172,7 @@ const TaskContainer: React.FC = () => {
                 )}
               </tr>
             ))}
+
           </tbody>
         </Table>
       </Container>
