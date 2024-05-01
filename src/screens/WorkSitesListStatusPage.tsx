@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Table, InputGroup, Button, Form, Dropdown } from 'react-bootstrap';
 
-const TaskContainer: React.FC = () => {
+const WorkSitesListStatusPage: React.FC = () => {
   enum TaskStatus {
     toComplete = "A compléter",
     inProgress = "En cours",
@@ -180,4 +180,4 @@ const TaskContainer: React.FC = () => {
   );
 };
 
-export default TaskContainer;
+export default WorkSitesListStatusPage;
