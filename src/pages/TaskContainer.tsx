@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Table, InputGroup, Button, Form, Dropdown } from 'react-bootstrap';
 
@@ -11,13 +11,13 @@ const TaskContainer: React.FC = () => {
   }
 
   interface Task {
-    id: number
-    name: string
-    date: string
-    startHours: string
-    endHour: string
-    address: string
-    status: TaskStatus
+    id: number;
+    name: string;
+    date: string;
+    startHours: string;
+    endHour: string;
+    address: string;
+    status: TaskStatus;
   }
 
   const tasks: Task[] = [
@@ -43,14 +43,33 @@ const TaskContainer: React.FC = () => {
     );
   };
 
-
-  // Initialiser de la map de Date et Taches
   const mapDateTasks = new Map<string, Task[]>();
   tasks.forEach(task => {
     const taskList = mapDateTasks.get(task.date) || [];
     taskList.push(task);
     mapDateTasks.set(task.date, taskList);
   });
+
+  const allStatus: TaskStatus[] = Object.values(TaskStatus);
+  const [selectedStatus, setSelectedStatus] = useState<TaskStatus[]>([]);
+
+  const [checkboxes, setCheckboxes] = useState<{ [key in TaskStatus]?: boolean }>({});
+
+  const handleStatusChange = (status: TaskStatus) => {
+    const updatedCheckboxes = { ...checkboxes, [status]: !checkboxes[status] };
+    setCheckboxes(updatedCheckboxes);
+
+    setSelectedStatus(Object.keys(updatedCheckboxes).filter(key => updatedCheckboxes[key as TaskStatus]) as TaskStatus[]);
+  };
+
+  useEffect(() => {
+    // Rafraîchir les cases à cocher ici
+    const updatedCheckboxes: { [key in TaskStatus]?: boolean } = {};
+    selectedStatus.forEach(status => {
+      updatedCheckboxes[status] = true;
+    });
+    setCheckboxes(updatedCheckboxes);
+  }, [selectedStatus]);
 
   return (
     <Container>
@@ -68,51 +87,81 @@ const TaskContainer: React.FC = () => {
         </Col>
       </Row>
 
-      {/* Parcourir chaque date dans tasksByDate et afficher les tâches correspondantes */}
+      <Row className="mt-4">
+        <Col>
+          <Dropdown>
+            <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+              Filtrer
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              {Object.values(TaskStatus).map((status, index) => (
+                <Dropdown.Item key={index}>
+                  <Form.Check
+                    type="checkbox"
+                    label={status}
+                    checked={!!checkboxes[status]}
+                    onChange={() => handleStatusChange(status)}
+                  />
+                </Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
+        </Col>
+      </Row>
+
       <Container>
-          <Table>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>A compléter</th>
-                <th>En cours</th>
-                <th>Terminer</th>
-                <th>Archiver</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Array.from(mapDateTasks.entries()).map(([date, tasks]) => (
-                <tr key={date}>
-                  <td>{date}</td>
+        <Table>
+          <thead>
+            <tr>
+              {selectedStatus.length > 0 && <th>Date</th>}
+              {selectedStatus.includes(TaskStatus.toComplete) && <th>A compléter </th>}
+              {selectedStatus.includes(TaskStatus.inProgress) && <th>En cours</th>}
+              {selectedStatus.includes(TaskStatus.Terminate) && <th>Terminer</th>}
+              {selectedStatus.includes(TaskStatus.Archiver) && <th>Archiver</th>}
+            </tr>
+          </thead>
+          <tbody>
+            {Array.from(mapDateTasks.entries()).map(([date, tasks]) => (
+              <tr key={date}>
+                {selectedStatus.length > 0 && <td>{date}</td>}
+                {selectedStatus.includes(TaskStatus.toComplete) && (
                   <td>
                     {tasks
                       .filter(task => task.status === TaskStatus.toComplete)
                       .map(task => <SquareDiv key={task.id} taskName={task.name} />)
                     }
                   </td>
+                )}
+                {selectedStatus.includes(TaskStatus.inProgress) && (
                   <td>
                     {tasks
                       .filter(task => task.status === TaskStatus.inProgress)
                       .map(task => <SquareDiv key={task.id} taskName={task.name} />)
                     }
                   </td>
+                )}
+                {selectedStatus.includes(TaskStatus.Terminate) && (
                   <td>
                     {tasks
                       .filter(task => task.status === TaskStatus.Terminate)
                       .map(task => <SquareDiv key={task.id} taskName={task.name} />)
                     }
                   </td>
+                )}
+                {selectedStatus.includes(TaskStatus.Archiver) && (
                   <td>
                     {tasks
                       .filter(task => task.status === TaskStatus.Archiver)
                       .map(task => <SquareDiv key={task.id} taskName={task.name} />)
                     }
                   </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </Container>
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </Container>
     </Container>
   );
 };
