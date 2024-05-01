@@ -71,6 +71,21 @@ const TaskContainer: React.FC = () => {
     setCheckboxes(updatedCheckboxes);
   }, [selectedStatus]);
 
+  useEffect(() => {
+    // Initialiser les cases à cocher ici
+    const initialCheckboxes: { [key in TaskStatus]?: boolean } = {};
+    allStatus.forEach(status => {
+      initialCheckboxes[status] = true;
+    });
+    
+    setSelectedStatus(allStatus);
+    setCheckboxes(initialCheckboxes);
+  
+    // Sélectionner tous les statuts par défaut
+    
+  }, []);
+  
+
   return (
     <Container>
       <Row className="justify-content-left mt-4">
@@ -81,7 +96,7 @@ const TaskContainer: React.FC = () => {
               aria-describedby="basic-addon1"
             />
             <Button variant="outline-secondary" id="button-addon1">
-              Button
+              Rechercher
             </Button>
           </InputGroup>
         </Col>
@@ -117,8 +132,8 @@ const TaskContainer: React.FC = () => {
               {selectedStatus.length > 0 && <th>Date</th>}
               {selectedStatus.includes(TaskStatus.toComplete) && <th>A compléter </th>}
               {selectedStatus.includes(TaskStatus.inProgress) && <th>En cours</th>}
-              {selectedStatus.includes(TaskStatus.Terminate) && <th>Terminer</th>}
-              {selectedStatus.includes(TaskStatus.Archiver) && <th>Archiver</th>}
+              {selectedStatus.includes(TaskStatus.Terminate) && <th>Terminé</th>}
+              {selectedStatus.includes(TaskStatus.Archiver) && <th>Archivé</th>}
             </tr>
           </thead>
           <tbody>
