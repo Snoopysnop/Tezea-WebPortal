@@ -5,7 +5,8 @@ import Test from './screens/test';
 import Incidents from './pages/Incidents';
 import Creer from './pages/Creer';
 import Parametres from './pages/Parametres';
-import Liste from './pages/Liste';
+import Lisr from './pages/TaskContainer';
+import TaskContainer from './pages/TaskContainer';
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
             <Routes>
             <Route path="/incidents" element={<Incidents />} />
 
-              <Route path="/liste" element={<Liste />} />
+              <Route path="/liste" element={<TaskContainer/>} />
               <Route path="/creer" element={<Creer />} />
               <Route path="/parametres" element={<Parametres />} />
             </Routes>
