@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap'; // Import des composants Bootstrap
-import { Category, TaskStatus } from '../api/Model';
+import { Category, WorkSiteStatus } from '../api/Model';
 import { getCategoryIcon, getStatusColor, getStatusIcon } from '../common/utils/utils';
 import { ReactComponent as ClockIcon } from 'bootstrap-icons/icons/clock.svg'
 import { ReactComponent as AddressIcon } from 'bootstrap-icons/icons/house-door.svg'
@@ -12,7 +12,7 @@ type TaskProps = {
     startHours: string
     endHour: string
     address: string
-    status: TaskStatus
+    status: WorkSiteStatus
     category: Category
 }
 
