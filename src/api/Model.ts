@@ -139,8 +139,6 @@ export interface ToolUsage {
     id: string;
     tool: Tool;
     workSite: WorkSite;
-    begin: Date;
-    end: Date;
     quantity: number;
 }
 
