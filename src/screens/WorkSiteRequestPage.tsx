@@ -1,67 +1,71 @@
 import React, { useState, ChangeEvent } from 'react';
 import { Form, Col, Row, Button, Container } from 'react-bootstrap';
+import { Civility, CustomerStatus, Service, Emergency, Category, WorkSiteStatus, WorkSiteRequestStatus } from '../api/Model';
 
 
 
 const WorkSiteRequestPage: React.FC = () => {
   const [formData, setFormData] = useState({
     customer: {
-      name: '',
-      firstname: '',
-      civility: '',
-      phoneNumber: '',
+      id: '',
+      firstName: '',
+      lastName: '',
+      civility: Civility.M,
       email: '',
+      phoneNumber: '',
       address: '',
-      postalCode: '',
       city: '',
-      status: '',
-      hourArrival: '',
-      hourDeparture: '',
+      postalCode: 0,
+      status: CustomerStatus.Business,
+      company: '',
+      requests: []
     },
-    worksiteDemand: {
+    worksiteRequest: {
+      id: '',
+      concierge: { id: '', firstName: '', lastName: '', role: '', email: '', phoneNumber: '' },
+      siteChief: undefined,
+      customer: { id: '', firstName: '', lastName: '', civility: Civility.M, email: '', phoneNumber: '', address: '', city: '', postalCode: 0, status: CustomerStatus.Business, company: '', requests: [] },
+      city: '',
+      workSites: undefined,
+      serviceType: Service.Service,
+      description: '',
+      emergency: Emergency.Low,
+      status: WorkSiteStatus.Standby,
+      title: '',
+      category: Category.Conciergerie,
       removal: false,
       delivery: false,
       removalRecycling: false,
       chronoQuote: false,
       date: new Date(),
-      conciergeName: '',
+      requestStatus: WorkSiteRequestStatus.New,
       hourReturnDeposit: '',
-      commandStatus: '',
-      emergency: 0,
-      detailDelivery: '',
-      tezeaAffectation: '',
-      provider: '',
-      satisfaction: 0,
+      hourArrival: '',
+      hourDeparture: '',
       weightEstimate: 0,
       volumeEstimation: 0,
+      provider: '',
+      tezeaAffectation: ''
     },
   });
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    const { customer, worksiteDemand } = formData;
     setFormData({
-      customer: {
-        ...customer,
-        [name]: value,
-      },
-      worksiteDemand: {
-        ...worksiteDemand,
-        [name]: value,
-      },
+      ...formData,
+      [name]: value
     });
   };
 
   const handleTimeChange = (name: string, value: string) => {
     setFormData({
       ...formData,
-      customer: {
-        ...formData.customer,
+      worksiteRequest: {
+        ...formData.worksiteRequest,
         [name]: value,
       },
     });
   };
-
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -74,31 +78,34 @@ const WorkSiteRequestPage: React.FC = () => {
     <Form>
       <Container>
         <Row className="mb-5"></Row>
-        <Row className="mb-5" style={{ color: 'white', fontSize: '32px' }}>
-          <Col className="mb-3" xs={1}></Col>
+        <Row className="mb-5" style={{ color: '#008FE3', fontSize: '32px' }}>
+          
           Informations du client :
         </Row>
-        <Row className="mb-3" style={{ color: 'white', fontSize: '18px' }}>
+        <Row className="mb-3" style={{ color: '#008FE3', fontSize: '18px' }}>
           <Form.Group as={Col} controlId="formGridNom">
             <Form.Label >Nom</Form.Label>
-            <Form.Control type="text" placeholder="Entrez un nom" value={formData.customer.name} onChange={handleChange} name="name" />
+            <Form.Control type="text" placeholder="Entrez un nom" value={formData.customer.lastName} onChange={handleChange} name="name" />
           </Form.Group>
 
           <Form.Group as={Col} controlId="formGridFirstName">
             <Form.Label >Prénom</Form.Label>
-            <Form.Control type="text" placeholder="Entrez un prénom" value={formData.customer.firstname} onChange={handleChange} name="firstname" />
+            <Form.Control type="text" placeholder="Entrez un prénom" value={formData.customer.firstName} onChange={handleChange} name="firstname" />
           </Form.Group>
 
           <Form.Group as={Col} xs={2} controlId="formGridCivility">
             <Form.Label >Civilité</Form.Label>
             <Form.Select name="civility" value={formData.customer.civility} onChange={handleChange} >
-              <option value="M">M</option>
-              <option value="Mme">Mme</option>
-              <option value="Mlle">Mlle</option>
+              {Object.keys(Civility).map((key) => (
+                <option key={key} value={Civility[key as keyof typeof Civility]}>
+                  {Civility[key as keyof typeof Civility]}
+                </option>
+              ))}
             </Form.Select>
           </Form.Group>
+
         </Row>
-        <Row className="mb-3" style={{ color: 'white', fontSize: '18px' }}>
+        <Row className="mb-3" style={{ color: '#008FE3', fontSize: '18px' }}>
           <Form.Group as={Col} xs={4} controlId="formGridPhoneNumber">
             <Form.Label >Téléphone</Form.Label>
             <Form.Control type="text" placeholder="Entrez un numéro de téléphone" value={formData.customer.phoneNumber} onChange={handleChange} name="phoneNumber" />
@@ -109,7 +116,7 @@ const WorkSiteRequestPage: React.FC = () => {
             <Form.Control type="email" placeholder="Entrez une adresse email" value={formData.customer.email} onChange={handleChange} name="email" />
           </Form.Group>
         </Row>
-        <Row className="mb-3" style={{ color: 'white', fontSize: '18px' }}>
+        <Row className="mb-3" style={{ color: '#008FE3', fontSize: '18px' }}>
 
           <Form.Group as={Col} xs={5} controlId="formGridAddress">
             <Form.Label >Adresse</Form.Label>
@@ -126,123 +133,158 @@ const WorkSiteRequestPage: React.FC = () => {
             <Form.Control type="text" placeholder="Entrez une ville" value={formData.customer.city} onChange={handleChange} name="city" />
           </Form.Group>
         </Row>
-        <Row className="mb-3" style={{ color: 'white', fontSize: '18px' }}>
-          <Form.Group as={Col} controlId="formGridStatus">
-            <Form.Label >Statut</Form.Label>
-            <Form.Control type="text" placeholder="Entrez un statut" value={formData.customer.status} onChange={handleChange} name="status" />
+        <Row className="mb-3" style={{ color: '#008FE3', fontSize: '18px' }}>
+        <Form.Group as={Col}  controlId="formGridStatus">
+            <Form.Label >Status</Form.Label>
+            <Form.Select name="status" value={formData.customer.status} onChange={handleChange} >
+              {Object.keys(CustomerStatus).map((key) => (
+                <option key={key} value={CustomerStatus[key as keyof typeof CustomerStatus]}>
+                  {CustomerStatus[key as keyof typeof CustomerStatus]}
+                </option>
+              ))}
+            </Form.Select>
           </Form.Group>
-
+          <Form.Group as={Col} xs={8} controlId="formGridCity">
+            <Form.Label >Société</Form.Label>
+            <Form.Control type="text" placeholder="Entrez le nom d'une société" value={formData.customer.company} onChange={handleChange} name="city" />
+          </Form.Group>
 
         </Row>
         <Row className="mb-5"></Row>
-        <Row className="mb-5" style={{ color: 'white', fontSize: '32px' }}>
-          <Col className="mb-3" xs={1}></Col>
-          Informations sur le chantier :
+        <Row className="mb-5" style={{ color: '#008FE3', fontSize: '32px' }}>
+ 
+          Informations sur la demande de chantier :
         </Row>
-        <Row className="mb-3" style={{ color: 'white', fontSize: '18px' }}>
-          <Form.Group as={Col} controlId="formGridConciergeName">
-            <Form.Label>Nom du concierge</Form.Label>
-            <Form.Control type="text" placeholder="Entrez le nom du concierge" value={formData.worksiteDemand.conciergeName} onChange={(e) => setFormData({ ...formData, worksiteDemand: { ...formData.worksiteDemand, conciergeName: e.target.value } })} />
+        <Row className="mb-3" style={{ color: '#008FE3', fontSize: '18px' }}>
+        <Form.Group as={Col}  controlId="formGridService">
+            <Form.Label >Type de service</Form.Label>
+            <Form.Select name="service" value={formData.worksiteRequest.serviceType} onChange={handleChange} >
+              {Object.keys(Service).map((key) => (
+                <option key={key} value={Service[key as keyof typeof Service]}>
+                  {Service[key as keyof typeof Service]}
+                </option>
+              ))}
+            </Form.Select>
           </Form.Group>
+
+          <Form.Group as={Col}  controlId="formGridCategorie">
+            <Form.Label >Catégorie</Form.Label>
+            <Form.Select name="categorie" value={formData.worksiteRequest.category} onChange={handleChange} >
+              {Object.keys(Category).map((key) => (
+                <option key={key} value={Category[key as keyof typeof Category]}>
+                  {Category[key as keyof typeof Category]}
+                </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+
           <Form.Group as={Col} controlId="formGridDate">
             <Form.Label >Date</Form.Label>
-            <Form.Control type="date" value={formData.worksiteDemand.hourReturnDeposit} onChange={handleChange} />
+            <Form.Control type="date" value={formData.worksiteRequest.hourReturnDeposit} onChange={handleChange} />
           </Form.Group>
 
         </Row>
         <Row className="mb-4" ></Row>
-        <Row className="mb-3" style={{ color: 'white', fontSize: '18px' }}>
+        <Row className="mb-3" style={{ color: '#008FE3', fontSize: '18px' }}>
           <Form.Group as={Col} xs={3} controlId="formGridRemoval">
-            <Form.Check type="checkbox" label="Enlèvement" checked={formData.worksiteDemand.removal} onChange={(e) => setFormData({ ...formData, worksiteDemand: { ...formData.worksiteDemand, removal: e.target.checked } })} />
+            <Form.Switch type="switch" label="Enlèvement" checked={formData.worksiteRequest.removal} onChange={(e) => setFormData({ ...formData, worksiteRequest: { ...formData.worksiteRequest, removal: e.target.checked } })} />
           </Form.Group>
 
           <Form.Group as={Col} xs={3} controlId="formGridDelivery">
-            <Form.Check type="checkbox" label="Livraison" checked={formData.worksiteDemand.delivery} onChange={(e) => setFormData({ ...formData, worksiteDemand: { ...formData.worksiteDemand, delivery: e.target.checked } })} />
+            <Form.Switch type="switch" label="Livraison" checked={formData.worksiteRequest.delivery} onChange={(e) => setFormData({ ...formData, worksiteRequest: { ...formData.worksiteRequest, delivery: e.target.checked } })} />
           </Form.Group>
 
           <Form.Group as={Col} xs={3} controlId="formGridRemovalRecycling">
-            <Form.Check type="checkbox" label="Déchetterie" checked={formData.worksiteDemand.removalRecycling} onChange={(e) => setFormData({ ...formData, worksiteDemand: { ...formData.worksiteDemand, removalRecycling: e.target.checked } })} />
+            <Form.Switch type="switch" label="Enlèvement déchetterie" checked={formData.worksiteRequest.removalRecycling} onChange={(e) => setFormData({ ...formData, worksiteRequest: { ...formData.worksiteRequest, removalRecycling: e.target.checked } })} />
           </Form.Group>
 
           <Form.Group as={Col} xs={3} controlId="formGridChronoQuote">
-            <Form.Check type="checkbox" label="Devis" checked={formData.worksiteDemand.chronoQuote} onChange={(e) => setFormData({ ...formData, worksiteDemand: { ...formData.worksiteDemand, chronoQuote: e.target.checked } })} />
+            <Form.Switch type="switch" label="Chrono pour devis" checked={formData.worksiteRequest.chronoQuote} onChange={(e) => setFormData({ ...formData, worksiteRequest: { ...formData.worksiteRequest, chronoQuote: e.target.checked } })} />
           </Form.Group>
         </Row>
-        <Row className="mb-3" style={{ color: 'white', fontSize: '18px' }}>
+
+        <Row className="mb-3" style={{ color: '#008FE3', fontSize: '18px' }}>
 
           <Form.Group as={Col} controlId="formGridHourArrival">
             <Form.Label>Heure d'arrivée du client</Form.Label>
-            <Form.Control type="time" value={formData.customer.hourArrival} onChange={(e) => handleTimeChange("hourArrival", e.target.value)} />
+            <Form.Control type="time" value={formData.worksiteRequest.hourArrival} onChange={(e) => handleTimeChange("hourArrival", e.target.value)} />
           </Form.Group>
 
           <Form.Group as={Col} controlId="formGridHourDeparture">
             <Form.Label >Heure de départ du client</Form.Label>
-            <Form.Control type="time" value={formData.customer.hourDeparture} onChange={(e) => handleTimeChange("hourDeparture", e.target.value)} />
+            <Form.Control type="time" value={formData.worksiteRequest.hourDeparture} onChange={(e) => handleTimeChange("hourDeparture", e.target.value)} />
           </Form.Group>
           <Form.Group as={Col} controlId="formGridHourReturnDeposit">
-            <Form.Label style={{ color: 'white' }}>Heure de retour du dépôt</Form.Label>
-            <Form.Control type="time" value={formData.worksiteDemand.hourReturnDeposit} onChange={(e) => setFormData({ ...formData, worksiteDemand: { ...formData.worksiteDemand, hourReturnDeposit: e.target.value } })} />
+            <Form.Label style={{ color: '#008FE3' }}>Heure de retour du dépôt</Form.Label>
+            <Form.Control type="time" value={formData.worksiteRequest.hourReturnDeposit} onChange={(e) => handleTimeChange("hourReturnDeposit", e.target.value)}  />
           </Form.Group>
         </Row>
-        <Row className="mb-3" style={{ color: 'white', fontSize: '18px' }}>
 
-          <Form.Group as={Col} controlId="formGridCommandStatus">
-            <Form.Label style={{ color: 'white' }}>Statut de la commande</Form.Label>
-            <Form.Control type="text" placeholder="Entrez le statut de la commande" value={formData.worksiteDemand.commandStatus} onChange={(e) => setFormData({ ...formData, worksiteDemand: { ...formData.worksiteDemand, commandStatus: e.target.value } })} />
+        <Row className="mb-3" style={{ color: '#008FE3', fontSize: '18px' }}>
+
+        <Form.Group as={Col}  controlId="formGridStatus">
+            <Form.Label >Status de la commande</Form.Label>
+            <Form.Select name="requestStatus" value={formData.worksiteRequest.requestStatus} onChange={handleChange} >
+              {Object.keys(WorkSiteRequestStatus).map((key) => (
+                <option key={key} value={WorkSiteRequestStatus[key as keyof typeof WorkSiteRequestStatus]}>
+                  {WorkSiteRequestStatus[key as keyof typeof WorkSiteRequestStatus]}
+                </option>
+              ))}
+            </Form.Select>
           </Form.Group>
 
-          <Form.Group as={Col} xs={2} controlId="formGridEmergency">
-            <Form.Label style={{ color: 'white' }}>Urgence</Form.Label>
-            <Form.Select value={formData.worksiteDemand.emergency} onChange={(e) => setFormData({ ...formData, worksiteDemand: { ...formData.worksiteDemand, emergency: parseInt(e.target.value) } })}>
-              {[0, 1, 2, 3, 4, 5].map((value) => (
-                <option key={value} value={value}>{value}</option>
+          <Form.Group as={Col}  controlId="formGridEmergency">
+            <Form.Label >Urgence</Form.Label>
+            <Form.Select name="emergency" value={formData.worksiteRequest.emergency} onChange={handleChange} >
+              {Object.keys(Emergency).map((key) => (
+                <option key={key} value={Emergency[key as keyof typeof Emergency]}>
+                  {Emergency[key as keyof typeof Emergency]}
+                </option>
               ))}
             </Form.Select>
           </Form.Group>
         </Row>
-        <Row className="mb-3" style={{ color: 'white', fontSize: '18px' }}>
+        <Row className="mb-3" style={{ color: '#008FE3', fontSize: '18px' }}>
 
-        <Form.Group as={Col} controlId="formGridDetailDelivery">
-          <Form.Label style={{ color: 'white' }}>Détails de la livraison</Form.Label>
-          <Form.Control as="textarea" rows={3} placeholder="Entrez les détails de la livraison" value={formData.worksiteDemand.detailDelivery} onChange={(e) => setFormData({ ...formData, worksiteDemand: { ...formData.worksiteDemand, detailDelivery: e.target.value } })} />
-        </Form.Group>
+          <Form.Group as={Col} controlId="formGridDetailDelivery">
+            <Form.Label style={{ color: '#008FE3' }}>Détails de la livraison</Form.Label>
+            <Form.Control as="textarea" rows={3} placeholder="Entrez les détails de la livraison" value={formData.worksiteRequest.description} onChange={(e) => setFormData({ ...formData, worksiteRequest: { ...formData.worksiteRequest, description: e.target.value } })} />
+          </Form.Group>
         </Row>
-        <Row className="mb-3" style={{ color: 'white', fontSize: '18px' }}>
+        <Row className="mb-3" style={{ color: '#008FE3', fontSize: '18px' }}>
 
-        <Form.Group as={Col} controlId="formGridTezeaAffectation">
-          <Form.Label style={{ color: 'white' }}>Affectation Tezea</Form.Label>
-          <Form.Control type="text" placeholder="Entrez l'affectation Tezea" value={formData.worksiteDemand.tezeaAffectation} onChange={(e) => setFormData({ ...formData, worksiteDemand: { ...formData.worksiteDemand, tezeaAffectation: e.target.value } })} />
-        </Form.Group>
+          <Form.Group as={Col} controlId="formGridTezeaAffectation">
+            <Form.Label style={{ color: '#008FE3' }}>Affectation Tezea</Form.Label>
+            <Form.Control type="text" placeholder="Entrez l'affectation Tezea" value={formData.worksiteRequest.tezeaAffectation} onChange={(e) => setFormData({ ...formData, worksiteRequest: { ...formData.worksiteRequest, tezeaAffectation: e.target.value } })} />
+          </Form.Group>
 
-        <Form.Group as={Col} controlId="formGridProvider">
-          <Form.Label style={{ color: 'white' }}>Prestataire</Form.Label>
-          <Form.Control type="text" placeholder="Entrez le prestataire" value={formData.worksiteDemand.provider} onChange={(e) => setFormData({ ...formData, worksiteDemand: { ...formData.worksiteDemand, provider: e.target.value } })} />
-        </Form.Group>
+          <Form.Group as={Col} controlId="formGridProvider">
+            <Form.Label style={{ color: '#008FE3' }}>Prestataire</Form.Label>
+            <Form.Control type="text" placeholder="Entrez le prestataire" value={formData.worksiteRequest.provider} onChange={(e) => setFormData({ ...formData, worksiteRequest: { ...formData.worksiteRequest, provider: e.target.value } })} />
+          </Form.Group>
 
-        <Form.Group as={Col} xs={2} controlId="formGridSatisfaction">
-          <Form.Label style={{ color: 'white' }}>Satisfaction</Form.Label>
-          <Form.Select value={formData.worksiteDemand.satisfaction} onChange={(e) => setFormData({ ...formData, worksiteDemand: { ...formData.worksiteDemand, satisfaction: parseInt(e.target.value) } })}>
-            {[0, 1, 2, 3, 4, 5].map((value) => (
-              <option key={value} value={value}>{value}</option>
-            ))}
-          </Form.Select>
-        </Form.Group>
-          </Row>
-          <Row className="mb-3" style={{ color: 'white', fontSize: '18px' }}>
 
-        <Form.Group as={Col} controlId="formGridWeightEstimate">
-          <Form.Label style={{ color: 'white' }}>Estimation du poids</Form.Label>
-          <Form.Control type="number" placeholder="Entrez l'estimation du poids" value={formData.worksiteDemand.weightEstimate} onChange={(e) => setFormData({ ...formData, worksiteDemand: { ...formData.worksiteDemand, weightEstimate: parseInt(e.target.value) } })} />
-        </Form.Group>
+        </Row>
+        <Row className="mb-3" style={{ color: '#008FE3', fontSize: '18px' }}>
 
-        <Form.Group as={Col} controlId="formGridVolumeEstimation">
-          <Form.Label style={{ color: 'white' }}>Estimation du volume</Form.Label>
-          <Form.Control type="number" placeholder="Entrez l'estimation du volume" value={formData.worksiteDemand.volumeEstimation} onChange={(e) => setFormData({ ...formData, worksiteDemand: { ...formData.worksiteDemand, volumeEstimation: parseInt(e.target.value) } })} />
-        </Form.Group>
+          <Form.Group as={Col} controlId="formGridWeightEstimate">
+            <Form.Label style={{ color: '#008FE3' }}>Estimation du poids</Form.Label>
+            <Form.Control type="number" placeholder="Entrez l'estimation du poids" value={formData.worksiteRequest.weightEstimate} onChange={(e) => setFormData({ ...formData, worksiteRequest: { ...formData.worksiteRequest, weightEstimate: parseInt(e.target.value) } })} />
+          </Form.Group>
+
+          <Form.Group as={Col} controlId="formGridVolumeEstimation">
+            <Form.Label style={{ color: '#008FE3' }}>Estimation du volume</Form.Label>
+            <Form.Control type="number" placeholder="Entrez l'estimation du volume" value={formData.worksiteRequest.volumeEstimation} onChange={(e) => setFormData({ ...formData, worksiteRequest: { ...formData.worksiteRequest, volumeEstimation: parseInt(e.target.value) } })} />
+          </Form.Group>
         </Row>
         <Row className="mb-5"></Row>
-
+        <Row className="mb-5" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Button variant="primary" type="submit" style={{alignItems:'center'}}>
+        Soumettre
+    </Button>
+    </Row>
       </Container>
+      
     </Form>
     /*
   <style>
@@ -272,7 +314,7 @@ const WorkSiteRequestPage: React.FC = () => {
           text-align: left;
           margin-top:40px;
           margin-bottom: 40px; 
-          color: white;
+          color: #008FE3;
         }
         h2 {
           font-size: 24px;
