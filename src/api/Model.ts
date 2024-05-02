@@ -1,63 +1,74 @@
 export enum Category {
     Conciergerie = "Conciergerie",
     Recyclerie = "Recyclerie",
-    PetitsTravaux = "PetitsTravaux",
-    NettoyageDeVehicule = "NettoyageDeVehicule",
-    EspacesVerts = "EspacesVerts",
-    LaverieBlanchisserie = "LaverieBlanchisserie",
-    CommerceAmbulant = "CommerceAmbulant",
-    PiquetsEnBois = "PiquetsEnBois",
-    BoisDeChauffage = "BoisDeChauffage",
-    CreaPalette = "CreaPalette",
-    LeBioAVotrePorte = "LeBioAVotrePorte",
-    DonDePlasmaEtDeSang = "DonDePlasmaEtDeSang",
-    RelaisColis = "RelaisColis",
-    LocationVelosElectriques = "LocationVelosElectriques"
+    PetitsTravaux = "Petits Travaux",
+    NettoyageDeVehicule = "Nettoyage De Vehicule",
+    EspacesVerts = "Espaces Verts",
+    LaverieBlanchisserie = "Laverie Blanchisserie",
+    CommerceAmbulant = "Commerce Ambulant",
+    PiquetsEnBois = "Piquets En Bois",
+    BoisDeChauffage = "Bois De Chauffage",
+    CreaPalette = "Crea Palette",
+    LeBioAVotrePorte = "Le Bio A Votre Porte",
+    DonDePlasmaEtDeSang = "Don De Plasma Et De Sang",
+    RelaisColis = "Relais Colis",
+    LocationVelosElectriques = "Location Velos Electriques"
 }
 
 export enum Civility {
-    Mr = "Mr",
+    M = "M",
     Mme = "Mme",
-    Other = "Other"
+    Mlle = "Mlle"
 }
 
 export enum CustomerStatus {
     Business = "Business",
-    Community = "Community",
+    Community = "Communauté",
     Association = "Association",
-    Particular = "Particular"
+    Particular = "Particulier"
 }
 
 export enum Emergency {
-    Low = "Low",
-    Medium = "Medium",
-    Average = "Average",
-    High = "High",
-    VeryHigh = "VeryHigh"
+    Low = "Basse",
+    Medium = "Normale",
+    Average = "Moyenne",
+    High = "Haute",
+    VeryHigh = "Très Haute"
 }
 
 export enum Role {
-    Concierge = "Concierge",
-    SiteChief = "SiteChief",
+    Concierge = "Concièrge",
+    SiteChief = "Chef de site",
     Commercial = "Commercial",
-    WorkSiteChief = "WorkSiteChief",
-    Employee = "Employee"
+    WorkSiteChief = "Chef de chantier",
+    Employee = "Employé"
 }
 
 export enum SatisfactionLevel {
-    Perfect = "Perfect",
-    High = "High",
-    Medium = "Medium",
-    Low = "Low",
-    Dissatisfied = "Dissatisfied"
+    Perfect = "Parfait",
+    High = "Très Satisfait",
+    Medium = "Satisfait",
+    Low = "Peu Satisfait",
+    Dissatisfied = "Pas Du Tout"
 }
 
 export enum Service {
     Service = "Service",
     Donation = "Donation",
-    ServiceAndDonation = "ServiceAndDonation",
+    ServiceAndDonation = "Service et Donation",
     Plasma = "Plasma",
     Information = "Information"
+}
+
+export enum WorkSiteRequestStatus {
+    New = "Nouvelle",
+    QuoteInProgress = "Devis en cours",
+    QuoteSigned = "Devis signé",
+    Duplicate = "Doublon",
+    Billed = "Facturée",
+    Refused = "Refusée",
+    Closed = "Cloturée",
+    Other = "Autre"
 }
 
 export enum WorkSiteStatus {
@@ -101,16 +112,29 @@ export interface Customer {
 export interface WorkSiteRequest {
     id: string;
     concierge: User;
-    siteChief: User;
+    siteChief: User | undefined;
     customer: Customer;
     city: string;
-    workSites: WorkSite[];
+    workSites: WorkSite[] | undefined;
     serviceType: Service;
     description: string;
     emergency: Emergency;
     status: WorkSiteStatus;
     title: string;
     category: Category;
+    removal: boolean;
+    delivery: boolean;
+    removalRecycling: boolean;
+    chronoQuote: boolean;
+    date: Date;
+    requestStatus: WorkSiteRequestStatus;
+    hourReturnDeposit: string;
+    hourArrival: string;
+    hourDeparture: string;
+    weightEstimate: number;
+    volumeEstimation: number;
+    provider: string;
+    tezeaAffectation: string;
 }
 
 export interface WorkSite {
