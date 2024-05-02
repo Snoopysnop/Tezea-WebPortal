@@ -16,9 +16,9 @@ export enum Category {
 }
 
 export enum Civility {
-    Mr = "Mr",
+    M = "M",
     Mme = "Mme",
-    Other = "Other"
+    Mlle = "Mlle"
 }
 
 export enum CustomerStatus {
@@ -101,16 +101,29 @@ export interface Customer {
 export interface WorkSiteRequest {
     id: string;
     concierge: User;
-    siteChief: User;
+    siteChief: User | undefined;
     customer: Customer;
     city: string;
-    workSites: WorkSite[];
+    workSites: WorkSite[] | undefined;
     serviceType: Service;
     description: string;
     emergency: Emergency;
     status: WorkSiteStatus;
     title: string;
     category: Category;
+    removal: boolean;
+    delivery: boolean;
+    removalRecycling: boolean;
+    chronoQuote: boolean;
+    date: Date;
+    commandStatus: string;
+    hourReturnDeposit: Date;
+    hourArrival: Date;
+    hourDeparture: Date;
+    weightEstimate: number;
+    volumeEstimation: number;
+    provider: string;
+    tezeaAffectation: string;
 }
 
 export interface WorkSite {
