@@ -4,3 +4,12 @@
 .react-pro-sidebar.sidebar-dark .pro-sidebar-menu .pro-menu-item a {
   color: black;
 }
+
+.custom-autocomplete .p-autocomplete-panel {
+  opacity: 1; /* Définissez l'opacité à 1 pour rendre la liste d'autocomplétion non transparente */
+}
+.p-autocomplete-panel .p-autocomplete-items {
+  background-color: white !important;
+}
+
+

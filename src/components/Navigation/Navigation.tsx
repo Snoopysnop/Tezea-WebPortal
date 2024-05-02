@@ -13,19 +13,19 @@ import SchedulePage from '../../screens/SchedulePage';
 function Navigation() {
   return (
       <Routes>
-        <Route path="/" element={<WorkSitesListStatusPage />} />
-        <Route path="/login" element={<LoginPage />} />
+      <Route path="/" element={<LoginPage />} />
+            <Route path="/login" element={<LoginPage />} />
 
-        <Route path="/listeStatus" element={<WorkSitesListStatusPage />} />
-        <Route path="/creerDemande" element={<WorkSiteRequestPage />} />
-        <Route path="/incidents" element={<IncidentsPage />} />
-        <Route path="/parametres" element={<SettingsPage />} />
-        <Route path="/detailChantier" element={<WorkSiteDetailPage />} />
+            <Route path="/listeStatus" element={<WorkSitesListStatusPage />} />
+            <Route path="/creerDemande" element={<WorkSiteRequestPage />} />
+            <Route path="/incidents" element={<IncidentsPage />} />
+            <Route path="/parametres" element={<SettingsPage />} />
+            <Route path="/detailChantier" element={<WorkSiteDetailPage />} />
 
-        <Route path="/creerChantier" element={<CreateWorkSitePage />} />
+            <Route path="/creerChantier" element={<CreateWorkSitePage />} />
 
-        <Route path="/listeChantiers" element={<WorkSiteListPage />} />
-        <Route path="/planning" element={<SchedulePage />} />
+            <Route path="/listeChantiers" element={<WorkSiteListPage />} />
+            <Route path="/planning" element={<SchedulePage />} />
       </Routes>
   );
 }
