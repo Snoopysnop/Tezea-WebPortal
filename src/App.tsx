@@ -2,25 +2,17 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/ListAltOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/Create";
 import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/Warning";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import WorkSitesListStatusPage from './screens/WorkSitesListStatusPage';
-import WorkSiteRequestPage from './screens/WorkSiteRequestPage';
-import IncidentsPage from './screens/IncidentsPage';
-import SettingsPage from './screens/SettingsPage';
-import WorkSiteDetailPage from './screens/WorkSiteDetailPage';
-import CreateWorkSitePage from './screens/CreateWorkSitePage';
-import WorkSiteListPage from './screens/WorkSiteListPage';
-import SchedulePage from './screens/SchedulePage';
-import LoginPage from './screens/LoginPage';
+
 // Importez Link de react-router-dom
 import { Link } from 'react-router-dom';
 import Navigation from './components/Navigation/Navigation';
+import { LoginOutlined } from '@mui/icons-material';
 
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false);
@@ -31,7 +23,7 @@ function App() {
 
   return (
     <Router>
-      <div id="app" style={{ position: "relative", display: "flex", backgroundColor: "#f2f2f2" }}> {/* Ajout de la couleur de fond */}
+      <div id="app" style={{ display: "flex", backgroundColor: "#f2f2f2", minHeight: "100vh" }}> {/* Utilisation de minHeight: 100vh pour que le div prenne au moins toute la hauteur de l'écran */}
       
         <Sidebar 
           collapsed={sidebarCollapsed} 
@@ -54,8 +46,8 @@ function App() {
             </MenuItem>
 
             {/* Menu principal */}
-            <MenuItem icon={<HomeOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/" style={{ display: 'flex', alignItems: 'center', color: 'black' , textDecoration: 'none'}}/>}>
-                {sidebarCollapsed ? null : 'Accueil'}
+            <MenuItem icon={<LoginOutlined />} style={{ backgroundColor: 'white' }} component={<Link to="/login" style={{ display: 'flex', alignItems: 'center', color: 'black' , textDecoration: 'none'}}/>}>
+                {sidebarCollapsed ? null : 'Connexion'}
             </MenuItem>
             <MenuItem icon={<PeopleOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/listeStatus" style={{ display: 'flex', alignItems: 'center', color: 'black' , textDecoration: 'none'}}/>}>
                 {sidebarCollapsed ? null : 'Liste des chantiers'}

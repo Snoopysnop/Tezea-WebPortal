@@ -3,7 +3,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Table, InputGroup, Button, Form, Dropdown } from 'react-bootstrap';
 import { Category, Task, WorkSiteStatus } from '../api/Model';
 import TaskComponent from './TaskComponent';
-import { AutoComplete } from 'primereact/autocomplete';
 import '../App.css'
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 
