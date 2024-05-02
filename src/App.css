@@ -1,6 +1,111 @@
-/* Ajoutez ces styles dans votre fichier App.css */
 
-/* Définition de la couleur noire pour les noms des menus */
+:root {
+  --primary: #6a6a6a; /* Rouge */
+  --secondary: #8d8d8d;
+  --light-grey: #b1b1b1;
+}
+
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.App {
+  display: flex;
+}
+
+.sidebar {
+  width: 200px;
+  background-color: #333;
+  color: white;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar li {
+  padding: 10px;
+}
+
+.sidebar li a {
+  color: white;
+  text-decoration: none;
+}
+
+.sidebar li a:hover {
+  text-decoration: underline;
+}
+
+.lineTitle{
+  border: 0.1em solid;
+  border-top: none;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 48.96%, rgba(0, 0, 0, 0) 100%);
+}
+
+.divider {
+  border-radius: 40px;
+  height: 75%;
+  width: 2px;
+  background-color: var(--light-grey);
+}
+
+.divider-half {
+  border-radius: 40px;
+  height: 50%;
+  width: 2px;
+  background-color: var(--light-grey);
+}
+
+.container-xxl {
+  max-width: 1920px !important;
+}
+
+.primary {
+  color: var(--primary);
+}
+
+.secondary {
+  color: var(--secondary);
+}
+
 .react-pro-sidebar.sidebar-dark .pro-sidebar-menu .pro-menu-item a {
   color: black;
 }
+
