@@ -55,7 +55,7 @@ export enum SatisfactionLevel {
 export enum Service {
     Service = "Service",
     Donation = "Donation",
-    ServiceAndDonation = "ServiceAndDonation",
+    ServiceAndDonation = "Service et Donation",
     Plasma = "Plasma",
     Information = "Information"
 }
