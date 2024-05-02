@@ -79,7 +79,7 @@ const WorkSiteRequestPage: React.FC = () => {
       <Container>
         <Row className="mb-5"></Row>
         <Row className="mb-5" style={{ color: '#008FE3', fontSize: '32px' }}>
-          
+
           Informations du client :
         </Row>
         <Row className="mb-3" style={{ color: '#008FE3', fontSize: '18px' }}>
@@ -134,7 +134,7 @@ const WorkSiteRequestPage: React.FC = () => {
           </Form.Group>
         </Row>
         <Row className="mb-3" style={{ color: '#008FE3', fontSize: '18px' }}>
-        <Form.Group as={Col}  controlId="formGridStatus">
+          <Form.Group as={Col} controlId="formGridStatus">
             <Form.Label >Status</Form.Label>
             <Form.Select name="status" value={formData.customer.status} onChange={handleChange} >
               {Object.keys(CustomerStatus).map((key) => (
@@ -152,11 +152,11 @@ const WorkSiteRequestPage: React.FC = () => {
         </Row>
         <Row className="mb-5"></Row>
         <Row className="mb-5" style={{ color: '#008FE3', fontSize: '32px' }}>
- 
+
           Informations sur la demande de chantier :
         </Row>
         <Row className="mb-3" style={{ color: '#008FE3', fontSize: '18px' }}>
-        <Form.Group as={Col}  controlId="formGridService">
+          <Form.Group as={Col} controlId="formGridService">
             <Form.Label >Type de service</Form.Label>
             <Form.Select name="service" value={formData.worksiteRequest.serviceType} onChange={handleChange} >
               {Object.keys(Service).map((key) => (
@@ -167,7 +167,7 @@ const WorkSiteRequestPage: React.FC = () => {
             </Form.Select>
           </Form.Group>
 
-          <Form.Group as={Col}  controlId="formGridCategorie">
+          <Form.Group as={Col} controlId="formGridCategorie">
             <Form.Label >Catégorie</Form.Label>
             <Form.Select name="categorie" value={formData.worksiteRequest.category} onChange={handleChange} >
               {Object.keys(Category).map((key) => (
@@ -216,13 +216,13 @@ const WorkSiteRequestPage: React.FC = () => {
           </Form.Group>
           <Form.Group as={Col} controlId="formGridHourReturnDeposit">
             <Form.Label style={{ color: '#008FE3' }}>Heure de retour du dépôt</Form.Label>
-            <Form.Control type="time" value={formData.worksiteRequest.hourReturnDeposit} onChange={(e) => handleTimeChange("hourReturnDeposit", e.target.value)}  />
+            <Form.Control type="time" value={formData.worksiteRequest.hourReturnDeposit} onChange={(e) => handleTimeChange("hourReturnDeposit", e.target.value)} />
           </Form.Group>
         </Row>
 
         <Row className="mb-3" style={{ color: '#008FE3', fontSize: '18px' }}>
 
-        <Form.Group as={Col}  controlId="formGridStatus">
+          <Form.Group as={Col} controlId="formGridStatus">
             <Form.Label >Status de la commande</Form.Label>
             <Form.Select name="requestStatus" value={formData.worksiteRequest.requestStatus} onChange={handleChange} >
               {Object.keys(WorkSiteRequestStatus).map((key) => (
@@ -233,7 +233,7 @@ const WorkSiteRequestPage: React.FC = () => {
             </Form.Select>
           </Form.Group>
 
-          <Form.Group as={Col}  controlId="formGridEmergency">
+          <Form.Group as={Col} controlId="formGridEmergency">
             <Form.Label >Urgence</Form.Label>
             <Form.Select name="emergency" value={formData.worksiteRequest.emergency} onChange={handleChange} >
               {Object.keys(Emergency).map((key) => (
@@ -279,53 +279,13 @@ const WorkSiteRequestPage: React.FC = () => {
         </Row>
         <Row className="mb-5"></Row>
         <Row className="mb-5" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <Button variant="primary" type="submit" style={{alignItems:'center'}}>
-        Soumettre
-    </Button>
-    </Row>
+          <Button variant="primary" type="submit" style={{ alignItems: 'center' }}>
+            Soumettre
+          </Button>
+        </Row>
       </Container>
-      
+
     </Form>
-    /*
-  <style>
-    {`
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 15px;
-            align-items: flex-start;
-        }
-        .form-group-switch {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 15px;
-        }
-
-        label {
-            margin-bottom: 5px;
-            align-self: flex-start;
-            font-size: 14px;
-        }
-        input {
-            height: 25px;
-        }
-        h1{
-          font-size: 32px;
-          text-align: left;
-          margin-top:40px;
-          margin-bottom: 40px; 
-          color: #008FE3;
-        }
-        h2 {
-          font-size: 24px;
-          text-align: left;
-          margin-bottom: 40px; 
-      }
-
-
-        `}
-  </style>
-</form>*/
   );
 
 };
