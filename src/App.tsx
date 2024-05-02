@@ -30,7 +30,7 @@ function App() {
 
   return (
     <Router>
-      <div id="app" style={{ position: "relative", display: "flex" }}>
+      <div id="app" style={{ position: "relative", display: "flex", backgroundColor: "#f5f5f5" }}> {/* Ajout de la couleur de fond gris clair */}
         <Sidebar 
           collapsed={sidebarCollapsed} 
           style={{ 

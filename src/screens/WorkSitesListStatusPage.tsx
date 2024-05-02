@@ -61,6 +61,7 @@ const WorkSitesListStatusPage: React.FC = () => {
     setSelectedStatus(allStatus);
     setCheckboxes(initialCheckboxes);
   }, []);
+  
 
 
   return (
