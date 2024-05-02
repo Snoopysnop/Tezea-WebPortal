@@ -72,10 +72,10 @@ export enum WorkSiteRequestStatus {
 }
 
 export enum WorkSiteStatus {
-    Standby = "A compléter",
-    InProgress = "En cours",
-    Canceled = "Archivé",
-    Done = "Terminé"
+    Standby = "Standby",
+    InProgress = "InProgress",
+    Canceled = "Canceled",
+    Done = "Done"
 }
 
 export interface Task {

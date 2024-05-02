@@ -11,6 +11,7 @@ import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 
 // Importez Link de react-router-dom
 import { Link } from 'react-router-dom';
+import MainApi from './api/MainApi';
 import Navigation from './components/Navigation/Navigation';
 import { LoginOutlined } from '@mui/icons-material';
 
@@ -20,6 +21,8 @@ function App() {
   const toggleSidebar = () => {
     setSidebarCollapsed(!sidebarCollapsed);
   };
+
+  MainApi.initInstance()
 
   return (
     <Router>

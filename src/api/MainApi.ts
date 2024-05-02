@@ -24,8 +24,8 @@ class MainApi extends AbstractApi {
         return MainApi.instance
     }
 
-    public static initInstance(token: string) : void {
-        MainApi.instance = new MainApi(process.env.REACT_APP_API_URL as any, token)
+    public static initInstance(token?: string) : void {
+        MainApi.instance = new MainApi(process.env.REACT_APP_API_URL as any)
     }
 
     public async getUsers(): Promise<Array<User>> {
@@ -60,3 +60,5 @@ class MainApi extends AbstractApi {
         }
     }
 }
+
+export default MainApi
