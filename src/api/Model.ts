@@ -43,11 +43,9 @@ export enum CustomerStatus {
 }
 
 export enum Emergency {
-    Low = "Basse",
-    Medium = "Normale",
-    Average = "Moyenne",
-    High = "Haute",
-    VeryHigh = "Très Haute"
+    Low = "Bas",
+    Medium = "Moyen",
+    High = "Elevé"
 }
 
 export enum Role {
@@ -86,10 +84,10 @@ export enum WorkSiteRequestStatus {
 }
 
 export enum WorkSiteStatus {
-    Standby = "Standby",
-    InProgress = "InProgress",
-    Canceled = "Canceled",
-    Done = "Done"
+    Standby = "En attente",
+    InProgress = "En cours",
+    Canceled = "Archivé",
+    Done = "Terminé"
 }
 
 export interface Task {
@@ -101,6 +99,15 @@ export interface Task {
     address: string
     status: WorkSiteStatus
 }
+
+export interface EmergencyDetails {
+    description: string,
+    chantier: any,
+    id: number,
+    emergency: Emergency,
+    task: Task
+}
+
 
 export interface SubErrorDetails {
     message: string

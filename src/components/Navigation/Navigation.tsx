@@ -10,6 +10,7 @@ import CreateWorkSitePage from '../../screens/CreateWorkSitePage';
 import WorkSiteListPage from '../../screens/WorkSiteListPage';
 import SchedulePage from '../../screens/SchedulePage';
 import RegisterPage from '../../screens/RegisterPage';
+import WorkSiteListRequestPage from '../../screens/WorkSiteListRequestPage';
 
 function Navigation() {
   return (
@@ -25,6 +26,8 @@ function Navigation() {
       <Route path="/creerChantier" element={<CreateWorkSitePage />} />
 
       <Route path="/listeChantiers" element={<WorkSiteListPage />} />
+      <Route path="/listeDemandeChantiers" element={<WorkSiteListRequestPage />} />
+
       <Route path="/planning" element={<SchedulePage />} />
       <Route path="/register" element={<RegisterPage />} />
     </Routes>
