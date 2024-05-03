@@ -152,13 +152,13 @@ export interface WorkSiteRequest {
 
 export interface WorkSite {
     id: string;
-    workSiteChief: User;
+    workSiteChief: User | undefined;
     staff: User[];
     equipment: ToolUsage[];
     begin: Date;
     end: Date;
     status: WorkSiteStatus;
-    request: WorkSiteRequest;
+    request: WorkSiteRequest | undefined; //todo a voir si on laisse undefined
     satisfaction: SatisfactionLevel;
     signature: ArrayBuffer;
 }
