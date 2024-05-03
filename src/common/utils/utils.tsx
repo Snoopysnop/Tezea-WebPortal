@@ -1,4 +1,4 @@
-import { Category, Emergency, WorkSiteStatus } from "../../api/Model";
+import { Category, Emergency, WorkSiteRequestStatusListPage, WorkSiteStatus } from "../../api/Model";
 import { ReactComponent as InProgressIcon } from 'bootstrap-icons/icons/hourglass-split.svg'
 import { ReactComponent as DoneIcon } from 'bootstrap-icons/icons/check-lg.svg'
 import { ReactComponent as StandByIcon } from 'bootstrap-icons/icons/pause.svg'
@@ -16,7 +16,7 @@ import { ReactComponent as BicycleIcon } from 'bootstrap-icons/icons/bicycle.svg
 import { ReactComponent as FireWoodIcon } from 'bootstrap-icons/icons/fire.svg'
 import CryptoJS from 'crypto-js';
 
-export function getStatusColor(status: WorkSiteStatus): string {
+export function getStatusColor(status:  WorkSiteStatus | WorkSiteRequestStatusListPage): string {
     switch (status) {
         case WorkSiteStatus.Standby:
             return '#ebab34';
@@ -60,7 +60,7 @@ export function getEmergencyColor(status: Emergency): string {
 
 
 
-export function getStatusIcon(status: WorkSiteStatus) {
+export function getStatusIcon(status:  WorkSiteStatus | WorkSiteRequestStatusListPage) {
     switch (status) {
         case WorkSiteStatus.Standby:
             return <StandByIcon className='secondary' width='10px' height='100%' />;

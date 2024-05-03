@@ -83,6 +83,13 @@ export enum WorkSiteRequestStatus {
     Other = "Autre"
 }
 
+export enum WorkSiteRequestStatusListPage {
+    ToComplete ="A compléter",
+    Standby = "En attente",
+    Done = "Terminé",
+    Archive = "Archivé"
+}
+
 export enum WorkSiteStatus {
     Standby = "En attente",
     InProgress = "En cours",
@@ -98,6 +105,16 @@ export interface Task {
     endHour: string
     address: string
     status: WorkSiteStatus
+}
+
+export interface TaskRequest {
+    id: number
+    name: string
+    date: string
+    startHours: string
+    endHour: string
+    address: string
+    status: WorkSiteRequestStatusListPage
 }
 
 export interface EmergencyDetails {
