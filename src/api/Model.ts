@@ -29,11 +29,9 @@ export enum CustomerStatus {
 }
 
 export enum Emergency {
-    Low = "Basse",
-    Medium = "Normale",
-    Average = "Moyenne",
-    High = "Haute",
-    VeryHigh = "Très Haute"
+    Low = "Bas",
+    Medium = "Moyen",
+    High = "Elevé"
 }
 
 export enum Role {
@@ -87,6 +85,15 @@ export interface Task {
     address: string
     status: WorkSiteStatus
 }
+
+export interface EmergencyDetails {
+    description: string,
+    chantier: any,
+    id: number,
+    emergency: Emergency,
+    task: Task
+}
+
 
 export interface SubErrorDetails {
     message: string

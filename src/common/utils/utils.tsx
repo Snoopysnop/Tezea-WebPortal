@@ -1,4 +1,4 @@
-import { Category, WorkSiteStatus } from "../../api/Model";
+import { Category, Emergency, WorkSiteStatus } from "../../api/Model";
 import { ReactComponent as InProgressIcon } from 'bootstrap-icons/icons/hourglass-split.svg'
 import { ReactComponent as DoneIcon } from 'bootstrap-icons/icons/check-lg.svg'
 import { ReactComponent as StandByIcon } from 'bootstrap-icons/icons/pause.svg'
@@ -30,6 +30,35 @@ export function getStatusColor(status: WorkSiteStatus): string {
     }
 }
 
+export function getEmergencyIconColor(status: Emergency): string {
+    switch (status) {
+        case Emergency.Low:
+            return 'text-success';
+        case Emergency.Medium:
+            return 'text-warning'; 
+        case Emergency.High:
+            return 'text-danger';
+        default:
+            return '#FFFFFF';
+    }
+}
+
+export function getEmergencyColor(status: Emergency): string {
+    switch (status) {
+        case Emergency.Low:
+            return '#008000';
+        case Emergency.Medium:
+            return '#FFFF00';
+        case Emergency.High:
+            return '#FF0000';
+        default:
+            return '#FFFFFF';
+    }
+}
+
+
+
+
 export function getStatusIcon(status: WorkSiteStatus) {
     switch (status) {
         case WorkSiteStatus.Standby:
@@ -44,6 +73,20 @@ export function getStatusIcon(status: WorkSiteStatus) {
             return <NotFoundIcon className='secondary' width='10px' height='100%' />;
     }
 }
+
+export function getEmergencyIcon(status: Emergency) {
+    switch (status) {
+        case Emergency.Low:
+            return <StandByIcon className='secondary' width='10px' height='100%' />;
+        case Emergency.Medium:
+            return <StandByIcon className='secondary' width='10px' height='100%' />;
+        case Emergency.High:
+            return <StandByIcon className='secondary' width='10px' height='100%' />;
+        default:
+            return <StandByIcon className='secondary' width='10px' height='100%' />;
+    }
+}
+
 
 export function getCategoryIcon(status: Category) {
     switch (status) {
