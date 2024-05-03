@@ -70,7 +70,7 @@ export enum WorkSiteRequestStatus {
 }
 
 export enum WorkSiteStatus {
-    Standby = "A compléter",
+    Standby = "En attente",
     InProgress = "En cours",
     Canceled = "Archivé",
     Done = "Terminé"

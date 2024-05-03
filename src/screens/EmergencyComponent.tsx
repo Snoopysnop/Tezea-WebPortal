@@ -41,8 +41,6 @@ const EmergencyComponent: React.FC<EmergencyProps> = ({ id, description, emergen
                         </Col>
                     </Row>
                 </Col>
-
-
             </Row>
         </Container>
     );
