@@ -1,55 +1,55 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Table, InputGroup, Button, Form, Dropdown } from 'react-bootstrap';
-import { Category, Task, WorkSiteStatus } from '../api/Model';
+import { Category, Task, TaskRequest, WorkSiteRequestStatusListPage } from '../api/Model';
 import TaskComponent from './TaskComponent';
 import '../App.css'
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 
 const WorkSiteListRequestPage: React.FC = () => {
 
-  const tasks: Task[] = [
-    { id: 1, name: "Chantier 1", date: "10/10/2024", startHours: "5PM", endHour: "9PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Standby },
-    { id: 2, name: "Chantier 2", date: "10/10/2024", startHours: "5PM", endHour: "9PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Standby },
-    { id: 3, name: "Chantier 2", date: "10/10/2024", startHours: "5PM", endHour: "9PM", address: "2 Fox Street, NY", status: WorkSiteStatus.InProgress },
+  const tasks: TaskRequest[] = [
+    { id: 1, name: "Chantier 1", date: "10/10/2024", startHours: "5PM", endHour: "9PM", address: "2 Fox Street, NY", status: WorkSiteRequestStatusListPage.Standby },
+    { id: 2, name: "Chantier 2", date: "10/10/2024", startHours: "5PM", endHour: "9PM", address: "2 Fox Street, NY", status: WorkSiteRequestStatusListPage.Standby },
+    { id: 3, name: "Chantier 2", date: "10/10/2024", startHours: "5PM", endHour: "9PM", address: "2 Fox Street, NY", status: WorkSiteRequestStatusListPage.Done },
 
-    { id: 4, name: "Chantier 2", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.InProgress },
-    { id: 5, name: "Chantier 3", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Canceled },
-    { id: 6, name: "Chantier 3", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Canceled },
+    { id: 4, name: "Chantier 2", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteRequestStatusListPage.Done },
+    { id: 5, name: "Chantier 3", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteRequestStatusListPage.Done },
+    { id: 6, name: "Chantier 3", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteRequestStatusListPage.ToComplete },
 
-    { id: 7, name: "Chantier Test 1", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Done },
-    { id: 8, name: "Chantier Test 2", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Done },
-    { id: 9, name: "Chantier Test 3", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Done },
-    { id: 10, name: "Chantier Test 14", date: "10/11/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Canceled },
-    { id: 11, name: "Chantier Test 24", date: "10/11/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Canceled },
-    { id: 12, name: "Chantier Test 35", date: "10/11/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Canceled },
+    { id: 7, name: "Chantier Test 1", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteRequestStatusListPage.Done },
+    { id: 8, name: "Chantier Test 2", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteRequestStatusListPage.Done },
+    { id: 9, name: "Chantier Test 3", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteRequestStatusListPage.Done },
+    { id: 10, name: "Chantier Test 14", date: "10/11/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteRequestStatusListPage.ToComplete },
+    { id: 11, name: "Chantier Test 24", date: "10/11/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteRequestStatusListPage.Archive },
+    { id: 12, name: "Chantier Test 35", date: "10/11/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteRequestStatusListPage.Archive },
   ];
 
   const [filterValue, setFilterValue] = useState<string>("");
   const filteredTasks = tasks.filter(task => task.name.toLowerCase().includes(filterValue.toLowerCase()));
 
-  const mapDateTasks = new Map<string, Task[]>();
+  const mapDateTasks = new Map<string, TaskRequest[]>();
   filteredTasks.forEach(task => {
     const taskList = mapDateTasks.get(task.date) || [];
     taskList.push(task);
     mapDateTasks.set(task.date, taskList);
   });
 
-  const allStatus: WorkSiteStatus[] = Object.values(WorkSiteStatus);
-  const [selectedStatus, setSelectedStatus] = useState<WorkSiteStatus[]>([]);
+  const allStatus: WorkSiteRequestStatusListPage[] = Object.values(WorkSiteRequestStatusListPage);
+  const [selectedStatus, setSelectedStatus] = useState<WorkSiteRequestStatusListPage[]>([]);
 
-  const [checkboxes, setCheckboxes] = useState<{ [key in WorkSiteStatus]?: boolean }>({});
+  const [checkboxes, setCheckboxes] = useState<{ [key in WorkSiteRequestStatusListPage]?: boolean }>({});
 
-  const handleStatusChange = (status: WorkSiteStatus) => {
+  const handleStatusChange = (status: WorkSiteRequestStatusListPage) => {
     const updatedCheckboxes = { ...checkboxes, [status]: !checkboxes[status] };
     setCheckboxes(updatedCheckboxes);
 
-    setSelectedStatus(Object.keys(updatedCheckboxes).filter(key => updatedCheckboxes[key as WorkSiteStatus]) as WorkSiteStatus[]);
+    setSelectedStatus(Object.keys(updatedCheckboxes).filter(key => updatedCheckboxes[key as WorkSiteRequestStatusListPage]) as WorkSiteRequestStatusListPage[]);
   };
 
   //Use effect pour refresh les checkbox en temps réel
   useEffect(() => {
-    const updatedCheckboxes: { [key in WorkSiteStatus]?: boolean } = {};
+    const updatedCheckboxes: { [key in WorkSiteRequestStatusListPage]?: boolean } = {};
     selectedStatus.forEach(status => {
       updatedCheckboxes[status] = true;
     });
@@ -58,7 +58,7 @@ const WorkSiteListRequestPage: React.FC = () => {
 
   //Use effect pour initialiser les checkbox a true
   useEffect(() => {
-    const initialCheckboxes: { [key in WorkSiteStatus]?: boolean } = {};
+    const initialCheckboxes: { [key in WorkSiteRequestStatusListPage]?: boolean } = {};
     allStatus.forEach(status => {
       initialCheckboxes[status] = true;
     });
@@ -104,7 +104,7 @@ const WorkSiteListRequestPage: React.FC = () => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              {Object.values(WorkSiteStatus).map((status, index) => (
+              {Object.values(WorkSiteRequestStatusListPage).map((status, index) => (
                 <Dropdown.Item key={index}>
                   <Form.Check
                     type="checkbox"
@@ -124,10 +124,10 @@ const WorkSiteListRequestPage: React.FC = () => {
           <thead>
             <tr>
               {selectedStatus.length > 0 && <th>Date</th>}
-              {selectedStatus.includes(WorkSiteStatus.Standby) && <th>A compléter</th>}
-              {selectedStatus.includes(WorkSiteStatus.InProgress) && <th>En cours</th>}
-              {selectedStatus.includes(WorkSiteStatus.Done) && <th>Terminé</th>}
-              {selectedStatus.includes(WorkSiteStatus.Canceled) && <th>Archivé</th>}
+              {selectedStatus.includes(WorkSiteRequestStatusListPage.ToComplete) && <th>{WorkSiteRequestStatusListPage.ToComplete}</th>}
+              {selectedStatus.includes(WorkSiteRequestStatusListPage.Standby) && <th>{WorkSiteRequestStatusListPage.Standby}</th>}
+              {selectedStatus.includes(WorkSiteRequestStatusListPage.Done) && <th>{WorkSiteRequestStatusListPage.Done}</th>}
+              {selectedStatus.includes(WorkSiteRequestStatusListPage.Archive) && <th>{WorkSiteRequestStatusListPage.Archive}</th>}
             </tr>
           </thead>
           <tbody>
@@ -135,11 +135,11 @@ const WorkSiteListRequestPage: React.FC = () => {
               filteredTasks.some(task => selectedStatus.includes(task.status)) && // Vérifie s'il y a des tâches à afficher
               <tr key={date}>
                 {selectedStatus.length > 0 && <td>{date}</td>}
-                {selectedStatus.includes(WorkSiteStatus.Standby) && (
+                {selectedStatus.includes(WorkSiteRequestStatusListPage.ToComplete) && (
                   <td>
                     <Row>
                       {filteredTasks
-                        .filter(task => task.status === WorkSiteStatus.Standby)
+                        .filter(task => task.status === WorkSiteRequestStatusListPage.ToComplete)
                         .map(task => (
                           <Col key={task.id} lg={6}>
                             <TaskComponent
@@ -157,11 +157,11 @@ const WorkSiteListRequestPage: React.FC = () => {
                     </Row>
                   </td>
                 )}
-                {selectedStatus.includes(WorkSiteStatus.InProgress) && (
+                {selectedStatus.includes(WorkSiteRequestStatusListPage.Standby) && (
                   <td>
                     <Row>
                       {filteredTasks
-                        .filter(task => task.status === WorkSiteStatus.InProgress)
+                        .filter(task => task.status === WorkSiteRequestStatusListPage.Standby)
                         .map(task => (
                           <Col key={task.id} lg={6}>
                             <TaskComponent
@@ -179,11 +179,11 @@ const WorkSiteListRequestPage: React.FC = () => {
                     </Row>
                   </td>
                 )}
-                {selectedStatus.includes(WorkSiteStatus.Done) && (
+                {selectedStatus.includes(WorkSiteRequestStatusListPage.Done) && (
                   <td>
                     <Row>
                       {filteredTasks
-                        .filter(task => task.status === WorkSiteStatus.Done)
+                        .filter(task => task.status === WorkSiteRequestStatusListPage.Done)
                         .map(task => (
                           <Col key={task.id} lg={6}>
                             <TaskComponent
@@ -201,11 +201,11 @@ const WorkSiteListRequestPage: React.FC = () => {
                     </Row>
                   </td>
                 )}
-                {selectedStatus.includes(WorkSiteStatus.Canceled) && (
+                {selectedStatus.includes(WorkSiteRequestStatusListPage.Archive) && (
                   <td>
                     <Row>
                       {filteredTasks
-                        .filter(task => task.status === WorkSiteStatus.Canceled)
+                        .filter(task => task.status === WorkSiteRequestStatusListPage.Archive)
                         .map(task => (
                           <Col key={task.id} lg={6}>
                             <TaskComponent

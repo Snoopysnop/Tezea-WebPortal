@@ -7,7 +7,7 @@ import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/Warning";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import { LoginOutlined } from "@mui/icons-material";
+import { LoginOutlined, RequestPageOutlined, RequestQuoteOutlined } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
 const SidebarComponent: React.FC = () => {
@@ -47,6 +47,9 @@ const SidebarComponent: React.FC = () => {
                 </MenuItem>
                 <MenuItem icon={<PeopleOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/listeStatus" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />}>
                     {sidebarCollapsed ? null : 'Liste des chantiers'}
+                </MenuItem>
+                <MenuItem icon={<RequestQuoteOutlined />} style={{ backgroundColor: 'white' }} component={<Link to="/listeDemandeChantiers" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />}>
+                    {sidebarCollapsed ? null : 'Demandes de chantiers'}
                 </MenuItem>
                 <MenuItem icon={<ContactsOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/creerDemande" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />}>
                     {sidebarCollapsed ? null : 'Créer une demande'}
