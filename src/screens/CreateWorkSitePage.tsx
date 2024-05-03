@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { Form, Col, Row, Button, Container, Tab, Tabs, Card } from 'react-bootstrap';
-<<<<<<< HEAD
 import Slider from 'react-input-slider';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { User, Tool, ToolName, Role, WorkSite, WorkSiteStatus, WorkSiteRequest, SatisfactionLevel } from '../api/Model';
@@ -10,10 +9,6 @@ import SearchAutocomplete from 'react-search-autocomplete';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 import { Height, Padding } from '@mui/icons-material';
 
-=======
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { User, Tool, ToolName, Role } from '../api/Model';
->>>>>>> 8b5cafb62a1db4cf31a9347d79a552c95bc87cde
 
 const mockStaff: User[] = [
   { id: '1', firstName: 'John', lastName: 'Doe', role: Role.Employee, email: 'john@example.com', phoneNumber: '123456789' },
@@ -29,18 +24,13 @@ const mockStaff: User[] = [
 ];
 
 const mockWorksiteChief: User[] = [
-<<<<<<< HEAD
   { id: '3', firstName: 'Alice', lastName: 'Smith', role: Role.WorkSiteChief, email: 'jaufret.dufeil@soprasteria.com', phoneNumber: '111111111' },
-=======
-  { id: '3', firstName: 'Alice', lastName: 'Smith', role: Role.WorkSiteChief, email: 'alice@example.com', phoneNumber: '111111111' },
->>>>>>> 8b5cafb62a1db4cf31a9347d79a552c95bc87cde
   { id: '4', firstName: 'Bob', lastName: 'Johnson', role: Role.WorkSiteChief, email: 'bob@example.com', phoneNumber: '222222222' },
 ];
 
 const mockTools: Tool[] = [
   { name: ToolName.Stapler, quantity: 5, schedules: [] },
   { name: ToolName.CementMixer, quantity: 2, schedules: [] },
-<<<<<<< HEAD
   { name: ToolName.Shear, quantity: 3, schedules: [] },
   { name: ToolName.Wrench, quantity: 4, schedules: [] },
   { name: ToolName.Ladder, quantity: 6, schedules: [] },
@@ -52,9 +42,6 @@ const mockTools: Tool[] = [
   { name: ToolName.Shovel, quantity: 16, schedules: [] },
 ];
 
-=======
-];
->>>>>>> 8b5cafb62a1db4cf31a9347d79a552c95bc87cde
 
 const CreateWorkSitePage: React.FC = () => {
   const [startTime, setStartTime] = useState('');
@@ -73,15 +60,12 @@ const CreateWorkSitePage: React.FC = () => {
 
   const [selectedTool, setSelectedTool] = useState<Tool | null>(null);
 
-<<<<<<< HEAD
   const [selectedTools, setSelectedTools] = useState<string[]>([]);
   const [filterValue, setFilterValue] = useState<string>("");
   const items = mockTools.map(tool => ({ id: tool.name, name: tool.name }));
   const [selectedQuantities, setSelectedQuantities] = useState<{ [key: string]: number }>({});
 
 
-=======
->>>>>>> 8b5cafb62a1db4cf31a9347d79a552c95bc87cde
   const handleStartTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setStartTime(e.target.value);
   };
@@ -92,11 +76,7 @@ const CreateWorkSitePage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-<<<<<<< HEAD
     //todo faire le branchement
-=======
-
->>>>>>> 8b5cafb62a1db4cf31a9347d79a552c95bc87cde
     try {
       setAvailableStaff(mockStaff);
       setAvailableWorksiteChief(mockWorksiteChief);
@@ -107,7 +87,6 @@ const CreateWorkSitePage: React.FC = () => {
     }
   };
 
-<<<<<<< HEAD
   const handleCreateWorkSite = async () => {
     // Vérifiez d'abord si toutes les sélections nécessaires ont été effectuées
     if (!startTime || !endTime || !selectedStaff.length || !selectedTools.length) {
@@ -141,8 +120,6 @@ const CreateWorkSitePage: React.FC = () => {
     }
   };
 
-=======
->>>>>>> 8b5cafb62a1db4cf31a9347d79a552c95bc87cde
   const handleSelectStaff = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedUserId = e.target.value;
     const selectedUser = availableStaff.find(user => user.id === selectedUserId);
@@ -160,7 +137,6 @@ const CreateWorkSitePage: React.FC = () => {
     }
   };
 
-<<<<<<< HEAD
   const handleRandomStaffSelection = () => {
     //TODO rendre la selection aléatoire ?
     const selectedStaff = mockStaff.slice(0, numRandomStaff);
@@ -171,8 +147,6 @@ const CreateWorkSitePage: React.FC = () => {
     ));
   };
 
-=======
->>>>>>> 8b5cafb62a1db4cf31a9347d79a552c95bc87cde
   const handleSelectWorksiteChief = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedUserId = e.target.value;
     const selectedUser = availableWorksiteChief.find(user => user.id === selectedUserId);
@@ -188,7 +162,6 @@ const CreateWorkSitePage: React.FC = () => {
     }
   };
 
-<<<<<<< HEAD
   const handleOnSearch = (string: any, results: any) => {
     setFilterValue(string);
     console.log(string, results);
@@ -226,18 +199,6 @@ const CreateWorkSitePage: React.FC = () => {
   };
 
 
-=======
-  const handleRandomStaffSelection = () => {
-    //TODO rendre la selection aléatoire ?
-    const selectedStaff = mockStaff.slice(0, numRandomStaff);
-    setSelectedStaff(selectedStaff);
-    setAvailableStaff(mockStaff);
-    setAvailableStaff(prevStaff => prevStaff.filter(
-      (staff) => !selectedStaff.some((user) => user.id === staff.id)
-    ));
-  };
-
->>>>>>> 8b5cafb62a1db4cf31a9347d79a552c95bc87cde
   return (
     <Container>
       <Row className="mb-5"></Row>
@@ -291,7 +252,6 @@ const CreateWorkSitePage: React.FC = () => {
             className="mb-3 flex-grow-1">
 
             <Tab eventKey="personnel" title={`Personnel (${mockStaff.length})`} style={{ width: '100%' }}>
-<<<<<<< HEAD
               <Row className="mb-3"></Row>
               <Row className="mb-5">
                 <h2>Selectionner le personnel nécessaire au chantier :</h2>
@@ -537,130 +497,6 @@ const CreateWorkSitePage: React.FC = () => {
       <Row className="mb-5"></Row>
     </Container>
 
-=======
-              <Container style={{ height: '200px' }}>
-              <Row className="mt-3">
-                <Col xs={12} md={6}>
-                  {/* Liste du personnel */}
-                  <h4>Liste du personnel :</h4>
-                  <Form.Select onChange={handleSelectWorksiteChief}>
-                    <option value="">Sélectionner un membre du personnel...</option>
-                    {availableWorksiteChief.map(user => (
-                      <option key={user.id} value={user.id}>{user.firstName} {user.lastName}</option>
-                    ))}
-                  </Form.Select>
-                </Col>
-                <Col xs={2}></Col>
-                {selectedWorksiteChief && (
-                  <Col key={selectedWorksiteChief.id} xs={12} sm={6} md={4} lg={3} xl={2} className="mb-3">
-                    <Card>
-                      <Card.Body>
-                        <Card.Title>{selectedWorksiteChief.firstName} {selectedWorksiteChief.lastName}</Card.Title>
-                        <Card.Text>
-                          {selectedWorksiteChief.role}
-                          <br />
-                          {selectedWorksiteChief.email}
-                          <br />
-                          {selectedWorksiteChief.phoneNumber}
-                        </Card.Text>
-                        <Button variant="danger" size="sm" onClick={() => handleRemoveSelectedWorksiteChief(selectedWorksiteChief.id)}>
-                          Retirer
-                        </Button>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                )}
-              </Row>
-              </Container>
-              <Row className="mt-3">
-                <Col xs={12} md={6}>
-                  {/* Liste du personnel */}
-                  <h4>Liste du personnel :</h4>
-                  <Form.Select onChange={handleSelectStaff}>
-                    <option value="">Sélectionner un membre du personnel...</option>
-                    {availableStaff.map(user => (
-                      <option key={user.id} value={user.id}>{user.firstName} {user.lastName}</option>
-                    ))}
-                  </Form.Select>
-                </Col>
-                <Col xs={12} md={6}>
-                  {/* Formulaire pour choisir le nombre de personnes à sélectionner aléatoirement */}
-                  <h4>Sélection aléatoire :</h4>
-                  <Form.Group controlId="numRandomStaff">
-                    <Form.Label>Nombre de personnes</Form.Label>
-                    <Form.Control
-                      type="number"
-                      min={1}
-                      value={numRandomStaff}
-                      onChange={(e) => setNumRandomStaff(parseInt(e.target.value))}
-                    />
-                  </Form.Group>
-                  <Button variant="primary" onClick={handleRandomStaffSelection}>Sélectionner aléatoirement</Button>
-                </Col>
-              </Row>
-            </Tab>
-            {/* Votre onglet outillage existant */}
-            {/* ... */}
-          </Tabs>
-        </Container>
-      )}
-
-      {/* Carte des membres du personnel sélectionnés */}
-      {selectedStaff.length > 0 && (
-        <Container>
-          <Row className="mb-3"></Row>
-          <h4>Membres du personnel sélectionnés :</h4>
-          <Row>
-            {selectedStaff.map((user) => (
-              <Col key={user.id} xs={12} sm={6} md={4} lg={3} xl={2} className="mb-3">
-                <Card>
-                  <Card.Body>
-                    <Card.Title>{user.firstName} {user.lastName}</Card.Title>
-                    <Card.Text>
-                      {user.role}
-                      <br />
-                      {user.email}
-                      <br />
-                      {user.phoneNumber}
-                    </Card.Text>
-                    <Button variant="danger" size="sm" onClick={() => handleRemoveSelectedStaff(user.id)}>
-                      Retirer
-                    </Button>
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))}
-          </Row>
-        </Container>
-      )}
-
-
-
-
-      {/* Carte de l'outil sélectionné */}
-      {selectedTool && (
-        <Container>
-          <Row className="mb-3"></Row>
-          <h4>Outil sélectionné :</h4>
-          <Row>
-            <Col xs={12} sm={6} md={4} lg={3} xl={2} className="mb-3">
-              <Card>
-                <Card.Body>
-                  <Card.Title>{selectedTool.name}</Card.Title>
-                  <Card.Text>
-                    Quantité : {selectedTool.quantity}
-                  </Card.Text>
-                  <Button variant="danger" size="sm" onClick={() => setSelectedTool(null)}>
-                    Retirer
-                  </Button>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-        </Container>
-      )}
-    </Container>
->>>>>>> 8b5cafb62a1db4cf31a9347d79a552c95bc87cde
   );
 };
 
