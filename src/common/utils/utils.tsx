@@ -14,6 +14,7 @@ import { ReactComponent as PickupPointIcon } from 'bootstrap-icons/icons/box-sea
 import { ReactComponent as SmallWorkIcon } from 'bootstrap-icons/icons/tools.svg'
 import { ReactComponent as BicycleIcon } from 'bootstrap-icons/icons/bicycle.svg'
 import { ReactComponent as FireWoodIcon } from 'bootstrap-icons/icons/fire.svg'
+import CryptoJS from 'crypto-js';
 
 export function getStatusColor(status: WorkSiteStatus): string {
     switch (status) {
@@ -82,3 +83,8 @@ export function getCategoryIcon(status: Category) {
             return <NotFoundIcon className='primary' width='20px' height='100%' />;
     }
 }
+
+export function hashPassword(password: string): string {
+    return CryptoJS.SHA256(password).toString();
+}
+

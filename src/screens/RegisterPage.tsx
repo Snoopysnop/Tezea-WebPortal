@@ -7,7 +7,8 @@ const RegisterPage: React.FC = () => {
     return (
         <Container>
             <Row className="justify-content-center mt-5">
-                <Col md={6} className="login-container border bg-white p-4">
+            <Col md={5} >
+            <Container className="border bg-white p-4" style={{borderRadius: '20px'}}>
                     <h1 className="text-center mb-4">Inscription</h1>
                     <Form>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -69,6 +70,7 @@ const RegisterPage: React.FC = () => {
                             </p>
                         </Col>
                     </Row>
+                    </Container>
                 </Col>
             </Row>
         </Container>

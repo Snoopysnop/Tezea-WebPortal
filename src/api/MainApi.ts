@@ -2,6 +2,7 @@ import axios, { AxiosInstance } from 'axios'
 import axiosRetry from 'axios-retry'
 import AbstractApi from './AbstractApi'
 import { User } from './Model'
+import { hashPassword } from '../common/utils/utils'
 
 const standaloneInstance = axios.create({
     baseURL: process.env.REACT_APP_API_URL,
@@ -57,6 +58,30 @@ class MainApi extends AbstractApi {
             return response.data as User
         } catch(err) {
             throw AbstractApi.handleError(err)
+        }
+    }
+
+    public async login(username: string, password: string): Promise<void> {
+        const hashedPassword: string = hashPassword(password);
+        const url: string = 'http://localhost:8080/realms/Tezea/protocol/openid-connect/token';
+        
+        const response = await this.service.post(url, {
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: {
+                'username': username,
+                'password': hashedPassword,
+                'grant_type': process.env.REACT_APP_GRANT_TYPE,
+                'client_id': process.env.REACT_APP_CLIENT_ID,
+                'client_secret': process.env.REACT_APP_CLIENT_SECRET,
+            }
+        });
+    
+        if (response.status === 200) {
+            const token: string = JSON.parse(response.data)["access_token"].toString();
+        } else if (response.status === 401) {
+            throw new Error('Wrong username or password ...');
+        } else {
+            throw new Error(`Erreur : ${response.status}, Réponse : ${response.data}`);
         }
     }
 }
