@@ -15,6 +15,20 @@ export enum Category {
     LocationVelosElectriques = "Location Velos Electriques"
 }
 
+export enum ToolName{
+    Stapler = "Agrafeuse",
+    CementMixer = "Bétonnière",
+    Shear = "Cisaille",
+    Wrench = "Clé anglaise",
+    Ladder = "Échelle",
+    Axe = "Hache",
+    Palette = "Palette",
+    Rake = "Râteau",
+    Saw = "Scie",
+    Drill = "Perceuse",
+    Shovel = "Pelle"
+}
+
 export enum Civility {
     M = "M",
     Mme = "Mme",
@@ -143,7 +157,6 @@ export interface WorkSiteRequest {
     serviceType: Service;
     description: string;
     emergency: Emergency;
-    status: WorkSiteStatus;
     title: string;
     category: Category;
     removal: boolean;
@@ -163,13 +176,13 @@ export interface WorkSiteRequest {
 
 export interface WorkSite {
     id: string;
-    workSiteChief: User;
+    workSiteChief: User | undefined;
     staff: User[];
     equipment: ToolUsage[];
     begin: Date;
     end: Date;
     status: WorkSiteStatus;
-    request: WorkSiteRequest;
+    request: WorkSiteRequest | undefined; //todo a voir si on laisse undefined
     satisfaction: SatisfactionLevel;
     signature: ArrayBuffer;
 }
@@ -191,12 +204,8 @@ export interface ToolUsage {
 }
 
 export interface Tool {
-    name: string;
+    name: ToolName;
     quantity: number;
     schedules: ToolUsage[];
 }
-
-
-
-
 
