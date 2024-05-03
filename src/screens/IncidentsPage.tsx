@@ -105,14 +105,14 @@ const IncidentsPage: React.FC = () => {
         </Col>
       </Row>
 
-      <Container className="mt-4">
-        <Table>
+      <Container className="container-xxl mt-4">
+        <Table responsive>
           <thead>
             <tr>
-              {selectedStatus.length > 0 && <th>Date</th>}
-              {selectedStatus.includes(Emergency.Low) && <th>{Emergency.Low}</th>}
-              {selectedStatus.includes(Emergency.Medium) && <th>{Emergency.Medium}</th>}
-              {selectedStatus.includes(Emergency.High) && <th>{Emergency.High}</th>}
+              {selectedStatus.length > 0 && <th className="col-lg-1">Date</th>}
+              {selectedStatus.includes(Emergency.Low) && <th className="col-lg-3">{Emergency.Low}</th>}
+              {selectedStatus.includes(Emergency.Medium) && <th className="col-lg-3">{Emergency.Medium}</th>}
+              {selectedStatus.includes(Emergency.High) && <th className="col-lg-3">{Emergency.High}</th>}
             </tr>
           </thead>
           <tbody>
@@ -126,7 +126,7 @@ const IncidentsPage: React.FC = () => {
                       {filteredTasks
                         .filter(task => task.emergency === Emergency.Low)
                         .map(task => (
-                          <Col key={task.id}  lg={12}>
+                          <Col key={task.id} lg={12}>
                             <EmergencyComponent
                               id={task.id}
                               description={task.description}
@@ -145,7 +145,7 @@ const IncidentsPage: React.FC = () => {
                       {filteredTasks
                         .filter(task => task.emergency === Emergency.Medium)
                         .map(task => (
-                          <Col key={task.id}  lg={12}>
+                          <Col key={task.id} lg={12}>
                             <EmergencyComponent
                               id={task.id}
                               description={task.description}

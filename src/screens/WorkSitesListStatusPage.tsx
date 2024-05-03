@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Table, InputGroup, Button, Form, Dropdown } from 'react-bootstrap';
 import { Category, Task, WorkSiteStatus } from '../api/Model';
 import TaskComponent from './TaskComponent';
+import '../App.css'
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 
 const WorkSitesListStatusPage: React.FC = () => {
@@ -82,7 +83,7 @@ const WorkSitesListStatusPage: React.FC = () => {
 
   return (
     <Container>
-      <Row >
+      <Row>
         {/* Utiliser ReactSearchAutocomplete */}
         <Col className="col-6">
           <ReactSearchAutocomplete
@@ -93,10 +94,7 @@ const WorkSitesListStatusPage: React.FC = () => {
             placeholder="Filtrer par nom de chantier..."
           />
         </Col>
-      </Row>
-
-      <Row className="mt-4">
-        <Col>
+        <Col className="col-6 d-flex">
           <Dropdown>
             <Dropdown.Toggle variant="secondary" id="dropdown-basic">
               Filtrer
@@ -118,15 +116,15 @@ const WorkSitesListStatusPage: React.FC = () => {
         </Col>
       </Row>
 
-      <Container className="mt-4">
-        <Table>
+      <Container className="container-xxl mt-4">
+        <Table responsive>
           <thead>
             <tr>
-              {selectedStatus.length > 0 && <th>Date</th>}
-              {selectedStatus.includes(WorkSiteStatus.Standby) && <th>A compléter</th>}
-              {selectedStatus.includes(WorkSiteStatus.InProgress) && <th>En cours</th>}
-              {selectedStatus.includes(WorkSiteStatus.Done) && <th>Terminé</th>}
-              {selectedStatus.includes(WorkSiteStatus.Canceled) && <th>Archivé</th>}
+              {selectedStatus.length > 0 && <th className="col-lg-1">Date</th>}
+              {selectedStatus.includes(WorkSiteStatus.Standby) && <th className="col-lg-2">A compléter</th>}
+              {selectedStatus.includes(WorkSiteStatus.InProgress) && <th className="col-lg-2">En cours</th>}
+              {selectedStatus.includes(WorkSiteStatus.Done) && <th className="col-lg-2">Terminé</th>}
+              {selectedStatus.includes(WorkSiteStatus.Canceled) && <th className="col-lg-2">Archivé</th>}
             </tr>
           </thead>
           <tbody>
@@ -232,4 +230,3 @@ const WorkSitesListStatusPage: React.FC = () => {
 };
 
 export default WorkSitesListStatusPage;
-
