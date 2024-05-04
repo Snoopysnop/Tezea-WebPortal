@@ -446,7 +446,7 @@ const CreateWorkSitePage: React.FC = () => {
                                       x={selectedQuantities[toolName] || 1} // Utilisez la quantité sélectionnée pour l'outil spécifique
                                       xmin={1}
                                       xmax={selectedTool.quantity}
-                                      onChange={({ x }) => handleQuantityChange(toolName, x)} // Passez le nom de l'outil pour identifier quelle quantité changer
+                                      onChange={( x: any ) => handleQuantityChange(toolName, x)} // Passez le nom de l'outil pour identifier quelle quantité changer
                                     />
 
                                   </Col>

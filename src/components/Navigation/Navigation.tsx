@@ -30,8 +30,7 @@ function Navigation() {
             <Route path="/creerChantier" element={<CreateWorkSitePage />} />
             <Route path="/listeChantiers" element={<WorkSiteListPage />} />
             <Route path="/listeDemandeChantiers" element={<WorkSiteListRequestPage />} />
-
-      <Route path="/planning" element={<SchedulePage />} />
+            <Route path="/planning" element={<SchedulePage />} />
             <Route path="/register" element={<RegisterPage />} />
           </Routes>
         </Col>
