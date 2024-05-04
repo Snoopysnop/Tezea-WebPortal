@@ -1,18 +1,18 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap'; // Import des composants Bootstrap
-import { Category, WorkSiteRequestStatusListPage, WorkSiteStatus } from '../api/Model';
+import { Category, WorkSiteStatus } from '../api/Model';
 import { getCategoryIcon, getStatusColor, getStatusIcon } from '../common/utils/utils';
 import { ReactComponent as ClockIcon } from 'bootstrap-icons/icons/clock.svg'
 import { ReactComponent as AddressIcon } from 'bootstrap-icons/icons/house-door.svg'
 
 type WorkSiteProps = {
-    id: number
+    id: string
     name: string
     date: string
     startHours: string
     endHour: string
     address: string
-    status: WorkSiteStatus | WorkSiteRequestStatusListPage
+    status: WorkSiteStatus
     category: Category
     onClick: () => void;
 }

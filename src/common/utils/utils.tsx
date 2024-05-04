@@ -1,4 +1,4 @@
-import { Category, Emergency, WorkSiteRequestStatusListPage, WorkSiteStatus } from "../../api/Model";
+import { Category, Emergency, WorkSiteStatus } from "../../api/Model";
 import { ReactComponent as InProgressIcon } from 'bootstrap-icons/icons/hourglass-split.svg'
 import { ReactComponent as DoneIcon } from 'bootstrap-icons/icons/check-lg.svg'
 import { ReactComponent as StandByIcon } from 'bootstrap-icons/icons/pause.svg'
@@ -16,7 +16,7 @@ import { ReactComponent as BicycleIcon } from 'bootstrap-icons/icons/bicycle.svg
 import { ReactComponent as FireWoodIcon } from 'bootstrap-icons/icons/fire.svg'
 import CryptoJS from 'crypto-js';
 
-export function getStatusColor(status:  WorkSiteStatus | WorkSiteRequestStatusListPage): string {
+export function getStatusColor(status: WorkSiteStatus): string {
     switch (status) {
         case WorkSiteStatus.Standby:
             return '#ebab34';
@@ -24,8 +24,10 @@ export function getStatusColor(status:  WorkSiteStatus | WorkSiteRequestStatusLi
             return '#24a6d1';
         case WorkSiteStatus.Done:
             return '#6bc238';
-        case WorkSiteStatus.Canceled:
+        case WorkSiteStatus.Archive:
             return '#d12424';
+        case WorkSiteStatus.ToComplete:
+            return '#FFB6C1';
         default:
             return '#000000';
     }
@@ -36,7 +38,7 @@ export function getEmergencyIconColor(status: Emergency): string {
         case Emergency.Low:
             return 'text-success';
         case Emergency.Medium:
-            return 'text-warning'; 
+            return 'text-warning';
         case Emergency.High:
             return 'text-danger';
         default:
@@ -52,6 +54,8 @@ export function getEmergencyColor(status: Emergency): string {
             return '#FFFF00';
         case Emergency.High:
             return '#FF0000';
+        case Emergency.Critical:
+            return '#000000';
         default:
             return '#FFFFFF';
     }
@@ -60,16 +64,19 @@ export function getEmergencyColor(status: Emergency): string {
 
 
 
-export function getStatusIcon(status:  WorkSiteStatus | WorkSiteRequestStatusListPage) {
+export function getStatusIcon(status: WorkSiteStatus) {
     switch (status) {
         case WorkSiteStatus.Standby:
             return <StandByIcon className='secondary' width='10px' height='100%' />;
         case WorkSiteStatus.InProgress:
-            return <InProgressIcon className='secondary' width='8px' height='100%'/>;
+            return <InProgressIcon className='secondary' width='8px' height='100%' />;
         case WorkSiteStatus.Done:
             return <DoneIcon className='secondary' width='10px' height='100%' />;
-        case WorkSiteStatus.Canceled:
+        case WorkSiteStatus.Archive:
             return <CanceledIcon className='secondary' width='8px' height='100%' />;
+        case WorkSiteStatus.ToComplete:
+            return <CanceledIcon className='secondary' width='8px' height='100%' />;
+    
         default:
             return <NotFoundIcon className='secondary' width='10px' height='100%' />;
     }
@@ -82,6 +89,8 @@ export function getEmergencyIcon(status: Emergency) {
         case Emergency.Medium:
             return <StandByIcon className='secondary' width='10px' height='100%' />;
         case Emergency.High:
+            return <StandByIcon className='secondary' width='10px' height='100%' />;
+        case Emergency.Critical:
             return <StandByIcon className='secondary' width='10px' height='100%' />;
         default:
             return <StandByIcon className='secondary' width='10px' height='100%' />;
