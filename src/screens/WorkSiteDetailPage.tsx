@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Card, Col, Container, Row, Table, Modal } from 'react-bootstrap';
-import { WorkSite, ToolUsage, User, Role, ToolName, WorkSiteStatus, SatisfactionLevel } from '../api/Model';
+import { WorkSite, User, Role, Tool, WorkSiteStatus, SatisfactionLevel, ToolName } from '../api/Model';
 import PopupEmergency from './PopupEmergency';
 
 
@@ -47,23 +47,14 @@ const WorkSiteDetailPage: React.FC = () => {
       }
     ],
     equipment: [
-      {
-        id: "tool1",
-        tool: {
+      {       
           name: ToolName.Stapler,
           quantity: 1,
-          schedules: []
-        },
-        quantity: 1
+  
       },
       {
-        id: "tool2",
-        tool: {
-          name: ToolName.Ladder,
+          name: ToolName.Palette,
           quantity: 2,
-          schedules: []
-        },
-        quantity: 2
       }
     ],
     begin: new Date("2024-05-01"),
@@ -114,10 +105,10 @@ const WorkSiteDetailPage: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {exampleWorkSite.equipment.map((toolUsage: ToolUsage) => (
-                    <tr key={toolUsage.id}>
-                      <td>{toolUsage.tool.name}</td>
-                      <td>{toolUsage.quantity}</td>
+                  {exampleWorkSite.equipment.map((tool: Tool) => (
+                    <tr key={tool.name}>
+                      <td>{tool.name}</td>
+                      <td>{tool.quantity}</td>
                     </tr>
                   ))}
                 </tbody>
