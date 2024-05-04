@@ -47,22 +47,23 @@ const WorkSiteDetailPage: React.FC = () => {
       }
     ],
     equipment: [
-      {       
-          name: ToolName.Stapler,
-          quantity: 1,
-  
+      {
+        name: ToolName.Stapler,
+        quantity: 1,
       },
       {
-          name: ToolName.Palette,
-          quantity: 2,
+        name: ToolName.Palette,
+        quantity: 2,
       }
     ],
-    begin: new Date("2024-05-01"),
-    end: new Date("2024-05-10"),
+    begin:"2024-10-10 09:00"
+    , end: "2024-10-10 12:00",
     status: WorkSiteStatus.InProgress,
     satisfaction: SatisfactionLevel.High,
     request: undefined,
-    signature: undefined
+    signature: undefined,
+    title: "",
+    address: ""
   };
 
   return (
@@ -75,8 +76,8 @@ const WorkSiteDetailPage: React.FC = () => {
               <Card.Text>
                 <p><strong>Chef de chantier :</strong> {exampleWorkSite.workSiteChief?.firstName} {exampleWorkSite.workSiteChief?.lastName}</p>
                 <p><strong>Statut:</strong> {exampleWorkSite.status}</p>
-                <p><strong>Date de début :</strong> {exampleWorkSite.begin.toDateString()}</p>
-                <p><strong>Date de fin :</strong> {exampleWorkSite.end.toDateString()}</p>
+                <p><strong>Date de début :</strong> {exampleWorkSite.begin}</p>
+                <p><strong>Date de fin :</strong> {exampleWorkSite.end}</p>
               </Card.Text>
               <Button variant="primary" onClick={openModal}>Déclarer un incident</Button>{' '}
               <Button variant="secondary">Voir la demande de chantiers</Button>
@@ -105,12 +106,19 @@ const WorkSiteDetailPage: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {exampleWorkSite.equipment.map((tool: Tool) => (
-                    <tr key={tool.name}>
-                      <td>{tool.name}</td>
-                      <td>{tool.quantity}</td>
-                    </tr>
-                  ))}
+                {exampleWorkSite.equipment && exampleWorkSite.equipment.length > 0 ? (
+  exampleWorkSite.equipment.map((tool: Tool) => (
+    <tr key={tool.name}>
+      <td>{tool.name}</td>
+      <td>{tool.quantity}</td>
+    </tr>
+  ))
+) : (
+  <tr>
+    <td colSpan={2}>Aucun équipement disponible</td>
+  </tr>
+)}
+
                 </tbody>
               </Table>
             </Card.Body>
@@ -131,15 +139,22 @@ const WorkSiteDetailPage: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {exampleWorkSite.staff.map((staffMember: User) => (
-                    <tr key={staffMember.id}>
-                      <td>{staffMember.firstName}</td>
-                      <td>{staffMember.lastName}</td>
-                      <td>{staffMember.role}</td>
-                      <td>{staffMember.email}</td>
-                      <td>{staffMember.phoneNumber}</td>
-                    </tr>
-                  ))}
+                {exampleWorkSite.staff && exampleWorkSite.staff.length > 0 ? (
+  exampleWorkSite.staff.map((staffMember: User) => (
+    <tr key={staffMember.id}>
+      <td>{staffMember.firstName}</td>
+      <td>{staffMember.lastName}</td>
+      <td>{staffMember.role}</td>
+      <td>{staffMember.email}</td>
+      <td>{staffMember.phoneNumber}</td>
+    </tr>
+  ))
+) : (
+  <tr>
+    <td colSpan={5}>Aucun membre du personnel disponible</td>
+  </tr>
+)}
+
                 </tbody>
               </Table>
             </Card.Body>

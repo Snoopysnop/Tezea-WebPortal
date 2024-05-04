@@ -43,9 +43,10 @@ export enum CustomerStatus {
 }
 
 export enum Emergency {
-    Low = "Bas",
+    Low = "Faible",
     Medium = "Moyen",
-    High = "Elevé"
+    High = "Haut",
+    Critical = "Bloquant"
 }
 
 export enum Role {
@@ -82,47 +83,22 @@ export enum WorkSiteRequestStatus {
     Closed = "Cloturée",
     Other = "Autre"
 }
-
-export enum WorkSiteRequestStatusListPage {
-    ToComplete ="A compléter",
-    Standby = "En attente",
-    Done = "Terminé",
-    Archive = "Archivé"
-}
-
+    
 export enum WorkSiteStatus {
     Standby = "En attente",
     InProgress = "En cours",
-    Canceled = "Archivé",
-    Done = "Terminé"
+    Done = "Terminé",
+    ToComplete ="A compléter",
+    Archive = "Archivé"
 }
 
-export interface Task {
-    id: number
-    name: string
-    date: string
-    startHours: string
-    endHour: string
-    address: string
-    status: WorkSiteStatus
-}
-
-export interface TaskRequest {
-    id: number
-    name: string
-    date: string
-    startHours: string
-    endHour: string
-    address: string
-    status: WorkSiteRequestStatusListPage
-}
 
 export interface EmergencyDetails {
     description: string,
     chantier: any,
     id: number,
     emergency: Emergency,
-    task: Task
+    worksite: WorkSite
 }
 
 
@@ -175,15 +151,17 @@ export interface WorkSiteRequest {
 
 export interface WorkSite {
     id: string;
-    workSiteChief: User | undefined;
-    staff: User[];
-    equipment: Tool[];
-    begin: Date;
-    end: Date;
+    workSiteChief?: User | undefined;
+    staff?: User[];
+    equipment?: Tool[];
+    begin: string;
+    end: string;
     status: WorkSiteStatus;
-    request: WorkSiteRequest | undefined; //todo a voir si on laisse undefined
-    satisfaction: SatisfactionLevel;
+    request?: WorkSiteRequest ; 
+    satisfaction?: SatisfactionLevel;
     signature?: String;
+    title: string;
+    address:string
 }
 
 export interface User {

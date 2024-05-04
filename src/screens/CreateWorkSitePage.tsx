@@ -121,13 +121,15 @@ const CreateWorkSitePage: React.FC = () => {
       equipment: selectedTools.map(toolName => ({
         name: toolName,
         quantity: selectedQuantities[toolName] || 1,
-      })as Tool),
-      begin: new Date(startTime),
-      end: new Date(endTime),
+      }) as Tool),
+      begin: startTime,
+      end: endTime,
       status: WorkSiteStatus.InProgress,
       request: undefined,
       satisfaction: SatisfactionLevel.Perfect,
       signature: "",
+      title: '',
+      address: ''
     };
 
     try {

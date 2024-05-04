@@ -1,40 +1,68 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Table, InputGroup, Button, Form, Dropdown } from 'react-bootstrap';
-import { Category, Task, WorkSiteStatus } from '../api/Model';
+import { Category, WorkSite, WorkSiteStatus } from '../api/Model';
 import TaskComponent from './WorkSiteComponent';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
+import WorkSiteComponent from './WorkSiteComponent';
 
 
 
 const WorkSitesListStatusPage: React.FC = () => {
 
-  const tasks: Task[] = [
-    { id: 1, name: "Chantier 1", date: "10/10/2024", startHours: "5PM", endHour: "9PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Standby },
-    { id: 2, name: "Chantier 2", date: "10/10/2024", startHours: "5PM", endHour: "9PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Standby },
-    { id: 3, name: "Chantier 2", date: "10/10/2024", startHours: "5PM", endHour: "9PM", address: "2 Fox Street, NY", status: WorkSiteStatus.InProgress },
-
-    { id: 4, name: "Chantier 2", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.InProgress },
-    { id: 5, name: "Chantier 3", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Canceled },
-    { id: 6, name: "Chantier 3", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Canceled },
-
-    { id: 7, name: "C", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Done },
-    { id: 8, name: "C", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Done },
-    { id: 9, name: "C", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Done },
-    { id: 10, name: "Chantier Test 14", date: "10/11/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Canceled },
-    { id: 11, name: "Chantier Test 24", date: "10/11/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Canceled },
-    { id: 12, name: "Chantier Test 35", date: "10/11/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Canceled },
+  const tasks: WorkSite[] = [
+    {
+      id: "1", title: "Chantier 1", begin: "2024-10-10 09:00"
+      , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
+    },
+    {
+      id: "2", title: "Chantier 2", begin: "2024-10-10 09:00"
+      , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.Standby
+    },
+    {
+      id: "3", title: "Chantier 2", begin: "2024-10-10 09:00"
+      , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.Done
+    },
+    {
+      id: "4", title: "Chantier 2", begin: "2024-10-10 09:00"
+      , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.Done
+    },
+    {
+      id: "5", title: "Chantier 3", begin: "2024-10-10 09:00"
+      , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.Done
+    },
+    {
+      id: "6", title: "Chantier 3", begin: "2024-10-10 09:00"
+      , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.ToComplete
+    },
+    {
+      id: "7", title: "Chantier Test 1", begin: "2024-10-10 09:00"
+      , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.InProgress
+    },
+    {
+      id: "8", title: "Chantier Test 2", begin: "2024-10-10 09:00"
+      , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.Done
+    },
+    {
+      id: "9", title: "Chantier Test 3", begin: "2024-10-10 09:00"
+      , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.Done
+    },
+    {
+      id: "10", title: "Chantier Test 14", begin: "2024-10-10 09:00"
+      , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.ToComplete
+    },
+    {
+      id: "11", title: "Chantier Test 24", begin: "2024-10-10 09:00"
+      , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
+    },
+    {
+      id: "12", title: "Chantier Test 35", begin: "2024-10-10 09:00"
+      , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
+    },
   ];
 
   const [filterValue, setFilterValue] = useState<string>("");
-  const filteredTasks = tasks.filter(task => task.name.toLowerCase().includes(filterValue.toLowerCase()));
-
-  const mapDateTasks = new Map<string, Task[]>();
-  filteredTasks.forEach(task => {
-    const taskList = mapDateTasks.get(task.date) || [];
-    taskList.push(task);
-    mapDateTasks.set(task.date, taskList);
-  });
+  const filteredTasks = tasks.filter(task => task.title.toLowerCase().includes(filterValue.toLowerCase()));
 
   const allStatus: WorkSiteStatus[] = Object.values(WorkSiteStatus);
   const [selectedStatus, setSelectedStatus] = useState<WorkSiteStatus[]>([]);
@@ -77,7 +105,7 @@ const WorkSitesListStatusPage: React.FC = () => {
 
   const items = tasks.map(task => ({
     id: task.id,
-    name: task.name,
+    name: task.title,
   }));
 
   const handleOnSearch = (string: any, results: any) => {
@@ -112,16 +140,18 @@ const WorkSitesListStatusPage: React.FC = () => {
                   Filtrer
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  {Object.values(WorkSiteStatus).map((status, index) => (
-                    <Dropdown.Item key={index}>
-                      <Form.Check
-                        type="checkbox"
-                        label={status}
-                        checked={!!checkboxes[status]}
-                        onChange={() => handleStatusChange(status)}
-                      />
-                    </Dropdown.Item>
-                  ))}
+                  {Object.values(WorkSiteStatus)
+                    .filter(status => status !== WorkSiteStatus.ToComplete)
+                    .map((status, index) => (
+                      <Dropdown.Item key={index}>
+                        <Form.Check
+                          type="checkbox"
+                          label={status}
+                          checked={!!checkboxes[status]}
+                          onChange={() => handleStatusChange(status)}
+                        />
+                      </Dropdown.Item>
+                    ))}
                 </Dropdown.Menu>
               </Dropdown>
             </Col>
@@ -133,113 +163,97 @@ const WorkSitesListStatusPage: React.FC = () => {
         <Table responsive>
           <thead>
             <tr>
-              {selectedStatus.length > 0 && <th className="col-lg-1">Date</th>}
               {selectedStatus.includes(WorkSiteStatus.Standby) && <th className="col-lg-2">{WorkSiteStatus.Standby}</th>}
               {selectedStatus.includes(WorkSiteStatus.InProgress) && <th className="col-lg-2">{WorkSiteStatus.InProgress}</th>}
               {selectedStatus.includes(WorkSiteStatus.Done) && <th className="col-lg-2">{WorkSiteStatus.Done}</th>}
-              {selectedStatus.includes(WorkSiteStatus.Canceled) && <th className="col-lg-2">{WorkSiteStatus.Canceled}</th>}
+              {selectedStatus.includes(WorkSiteStatus.Archive) && <th className="col-lg-2">{WorkSiteStatus.Archive}</th>}
             </tr>
           </thead>
           <tbody>
-
-            {Array.from(mapDateTasks.entries()).map(([date, filteredTasks]) => (
-              filteredTasks.some(task => selectedStatus.includes(task.status)) &&
-              <tr key={date}>
-                {selectedStatus.length > 0 && <td>{date}</td>}
-                {selectedStatus.includes(WorkSiteStatus.Standby) && (
-                  <td>
-                    <Row>
-                      {filteredTasks
-                        .filter(task => task.status === WorkSiteStatus.Standby)
-                        .map(task => (
-                          <Col key={task.id} lg={6}>
-                            <TaskComponent
-                              id={task.id}
-                              name={task.name}
-                              date={task.date}
-                              startHours={task.startHours}
-                              endHour={task.endHour}
-                              address={task.address}
-                              status={task.status}
-                              category={Category.CreaPalette}
-                              onClick={() => handleTaskClick()}
-                            />
-                          </Col>
-                        ))}
-                    </Row>
-                  </td>
-                )}
-                {selectedStatus.includes(WorkSiteStatus.InProgress) && (
-                  <td>
-                    <Row>
-                      {filteredTasks
-                        .filter(task => task.status === WorkSiteStatus.InProgress)
-                        .map(task => (
-                          <Col key={task.id} lg={6}>
-                            <TaskComponent
-                              id={task.id}
-                              name={task.name}
-                              date={task.date}
-                              startHours={task.startHours}
-                              endHour={task.endHour}
-                              address={task.address}
-                              status={task.status}
-                              category={Category.CreaPalette}
-                              onClick={() => handleTaskClick()}
-                            />
-                          </Col>
-                        ))}
-                    </Row>
-                  </td>
-                )}
-                {selectedStatus.includes(WorkSiteStatus.Done) && (
-                  <td>
-                    <Row>
-                      {filteredTasks
-                        .filter(task => task.status === WorkSiteStatus.Done)
-                        .map(task => (
-                          <Col key={task.id} lg={6}>
-                            <TaskComponent
-                              id={task.id}
-                              name={task.name}
-                              date={task.date}
-                              startHours={task.startHours}
-                              endHour={task.endHour}
-                              address={task.address}
-                              status={task.status}
-                              category={Category.CreaPalette}
-                              onClick={() => handleTaskClick()}
-                            />
-                          </Col>
-                        ))}
-                    </Row>
-                  </td>
-                )}
-                {selectedStatus.includes(WorkSiteStatus.Canceled) && (
-                  <td>
-                    <Row>
-                      {filteredTasks
-                        .filter(task => task.status === WorkSiteStatus.Canceled)
-                        .map(task => (
-                          <Col key={task.id} lg={6}>
-                            <TaskComponent
-                              id={task.id}
-                              name={task.name}
-                              date={task.date}
-                              startHours={task.startHours}
-                              endHour={task.endHour}
-                              address={task.address}
-                              status={task.status}
-                              category={Category.CreaPalette}
-                              onClick={() => handleTaskClick()}
-                            />
-                          </Col>
-                        ))}
-                    </Row>
-                  </td>
-                )}
-              </tr>
-            ))}
+            <td className={`col-lg-2 ${!selectedStatus.includes(WorkSiteStatus.Standby) && "d-none"}`}>
+              <Row>
+                {filteredTasks
+                  .filter(task => task.status === WorkSiteStatus.Standby)
+                  .map(task => (
+                    <Col key={task.id} lg={12}>
+                      <WorkSiteComponent
+                        id={task.id}
+                        name={task.title}
+                        date={task.begin.toLocaleString()}
+                        startHours={task.begin.toLocaleString()}
+                        endHour={task.end.toLocaleString()}
+                        address={task.address}
+                        status={task.status}
+                        category={Category.CreaPalette}
+                        onClick={() => handleTaskClick()}
+                      />
+                    </Col>
+                  ))}
+              </Row>
+            </td>
+            <td className={`col-lg-2 ${!selectedStatus.includes(WorkSiteStatus.InProgress) && "d-none"}`}>
+              <Row>
+                {filteredTasks
+                  .filter(task => task.status === WorkSiteStatus.InProgress)
+                  .map(task => (
+                    <Col key={task.id} lg={12}>
+                      <WorkSiteComponent
+                        id={task.id}
+                        name={task.title}
+                        date={task.begin.toLocaleString()}
+                        startHours={task.begin.toLocaleString()}
+                        endHour={task.end.toLocaleString()}
+                        address={task.address}
+                        status={task.status}
+                        category={Category.CreaPalette}
+                        onClick={() => handleTaskClick()}
+                      />
+                    </Col>
+                  ))}
+              </Row>
+            </td>
+            <td className={`col-lg-2 ${!selectedStatus.includes(WorkSiteStatus.Done) && "d-none"}`}>
+              <Row>
+                {filteredTasks
+                  .filter(task => task.status === WorkSiteStatus.Done)
+                  .map(task => (
+                    <Col key={task.id} lg={12}>
+                      <WorkSiteComponent
+                        id={task.id}
+                        name={task.title}
+                        date={task.begin.toLocaleString()}
+                        startHours={task.begin.toLocaleString()}
+                        endHour={task.end.toLocaleString()}
+                        address={task.address}
+                        status={task.status}
+                        category={Category.CreaPalette}
+                        onClick={() => handleTaskClick()}
+                      />
+                    </Col>
+                  ))}
+              </Row>
+            </td>
+            <td className={`col-lg-2 ${!selectedStatus.includes(WorkSiteStatus.Archive) && "d-none"}`}>
+              <Row>
+                {filteredTasks
+                  .filter(task => task.status === WorkSiteStatus.Archive)
+                  .map(task => (
+                    <Col key={task.id} lg={12}>
+                      <WorkSiteComponent
+                        id={task.id}
+                        name={task.title}
+                        date={task.begin.toLocaleString()}
+                        startHours={task.begin.toLocaleString()}
+                        endHour={task.end.toLocaleString()}
+                        address={task.address}
+                        status={task.status}
+                        category={Category.CreaPalette}
+                        onClick={() => handleTaskClick()}
+                      />
+                    </Col>
+                  ))}
+              </Row>
+            </td>
           </tbody>
         </Table>
       </Container>
