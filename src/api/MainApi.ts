@@ -1,7 +1,8 @@
 import axios, { AxiosInstance } from 'axios'
 import axiosRetry from 'axios-retry'
 import AbstractApi from './AbstractApi'
-import { User, WorkSiteRequest } from './Model'
+import { Customer, User, WorkSiteRequest } from './Model'
+import { CustomerJson, UserJson, WorkSiteRequestJson } from './ModelJson'
 
 const standaloneInstance = axios.create({
     baseURL: process.env.REACT_APP_URL,
@@ -82,7 +83,23 @@ class MainApi extends AbstractApi {
         }
     }
 
+    public async getWorksiteRequestbyId(id: number): Promise<WorkSiteRequestJson> {
+        try {
+            const response = await this.service.get(`/api/workSiteRequests/${id}`)
+            return response.data as WorkSiteRequestJson
+        } catch(err) {
+            throw AbstractApi.handleError(err)
+        }
+    }
 
+    public async getCustomerbyId(id: string): Promise<CustomerJson> {
+        try {
+            const response = await this.service.get(`/api/customers/${id}`)
+            return response.data as CustomerJson
+        } catch(err) {
+            throw AbstractApi.handleError(err)
+        }
+    }
 
 
 

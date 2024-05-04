@@ -2,12 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { Form, Col, Row, Button, Container } from 'react-bootstrap';
 import { Role, User, Customer, WorkSiteRequest, Civility, CustomerStatus, Service, Emergency, Category, WorkSiteStatus, WorkSiteRequestStatus } from '../api/Model';
 import MainApi from "../api/MainApi"
+import { useLocation } from 'react-router-dom';
 
-const WorkSiteRequestPage: React.FC = (updateWorksiteRequest?: WorkSiteRequest, updateCustomer?: Customer) => {
+
+const WorkSiteRequestPage: React.FC = () => {
+
+
+  const location = useLocation();
+  const updateWorksiteRequest = location.state ? (location.state as any).worksiteRequest as WorkSiteRequest : null;
 
 
   const [customerFormData, customerSetFormData] = useState({
-    customer: updateCustomer || {
+    customer: updateWorksiteRequest?.customer || {
       id: '',
       firstName: '',
       lastName: '',
@@ -24,8 +30,8 @@ const WorkSiteRequestPage: React.FC = (updateWorksiteRequest?: WorkSiteRequest, 
   });
   const [worksiteRequestFormData, worksiteRequestSetFormData] = useState({
     worksiteRequest: updateWorksiteRequest || {
-      id: '',
-      concierge: { id: '241c9354-e867-4a1d-b9f5-e71934af0e4e', firstName: 'Bruno', lastName: 'Chaveron', role: Role.Concierge, email: 'bruno.chaveron@gmail.com', phoneNumber: '0710101010' } as User, //todo remplacer par les infos du user actuel
+      id: undefined,
+      concierge: { id: '5327ed76-b97f-4cd7-8201-b4a7d2215f18', firstName: 'Bruno', lastName: 'Savon', role: Role.Concierge, email: 'Bruno.Savon@gmail.com', phoneNumber: '1698532499' } as User, //todo remplacer par les infos du user actuel
       siteChief: undefined,
       city: '',
       workSites: undefined,
@@ -39,13 +45,10 @@ const WorkSiteRequestPage: React.FC = (updateWorksiteRequest?: WorkSiteRequest, 
       delivery: false,
       removalRecycling: false,
       chronoQuote: false,
-      date: new Date(),
+      estimatedDate: new Date(),
       requestStatus: undefined,
-      hourReturnDeposit: '',
-      hourArrival: '',
-      hourDeparture: '',
       weightEstimate: 0,
-      volumeEstimation: 0,
+      volumeEstimate: 0,
       provider: '',
       tezeaAffectation: ''
   }
@@ -81,7 +84,7 @@ const WorkSiteRequestPage: React.FC = (updateWorksiteRequest?: WorkSiteRequest, 
       ...worksiteRequestFormData,
       worksiteRequest: {
         ...worksiteRequestFormData.worksiteRequest,
-        date: dateValue
+        estimatedDate: dateValue
       }
     });
   };
@@ -115,11 +118,10 @@ const WorkSiteRequestPage: React.FC = (updateWorksiteRequest?: WorkSiteRequest, 
         postalCode: customerFormData.customer.postalCode,
         status: customerFormData.customer.status,
         company: customerFormData.customer.company,
-        requests: []
       };
   
       const worksiteRequest: WorkSiteRequest = {
-        id: '',
+        id: undefined,
         concierge: worksiteRequestFormData.worksiteRequest.concierge,
         siteChief: worksiteRequestFormData.worksiteRequest.siteChief,
         customer: customer,
@@ -134,13 +136,10 @@ const WorkSiteRequestPage: React.FC = (updateWorksiteRequest?: WorkSiteRequest, 
         delivery: worksiteRequestFormData.worksiteRequest.delivery,
         removalRecycling: worksiteRequestFormData.worksiteRequest.removalRecycling,
         chronoQuote: worksiteRequestFormData.worksiteRequest.chronoQuote,
-        date: worksiteRequestFormData.worksiteRequest.date,
+        estimatedDate: worksiteRequestFormData.worksiteRequest.estimatedDate,
         requestStatus: worksiteRequestFormData.worksiteRequest.requestStatus,
-        hourReturnDeposit: worksiteRequestFormData.worksiteRequest.hourReturnDeposit,
-        hourArrival: worksiteRequestFormData.worksiteRequest.hourArrival,
-        hourDeparture: worksiteRequestFormData.worksiteRequest.hourDeparture,
         weightEstimate: worksiteRequestFormData.worksiteRequest.weightEstimate,
-        volumeEstimation: worksiteRequestFormData.worksiteRequest.volumeEstimation,
+        volumeEstimate: worksiteRequestFormData.worksiteRequest.volumeEstimate,
         provider: worksiteRequestFormData.worksiteRequest.provider,
         tezeaAffectation: worksiteRequestFormData.worksiteRequest.tezeaAffectation
       };
@@ -277,7 +276,7 @@ const WorkSiteRequestPage: React.FC = (updateWorksiteRequest?: WorkSiteRequest, 
 
           <Form.Group as={Col} controlId="formGridDate">
             <Form.Label >Date</Form.Label>
-            <Form.Control type="date" value={worksiteRequestFormData.worksiteRequest.date ? worksiteRequestFormData.worksiteRequest.date.toISOString().split('T')[0] : ''} onChange={handleDateChange} name="date" />
+            <Form.Control type="date" value={worksiteRequestFormData.worksiteRequest.estimatedDate ? worksiteRequestFormData.worksiteRequest.estimatedDate.toISOString().split('T')[0] : ''} onChange={handleDateChange} name="date" />
           </Form.Group>
 
         </Row>
@@ -300,22 +299,6 @@ const WorkSiteRequestPage: React.FC = (updateWorksiteRequest?: WorkSiteRequest, 
           </Form.Group>
         </Row>
 
-        <Row className="mb-3" style={{ color: '#008FE3', fontSize: '18px' }}>
-
-          <Form.Group as={Col} controlId="formGridHourArrival">
-            <Form.Label>Heure d'arrivée du client</Form.Label>
-            <Form.Control type="time" value={worksiteRequestFormData.worksiteRequest.hourArrival} onChange={(e) => handleTimeChange("hourArrival", e.target.value)} />
-          </Form.Group>
-
-          <Form.Group as={Col} controlId="formGridHourDeparture">
-            <Form.Label >Heure de départ du client</Form.Label>
-            <Form.Control type="time" value={worksiteRequestFormData.worksiteRequest.hourDeparture} onChange={(e) => handleTimeChange("hourDeparture", e.target.value)} />
-          </Form.Group>
-          <Form.Group as={Col} controlId="formGridHourReturnDeposit">
-            <Form.Label style={{ color: '#008FE3' }}>Heure de retour du dépôt</Form.Label>
-            <Form.Control type="time" value={worksiteRequestFormData.worksiteRequest.hourReturnDeposit} onChange={(e) => handleTimeChange("hourReturnDeposit", e.target.value)} />
-          </Form.Group>
-        </Row>
 
         <Row className="mb-3" style={{ color: '#008FE3', fontSize: '18px' }}>
 
@@ -371,7 +354,7 @@ const WorkSiteRequestPage: React.FC = (updateWorksiteRequest?: WorkSiteRequest, 
 
           <Form.Group as={Col} controlId="formGridVolumeEstimation">
             <Form.Label style={{ color: '#008FE3' }}>Estimation du volume</Form.Label>
-            <Form.Control type="number" placeholder="Entrez l'estimation du volume" value={worksiteRequestFormData.worksiteRequest.volumeEstimation} onChange={(e) => worksiteRequestSetFormData({ ...worksiteRequestFormData, worksiteRequest: { ...worksiteRequestFormData.worksiteRequest, volumeEstimation: parseInt(e.target.value) } })} />
+            <Form.Control type="number" placeholder="Entrez l'estimation du volume" value={worksiteRequestFormData.worksiteRequest.volumeEstimate} onChange={(e) => worksiteRequestSetFormData({ ...worksiteRequestFormData, worksiteRequest: { ...worksiteRequestFormData.worksiteRequest, volumeEstimate: parseInt(e.target.value) } })} />
           </Form.Group>
         </Row>
         <Row className="mb-5"></Row>

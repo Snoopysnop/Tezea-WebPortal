@@ -19,7 +19,7 @@ const SidebarComponent: React.FC = () => {
         setSidebarCollapsed(!sidebarCollapsed);
     };
 
-    //MainApi.initInstance()
+    MainApi.initInstance()
     KeycloakApi.initInstance()
 
     const handleMenuItemClick = () => {

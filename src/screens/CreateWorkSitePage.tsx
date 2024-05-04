@@ -29,17 +29,17 @@ const mockWorksiteChief: User[] = [
 ];
 
 const mockTools: Tool[] = [
-  { name: ToolName.Stapler, quantity: 5},
-  { name: ToolName.CementMixer, quantity: 2},
-  { name: ToolName.Shear, quantity: 3},
-  { name: ToolName.Wrench, quantity: 4},
-  { name: ToolName.Ladder, quantity: 6},
-  { name: ToolName.Axe, quantity: 2},
-  { name: ToolName.Palette, quantity: 8},
-  { name: ToolName.Rake, quantity: 3},
-  { name: ToolName.Saw, quantity: 5},
-  { name: ToolName.Drill, quantity: 4},
-  { name: ToolName.Shovel, quantity: 16},
+  { name: ToolName.Stapler, quantity: 5 },
+  { name: ToolName.CementMixer, quantity: 2 },
+  { name: ToolName.Shear, quantity: 3 },
+  { name: ToolName.Wrench, quantity: 4 },
+  { name: ToolName.Ladder, quantity: 6 },
+  { name: ToolName.Axe, quantity: 2 },
+  { name: ToolName.Palette, quantity: 8 },
+  { name: ToolName.Rake, quantity: 3 },
+  { name: ToolName.Saw, quantity: 5 },
+  { name: ToolName.Drill, quantity: 4 },
+  { name: ToolName.Shovel, quantity: 16 },
 ];
 
 
@@ -267,7 +267,7 @@ const CreateWorkSitePage: React.FC = () => {
                   </Button>
                 </Row>
                 <Row className="text-center">
-                {error && <Alert variant="danger">{error}</Alert>}
+                  {error && <Alert variant="danger">{error}</Alert>}
                 </Row>
               </Form>
             </Col>
@@ -441,12 +441,11 @@ const CreateWorkSitePage: React.FC = () => {
                                   <Col xs={8}>
 
                                     <Slider
-
                                       axis="x"
                                       x={selectedQuantities[toolName] || 1} // Utilisez la quantité sélectionnée pour l'outil spécifique
                                       xmin={1}
                                       xmax={selectedTool.quantity}
-                                      onChange={( x: any ) => handleQuantityChange(toolName, x)} // Passez le nom de l'outil pour identifier quelle quantité changer
+                                      onChange={(pos) => handleQuantityChange(toolName, pos.x)} // Passez le nom de l'outil pour identifier quelle quantité changer
                                     />
 
                                   </Col>
@@ -483,34 +482,34 @@ const CreateWorkSitePage: React.FC = () => {
               </Row>
               <Container>
                 <Row>
-                <Col xs={1}></Col>
-                <Col>
-                  <Row className="mb-5" style={{ fontSize: '20px' }}>
-                    Chef de chantier  : {selectedWorksiteChief ? `${selectedWorksiteChief.firstName} ${selectedWorksiteChief.lastName}` : 'Aucun'}
-                  </Row>
-                  <Row>
-                    <Col>
-                      <Row className="mb-3">
-                        Employés sélectionnés :
-                      </Row>
-                      <Row>
-                        {selectedStaff.map(user => (
-                          <li key={user.id}>{user.firstName} {user.lastName}</li>
-                        ))}
-                      </Row>
-                    </Col>
-                    <Col>
-                      <Row className="mb-3">
-                        Outils sélectionnés :
-                      </Row>
-                      <Row>
-                        {selectedTools.map(toolName => (
-                          <li key={toolName}>{toolName} - Quantité : {selectedQuantities[toolName]}</li>
-                        ))}
-                      </Row>
-                    </Col>
-                  </Row>
-                </Col>
+                  <Col xs={1}></Col>
+                  <Col>
+                    <Row className="mb-5" style={{ fontSize: '20px' }}>
+                      Chef de chantier  : {selectedWorksiteChief ? `${selectedWorksiteChief.firstName} ${selectedWorksiteChief.lastName}` : 'Aucun'}
+                    </Row>
+                    <Row>
+                      <Col>
+                        <Row className="mb-3">
+                          Employés sélectionnés :
+                        </Row>
+                        <Row>
+                          {selectedStaff.map(user => (
+                            <li key={user.id}>{user.firstName} {user.lastName}</li>
+                          ))}
+                        </Row>
+                      </Col>
+                      <Col>
+                        <Row className="mb-3">
+                          Outils sélectionnés :
+                        </Row>
+                        <Row>
+                          {selectedTools.map(toolName => (
+                            <li key={toolName}>{toolName} - Quantité : {selectedQuantities[toolName]}</li>
+                          ))}
+                        </Row>
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
               </Container>
               <Row className="mb-5"></Row>

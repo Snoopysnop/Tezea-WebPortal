@@ -123,7 +123,7 @@ export interface Customer {
 }
 
 export interface WorkSiteRequest {
-    id?: string;
+    id?: number;
     concierge?: User;
     siteChief?: User;
     customer?: Customer;
@@ -138,13 +138,10 @@ export interface WorkSiteRequest {
     delivery?: boolean;
     removalRecycling?: boolean;
     chronoQuote?: boolean;
-    date?: Date;
+    estimatedDate?: Date;
     requestStatus?: WorkSiteRequestStatus;
-    hourReturnDeposit?: string;
-    hourArrival?: string;
-    hourDeparture?: string;
     weightEstimate?: number;
-    volumeEstimation?: number;
+    volumeEstimate?: number;
     provider?: string;
     tezeaAffectation?: string;
 }

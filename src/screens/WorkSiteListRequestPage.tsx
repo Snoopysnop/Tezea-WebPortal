@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Table, InputGroup, Button, Form, Dropdown } from 'react-bootstrap';
-import { Category, WorkSite, WorkSiteStatus } from '../api/Model';
+import { Category, WorkSite, WorkSiteStatus, WorkSiteRequest, Customer } from '../api/Model';
+import { WorkSiteRequestJson, CustomerJson } from '../api/ModelJson';
+
 import '../App.css'
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 import WorkSiteRequestPopUp from '../components/WorkSiteRequestPopUp';
 import WorkSiteComponent from './WorkSiteComponent';
+import MainApi from "../api/MainApi"
 
 const WorkSiteListRequestPage: React.FC = () => {
 
@@ -75,7 +78,23 @@ const WorkSiteListRequestPage: React.FC = () => {
     setSelectedStatus(Object.keys(updatedCheckboxes).filter(key => updatedCheckboxes[key as WorkSiteStatus]) as WorkSiteStatus[]);
   };
   const [modalShow, setModalShow] = useState(false);
-  const handleTaskClick = () => {
+  const [worksiteRequestData, setWorksiteRequestData] = useState<WorkSiteRequest>();
+
+  const handleTaskClick = async (id:number) => {
+    const responseWorksiteRequest = await MainApi.getInstance().getWorksiteRequestbyId(id) as WorkSiteRequestJson;
+    const responseCustomer = await MainApi.getInstance().getCustomerbyId(responseWorksiteRequest.customer!) as CustomerJson;
+    const worksiteRequestMapper = responseWorksiteRequest as WorkSiteRequest;
+    const customerMapper = responseCustomer as Customer;
+    worksiteRequestMapper.customer = customerMapper;
+
+    const dateString = responseWorksiteRequest.estimatedDate!; //todo ! ?????
+    const date = new Date(dateString);
+    worksiteRequestMapper.estimatedDate = date;
+
+    console.log(worksiteRequestMapper);
+    setWorksiteRequestData(worksiteRequestMapper);
+      
+
     //TODO faire appel api get bdd
     //ptet rajouter un booleen pour differencier demande et chantier boolean:Boolean
     setModalShow(true);
@@ -179,7 +198,7 @@ const WorkSiteListRequestPage: React.FC = () => {
                       address={task.address}
                       status={task.status}
                       category={Category.CreaPalette}
-                      onClick={() => handleTaskClick()}
+                      onClick={() => handleTaskClick(Number(task.id))}
                     />
                   </Col>
                 ))}
@@ -200,7 +219,7 @@ const WorkSiteListRequestPage: React.FC = () => {
                       address={task.address}
                       status={task.status}
                       category={Category.CreaPalette}
-                      onClick={() => handleTaskClick()}
+                      onClick={() => handleTaskClick(Number(task.id))}
                     />
                   </Col>
                 ))}
@@ -221,7 +240,7 @@ const WorkSiteListRequestPage: React.FC = () => {
                       address={task.address}
                       status={task.status}
                       category={Category.CreaPalette}
-                      onClick={() => handleTaskClick()}
+                      onClick={() => handleTaskClick(Number(task.id))}
                     />
                   </Col>
                 ))}
@@ -242,7 +261,7 @@ const WorkSiteListRequestPage: React.FC = () => {
                       address={task.address}
                       status={task.status}
                       category={Category.CreaPalette}
-                      onClick={() => handleTaskClick()}
+                      onClick={() => handleTaskClick(Number(task.id))}
                     />
                   </Col>
                 ))}
@@ -254,6 +273,7 @@ const WorkSiteListRequestPage: React.FC = () => {
       <WorkSiteRequestPopUp
         show={modalShow}
         onHide={() => setModalShow(false)}
+        worksiteRequest={worksiteRequestData!}//todo checker le !
       />
     </Container>
   );
