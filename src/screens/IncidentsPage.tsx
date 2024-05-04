@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Table, InputGroup, Button, Form, Dropdown } from 'react-bootstrap';
 import { Category, Emergency, EmergencyDetails, Task, WorkSiteStatus } from '../api/Model';
-import TaskComponent from './TaskComponent';
 import '../App.css'
 import EmergencyComponent from './EmergencyComponent';
 
