@@ -82,52 +82,53 @@ const WorkSiteListRequestPage: React.FC = () => {
   };
 
   return (
-    <Container>
-      <Row >
-        {/* Utiliser ReactSearchAutocomplete */}
-        <Col className="col-6">
-          <ReactSearchAutocomplete
-            items={items}
-            onSearch={handleOnSearch}
-            onSelect={handleOnSelect}
-            autoFocus
-            placeholder="Filtrer par nom de chantier..."
-          />
+    <Container className='container-xxl'>
+      <Row className='mt-4'>
+        <Col lg={6}>
+          <Row>
+            <Col>
+              <ReactSearchAutocomplete
+                styling={{ borderRadius: "10px" }}
+                items={items}
+                onSearch={handleOnSearch}
+                onSelect={handleOnSelect}
+                autoFocus
+                placeholder="Filtrer par nom de chantier..."
+              />
+            </Col>
+            <Col lg className='d-flex align-items-center'>
+              <Dropdown>
+                <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                  Filtrer
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {Object.values(WorkSiteRequestStatusListPage).map((status, index) => (
+                    <Dropdown.Item key={index}>
+                      <Form.Check
+                        type="checkbox"
+                        label={status}
+                        checked={!!checkboxes[status]}
+                        onChange={() => handleStatusChange(status)}
+                      />
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            </Col>
+          </Row>
+
+
         </Col>
       </Row>
-
-      <Row className="mt-4">
-        <Col>
-          <Dropdown>
-            <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-              Filtrer
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu>
-              {Object.values(WorkSiteRequestStatusListPage).map((status, index) => (
-                <Dropdown.Item key={index}>
-                  <Form.Check
-                    type="checkbox"
-                    label={status}
-                    checked={!!checkboxes[status]}
-                    onChange={() => handleStatusChange(status)}
-                  />
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
-        </Col>
-      </Row>
-
-      <Container className="mt-4">
-        <Table>
+      <Container className="container-xxl mt-4">
+        <Table responsive>
           <thead>
             <tr>
-              {selectedStatus.length > 0 && <th>Date</th>}
-              {selectedStatus.includes(WorkSiteRequestStatusListPage.ToComplete) && <th>{WorkSiteRequestStatusListPage.ToComplete}</th>}
-              {selectedStatus.includes(WorkSiteRequestStatusListPage.Standby) && <th>{WorkSiteRequestStatusListPage.Standby}</th>}
-              {selectedStatus.includes(WorkSiteRequestStatusListPage.Done) && <th>{WorkSiteRequestStatusListPage.Done}</th>}
-              {selectedStatus.includes(WorkSiteRequestStatusListPage.Archive) && <th>{WorkSiteRequestStatusListPage.Archive}</th>}
+              {selectedStatus.length > 0 && <th className="col-lg-1">Date</th>}
+              {selectedStatus.includes(WorkSiteRequestStatusListPage.ToComplete) && <th className="col-lg-2">{WorkSiteRequestStatusListPage.ToComplete}</th>}
+              {selectedStatus.includes(WorkSiteRequestStatusListPage.Standby) && <th className="col-lg-2">{WorkSiteRequestStatusListPage.Standby}</th>}
+              {selectedStatus.includes(WorkSiteRequestStatusListPage.Done) && <th className="col-lg-2">{WorkSiteRequestStatusListPage.Done}</th>}
+              {selectedStatus.includes(WorkSiteRequestStatusListPage.Archive) && <th className="col-lg-2">{WorkSiteRequestStatusListPage.Archive}</th>}
             </tr>
           </thead>
           <tbody>

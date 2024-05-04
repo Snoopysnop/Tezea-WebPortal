@@ -116,8 +116,6 @@ const WorkSitesListStatusPage: React.FC = () => {
               </Dropdown>
             </Col>
           </Row>
-
-
         </Col>
       </Row>
 
