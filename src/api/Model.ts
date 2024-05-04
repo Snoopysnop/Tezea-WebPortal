@@ -109,44 +109,44 @@ export interface SubErrorDetails {
 }
 
 export interface Customer {
-    id: string;
-    firstName: string;
-    lastName: string;
-    civility: Civility;
-    email: string;
-    phoneNumber: string;
-    address: string;
-    city: string;
-    postalCode: number;
-    status: CustomerStatus;
-    company: string;
+    id?: string;
+    firstName?: string;
+    lastName?: string;
+    civility?: Civility;
+    email?: string;
+    phoneNumber?: string;
+    address?: string;
+    city?: string;
+    postalCode?: number;
+    status?: CustomerStatus;
+    company?: string;
 }
 
 export interface WorkSiteRequest {
-    id: string;
-    concierge: User;
-    siteChief: User | undefined;
-    customer: Customer;
-    city: string;
-    workSites: WorkSite[] | undefined;
-    serviceType: Service;
-    description: string;
-    emergency: Emergency;
-    title: string;
-    category: Category;
-    removal: boolean;
-    delivery: boolean;
-    removalRecycling: boolean;
-    chronoQuote: boolean;
-    date: Date;
-    requestStatus: WorkSiteRequestStatus;
-    hourReturnDeposit: string;
-    hourArrival: string;
-    hourDeparture: string;
-    weightEstimate: number;
-    volumeEstimation: number;
-    provider: string;
-    tezeaAffectation: string;
+    id?: string;
+    concierge?: User;
+    siteChief?: User;
+    customer?: Customer;
+    city?: string;
+    workSites?: WorkSite[];
+    serviceType?: Service;
+    description?: string;
+    emergency?: Emergency;
+    title?: string;
+    category?: Category;
+    removal?: boolean;
+    delivery?: boolean;
+    removalRecycling?: boolean;
+    chronoQuote?: boolean;
+    date?: Date;
+    requestStatus?: WorkSiteRequestStatus;
+    hourReturnDeposit?: string;
+    hourArrival?: string;
+    hourDeparture?: string;
+    weightEstimate?: number;
+    volumeEstimation?: number;
+    provider?: string;
+    tezeaAffectation?: string;
 }
 
 export interface WorkSite {
