@@ -9,19 +9,20 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/Warning";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import { LoginOutlined, RequestPageOutlined, RequestQuoteOutlined } from "@mui/icons-material";
 import { Link } from "react-router-dom";
+import KeycloakApi from "../api/KeycloakApi";
 
 const SidebarComponent: React.FC = () => {
 
-    const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false);
+    const [sidebarCollapsed, setSidebarCollapsed] = React.useState(true);
 
-    const toggleSidebar = () => {
+    const handleCollapseSidebar = () => {
         setSidebarCollapsed(!sidebarCollapsed);
     };
 
-    MainApi.initInstance()
+    //MainApi.initInstance()
+    KeycloakApi.initInstance()
 
     return (
-
         <Sidebar
             collapsed={sidebarCollapsed}
             style={{
@@ -35,7 +36,7 @@ const SidebarComponent: React.FC = () => {
             <Menu>
                 <MenuItem
                     icon={<MenuOutlinedIcon />}
-                    onClick={toggleSidebar}
+                    onClick={handleCollapseSidebar}
                     style={{ textAlign: "center" }}
                 >
                     <h2>{sidebarCollapsed ? null : ''}</h2>

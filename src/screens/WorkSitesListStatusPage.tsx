@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Table, InputGroup, Button, Form, Dropdown } from 'react-bootstrap';
 import { Category, Task, WorkSiteStatus } from '../api/Model';
-import TaskComponent from './TaskComponent';
-import '../App.css'
+import TaskComponent from './WorkSiteComponent';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 
 const WorkSitesListStatusPage: React.FC = () => {
@@ -17,9 +16,9 @@ const WorkSitesListStatusPage: React.FC = () => {
     { id: 5, name: "Chantier 3", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Canceled },
     { id: 6, name: "Chantier 3", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Canceled },
 
-    { id: 7, name: "Chantier Test 1", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Done },
-    { id: 8, name: "Chantier Test 2", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Done },
-    { id: 9, name: "Chantier Test 3", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Done },
+    { id: 7, name: "C", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Done },
+    { id: 8, name: "C", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Done },
+    { id: 9, name: "C", date: "10/10/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Done },
     { id: 10, name: "Chantier Test 14", date: "10/11/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Canceled },
     { id: 11, name: "Chantier Test 24", date: "10/11/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Canceled },
     { id: 12, name: "Chantier Test 35", date: "10/11/2024", startHours: "2PM", endHour: "4PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Canceled },
@@ -82,37 +81,43 @@ const WorkSitesListStatusPage: React.FC = () => {
   };
 
   return (
-    <Container>
-      <Row>
+    <Container className='container-xxl'>
+      <Row className='mt-4'>
         {/* Utiliser ReactSearchAutocomplete */}
-        <Col className="col-6">
-          <ReactSearchAutocomplete
-            items={items}
-            onSearch={handleOnSearch}
-            onSelect={handleOnSelect}
-            autoFocus
-            placeholder="Filtrer par nom de chantier..."
-          />
-        </Col>
-        <Col className="col-6 d-flex">
-          <Dropdown>
-            <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-              Filtrer
-            </Dropdown.Toggle>
+        <Col lg={6}>
+          <Row>
+            <Col>
+              <ReactSearchAutocomplete
+                styling={{ borderRadius: "10px" }}
+                items={items}
+                onSearch={handleOnSearch}
+                onSelect={handleOnSelect}
+                autoFocus
+                placeholder="Filtrer par nom de chantier..."
+              />
+            </Col>
+            <Col lg className='d-flex align-items-center'>
+              <Dropdown>
+                <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                  Filtrer
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {Object.values(WorkSiteStatus).map((status, index) => (
+                    <Dropdown.Item key={index}>
+                      <Form.Check
+                        type="checkbox"
+                        label={status}
+                        checked={!!checkboxes[status]}
+                        onChange={() => handleStatusChange(status)}
+                      />
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            </Col>
+          </Row>
 
-            <Dropdown.Menu>
-              {Object.values(WorkSiteStatus).map((status, index) => (
-                <Dropdown.Item key={index}>
-                  <Form.Check
-                    type="checkbox"
-                    label={status}
-                    checked={!!checkboxes[status]}
-                    onChange={() => handleStatusChange(status)}
-                  />
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
+
         </Col>
       </Row>
 
@@ -121,15 +126,16 @@ const WorkSitesListStatusPage: React.FC = () => {
           <thead>
             <tr>
               {selectedStatus.length > 0 && <th className="col-lg-1">Date</th>}
-              {selectedStatus.includes(WorkSiteStatus.Standby) && <th className="col-lg-2">A compléter</th>}
-              {selectedStatus.includes(WorkSiteStatus.InProgress) && <th className="col-lg-2">En cours</th>}
-              {selectedStatus.includes(WorkSiteStatus.Done) && <th className="col-lg-2">Terminé</th>}
-              {selectedStatus.includes(WorkSiteStatus.Canceled) && <th className="col-lg-2">Archivé</th>}
+              {selectedStatus.includes(WorkSiteStatus.Standby) && <th className="col-lg-2">{WorkSiteStatus.Standby}</th>}
+              {selectedStatus.includes(WorkSiteStatus.InProgress) && <th className="col-lg-2">{WorkSiteStatus.InProgress}</th>}
+              {selectedStatus.includes(WorkSiteStatus.Done) && <th className="col-lg-2">{WorkSiteStatus.Done}</th>}
+              {selectedStatus.includes(WorkSiteStatus.Canceled) && <th className="col-lg-2">{WorkSiteStatus.Canceled}</th>}
             </tr>
           </thead>
           <tbody>
+
             {Array.from(mapDateTasks.entries()).map(([date, filteredTasks]) => (
-              filteredTasks.some(task => selectedStatus.includes(task.status)) && // Vérifie s'il y a des tâches à afficher
+              filteredTasks.some(task => selectedStatus.includes(task.status)) &&
               <tr key={date}>
                 {selectedStatus.length > 0 && <td>{date}</td>}
                 {selectedStatus.includes(WorkSiteStatus.Standby) && (

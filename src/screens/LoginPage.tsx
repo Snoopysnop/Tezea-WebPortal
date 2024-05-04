@@ -5,11 +5,12 @@ import { Link } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import MainApi from '../api/MainApi';
+import KeycloakApi from '../api/KeycloakApi';
 
 const LoginPage: React.FC = () => {
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string().email('Adresse email invalide').required('Ce champ est requis'),
+    username: Yup.string().required('Ce champ est requis'),
     password: Yup.string().min(8, 'Le mot de passe doit comporter au moins 8 caractères').required('Ce champ est requis'),
   });
 
@@ -17,11 +18,13 @@ const LoginPage: React.FC = () => {
     <Container>
       <Formik
         initialValues={{
-          email: '',
+          username: '',
           password: '',
         }}
         onSubmit={async (values) => {
-          await MainApi.getInstance().login(values.email, values.password)
+            //await MainApi.getInstance().getUsers()
+            //await KeycloakApi.getInstance().login(values.username, values.password)
+            await KeycloakApi.getInstance().auth()
         }}
         validationSchema={validationSchema}
       >
@@ -43,13 +46,13 @@ const LoginPage: React.FC = () => {
 
               <h1 className="text-center mb-4">Connexion</h1>
                 <Form.Group className="mb-3">
-                  <Form.Label>E-mail</Form.Label>
+                  <Form.Label>ID</Form.Label>
                   <InputGroup>
                     <Form.Control
-                      isInvalid={touched.email && !!errors.email}
-                      type="email"
-                      name='email'
-                      placeholder="Entrez votre adresse email"
+                      isInvalid={touched.username && !!errors.username}
+                      type="input"
+                      name='username'
+                      placeholder="Entrez votre pseudo"
                       style={{ fontSize: '0.9rem' }}
                       onChange={handleChange}
                     />

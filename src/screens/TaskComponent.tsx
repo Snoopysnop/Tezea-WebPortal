@@ -72,3 +72,4 @@ const TaskComponent: React.FC<TaskProps> = ({ id, name, date, startHours, endHou
 }
 
 export default TaskComponent;
+

@@ -2,10 +2,9 @@ import axios, { AxiosInstance } from 'axios'
 import axiosRetry from 'axios-retry'
 import AbstractApi from './AbstractApi'
 import { User } from './Model'
-import { hashPassword } from '../common/utils/utils'
 
 const standaloneInstance = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
+    baseURL: process.env.REACT_APP_URL,
     timeout: 60000
 })
 
@@ -26,12 +25,14 @@ class MainApi extends AbstractApi {
     }
 
     public static initInstance(token?: string) : void {
-        MainApi.instance = new MainApi(process.env.REACT_APP_API_URL as any)
+        MainApi.instance = new MainApi(process.env.REACT_APP_URL as any)
     }
 
     public async getUsers(): Promise<Array<User>> {
         try {
-            const response = await this.service.get('/users')
+            const response = await this.service.get('/api/users', {
+                headers: {'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJkYU9GRkFVd01aWG92RmtwTVZWUXZvdjRfY1BHcDZ0OUd4QXNGY0FMRUV3In0.eyJleHAiOjE3MTQ3Nzc3NjcsImlhdCI6MTcxNDc3NzQ2NywianRpIjoiOGZjNzRiMjAtZmI4NS00NTNhLWJjOGYtZmUyNDRmNzY2ZTRjIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9UZXplYSIsInN1YiI6IjU2ZGFlMDE2LWFhNDEtNDQwNi04YjU3LTM4MjUwMzMwZDc0NCIsInR5cCI6IkJlYXJlciIsImF6cCI6InRlemVhLWFwcCIsInNlc3Npb25fc3RhdGUiOiJkMDY0YjEzMi04Y2Q1LTQ5YTctYjQyNi1lOWIxZGE0MDE1MjgiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbImh0dHA6Ly9sb2NhbGhvc3Q6MzAwMC8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWF0bGFzIiwiQ09NTUVSQ0lBTCJdfSwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwic2lkIjoiZDA2NGIxMzItOGNkNS00OWE3LWI0MjYtZTliMWRhNDAxNTI4IiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInByZWZlcnJlZF91c2VybmFtZSI6InRlc3QiLCJnaXZlbl9uYW1lIjoiIiwiZmFtaWx5X25hbWUiOiIiLCJlbWFpbCI6InRlc3RAdGVzdC5jb20ifQ.lJrkYggFbxCeSwiWhgnU48qt_kZPEAjd8yDAW_2NI_RAnI1CPlYR4JEf_UF9wq2k4P9EYV3vhMz6zFcqoMoO-TCMgZyvvROWVdOdEHpwj0gRF5MhmT7IfzuhU-7ihbNmwKmFDI2Py95qcZRQoGj9aDN6pflsU5rrU-yTK2vmZW5HglpWO6TwAGDd55BqF3LUL6FQCBTrgdzPDsvc9RazhjVJyHVlUo1dTVD5H8mypXRQdlO_Wh415nmOQxR1b24U80dWEb6Ah9I9lvbCcW9_QARVLvMVTtVGN321CQPb0K3xaM7UBlxDP-OnzYsjQFNdYoM95ikNuY1c5jdXzuDpWA'}
+            })
             return response.data as Array<User>
         } catch(err) {
             throw AbstractApi.handleError(err)
@@ -40,7 +41,7 @@ class MainApi extends AbstractApi {
 
     public async getUserbyId(id: number): Promise<User> {
         try {
-            const response = await this.service.get(`/users/${id}`)
+            const response = await this.service.get(`/api/users/${id}`)
             return response.data as User
         } catch(err) {
             throw AbstractApi.handleError(err)
@@ -54,34 +55,10 @@ class MainApi extends AbstractApi {
                     'Content-Type': 'multipart/form-data'
                 }
             }
-            const response = await this.service.post(`/users/create`)
+            const response = await this.service.post(`/api/users/create`)
             return response.data as User
         } catch(err) {
             throw AbstractApi.handleError(err)
-        }
-    }
-
-    public async login(username: string, password: string): Promise<void> {
-        const hashedPassword: string = hashPassword(password);
-        const url: string = 'http://localhost:8080/realms/Tezea/protocol/openid-connect/token';
-        
-        const response = await this.service.post(url, {
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: {
-                'username': username,
-                'password': hashedPassword,
-                'grant_type': process.env.REACT_APP_GRANT_TYPE,
-                'client_id': process.env.REACT_APP_CLIENT_ID,
-                'client_secret': process.env.REACT_APP_CLIENT_SECRET,
-            }
-        });
-    
-        if (response.status === 200) {
-            const token: string = JSON.parse(response.data)["access_token"].toString();
-        } else if (response.status === 401) {
-            throw new Error('Wrong username or password ...');
-        } else {
-            throw new Error(`Erreur : ${response.status}, Réponse : ${response.data}`);
         }
     }
 }

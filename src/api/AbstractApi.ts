@@ -10,6 +10,7 @@ class AbstractApi {
         if (this.constructor === AbstractApi) {
             throw new TypeError('Abstract class "AbstractApi" cannot be instantiated directly');
         }
+        console.log(url)
         this.service = axios.create({
             baseURL: url,
             timeout: 60000,
