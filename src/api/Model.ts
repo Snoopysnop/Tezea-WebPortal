@@ -144,7 +144,6 @@ export interface Customer {
     postalCode: number;
     status: CustomerStatus;
     company: string;
-    requests: WorkSiteRequest[];
 }
 
 export interface WorkSiteRequest {
@@ -178,13 +177,13 @@ export interface WorkSite {
     id: string;
     workSiteChief: User | undefined;
     staff: User[];
-    equipment: ToolUsage[];
+    equipment: Tool[];
     begin: Date;
     end: Date;
     status: WorkSiteStatus;
     request: WorkSiteRequest | undefined; //todo a voir si on laisse undefined
     satisfaction: SatisfactionLevel;
-    signature: ArrayBuffer;
+    signature: String;
 }
 
 export interface User {
@@ -196,16 +195,8 @@ export interface User {
     phoneNumber: string;
 }
 
-export interface ToolUsage {
-    id: string;
-    tool: Tool;
-    workSite: WorkSite;
-    quantity: number;
-}
-
 export interface Tool {
     name: ToolName;
     quantity: number;
-    schedules: ToolUsage[];
 }
 
