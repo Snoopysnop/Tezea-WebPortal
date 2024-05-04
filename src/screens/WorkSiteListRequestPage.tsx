@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Table, InputGroup, Button, Form, Dropdown } from 'react-bootstrap';
 import { Category, Task, TaskRequest, WorkSiteRequestStatusListPage } from '../api/Model';
-import TaskComponent from './TaskComponent';
 import '../App.css'
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
+import  WorkSiteRequestPopUp from '../components/WorkSiteRequestPopUp';
+import WorkSiteComponent from './WorkSiteComponent';
 
 const WorkSiteListRequestPage: React.FC = () => {
 
@@ -46,7 +47,12 @@ const WorkSiteListRequestPage: React.FC = () => {
 
     setSelectedStatus(Object.keys(updatedCheckboxes).filter(key => updatedCheckboxes[key as WorkSiteRequestStatusListPage]) as WorkSiteRequestStatusListPage[]);
   };
-
+  const [modalShow, setModalShow] = useState(false);
+  const handleTaskClick = () => {
+    //TODO faire appel api get bdd
+    //ptet rajouter un booleen pour differencier demande et chantier boolean:Boolean
+    setModalShow(true);
+  };
   //Use effect pour refresh les checkbox en temps réel
   useEffect(() => {
     const updatedCheckboxes: { [key in WorkSiteRequestStatusListPage]?: boolean } = {};
@@ -143,7 +149,7 @@ const WorkSiteListRequestPage: React.FC = () => {
                         .filter(task => task.status === WorkSiteRequestStatusListPage.ToComplete)
                         .map(task => (
                           <Col key={task.id} lg={6}>
-                            <TaskComponent
+                            <WorkSiteComponent
                               id={task.id}
                               name={task.name}
                               date={task.date}
@@ -152,6 +158,7 @@ const WorkSiteListRequestPage: React.FC = () => {
                               address={task.address}
                               status={task.status}
                               category={Category.CreaPalette}
+                              onClick={() => handleTaskClick()}
                             />
                           </Col>
                         ))}
@@ -165,7 +172,7 @@ const WorkSiteListRequestPage: React.FC = () => {
                         .filter(task => task.status === WorkSiteRequestStatusListPage.Standby)
                         .map(task => (
                           <Col key={task.id} lg={6}>
-                            <TaskComponent
+                            <WorkSiteComponent
                               id={task.id}
                               name={task.name}
                               date={task.date}
@@ -174,6 +181,7 @@ const WorkSiteListRequestPage: React.FC = () => {
                               address={task.address}
                               status={task.status}
                               category={Category.CreaPalette}
+                              onClick={() => handleTaskClick()}
                             />
                           </Col>
                         ))}
@@ -187,7 +195,7 @@ const WorkSiteListRequestPage: React.FC = () => {
                         .filter(task => task.status === WorkSiteRequestStatusListPage.Done)
                         .map(task => (
                           <Col key={task.id} lg={6}>
-                            <TaskComponent
+                            <WorkSiteComponent
                               id={task.id}
                               name={task.name}
                               date={task.date}
@@ -196,6 +204,7 @@ const WorkSiteListRequestPage: React.FC = () => {
                               address={task.address}
                               status={task.status}
                               category={Category.CreaPalette}
+                              onClick={() => handleTaskClick()}
                             />
                           </Col>
                         ))}
@@ -209,7 +218,7 @@ const WorkSiteListRequestPage: React.FC = () => {
                         .filter(task => task.status === WorkSiteRequestStatusListPage.Archive)
                         .map(task => (
                           <Col key={task.id} lg={6}>
-                            <TaskComponent
+                            <WorkSiteComponent
                               id={task.id}
                               name={task.name}
                               date={task.date}
@@ -218,6 +227,7 @@ const WorkSiteListRequestPage: React.FC = () => {
                               address={task.address}
                               status={task.status}
                               category={Category.CreaPalette}
+                              onClick={() => handleTaskClick()}
                             />
                           </Col>
                         ))}
@@ -229,6 +239,10 @@ const WorkSiteListRequestPage: React.FC = () => {
           </tbody>
         </Table>
       </Container>
+      <WorkSiteRequestPopUp
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+      />
     </Container>
   );
 };

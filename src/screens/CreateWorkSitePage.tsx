@@ -29,17 +29,17 @@ const mockWorksiteChief: User[] = [
 ];
 
 const mockTools: Tool[] = [
-  { name: ToolName.Stapler, quantity: 5, schedules: [] },
-  { name: ToolName.CementMixer, quantity: 2, schedules: [] },
-  { name: ToolName.Shear, quantity: 3, schedules: [] },
-  { name: ToolName.Wrench, quantity: 4, schedules: [] },
-  { name: ToolName.Ladder, quantity: 6, schedules: [] },
-  { name: ToolName.Axe, quantity: 2, schedules: [] },
-  { name: ToolName.Palette, quantity: 8, schedules: [] },
-  { name: ToolName.Rake, quantity: 3, schedules: [] },
-  { name: ToolName.Saw, quantity: 5, schedules: [] },
-  { name: ToolName.Drill, quantity: 4, schedules: [] },
-  { name: ToolName.Shovel, quantity: 16, schedules: [] },
+  { name: ToolName.Stapler, quantity: 5},
+  { name: ToolName.CementMixer, quantity: 2},
+  { name: ToolName.Shear, quantity: 3},
+  { name: ToolName.Wrench, quantity: 4},
+  { name: ToolName.Ladder, quantity: 6},
+  { name: ToolName.Axe, quantity: 2},
+  { name: ToolName.Palette, quantity: 8},
+  { name: ToolName.Rake, quantity: 3},
+  { name: ToolName.Saw, quantity: 5},
+  { name: ToolName.Drill, quantity: 4},
+  { name: ToolName.Shovel, quantity: 16},
 ];
 
 
@@ -119,17 +119,15 @@ const CreateWorkSitePage: React.FC = () => {
       workSiteChief: selectedWorksiteChief ? selectedWorksiteChief : undefined,
       staff: selectedStaff,
       equipment: selectedTools.map(toolName => ({
-        id: '',
-        tool: mockTools.find(tool => tool.name === toolName)!,
-        workSite: null!,
+        name: toolName,
         quantity: selectedQuantities[toolName] || 1,
-      })),
+      })as Tool),
       begin: new Date(startTime),
       end: new Date(endTime),
       status: WorkSiteStatus.InProgress,
       request: undefined,
       satisfaction: SatisfactionLevel.Perfect,
-      signature: new ArrayBuffer(0),
+      signature: "",
     };
 
     try {

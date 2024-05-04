@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Modal, Button } from 'react-bootstrap';
 import { Category, Emergency, Task } from '../api/Model';
-import { getCategoryIcon, getEmergencyColor, getEmergencyIconColor } from '../common/utils/utils';
+import { getEmergencyColor, getEmergencyIconColor } from '../common/utils/utils';
 import { ReactComponent as TriangleIcon } from 'bootstrap-icons/icons/exclamation-triangle.svg';
 
 type EmergencyProps = {

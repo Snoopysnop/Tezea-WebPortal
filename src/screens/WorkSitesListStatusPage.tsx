@@ -5,6 +5,8 @@ import { Category, Task, WorkSiteStatus } from '../api/Model';
 import TaskComponent from './WorkSiteComponent';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 
+
+
 const WorkSitesListStatusPage: React.FC = () => {
 
   const tasks: Task[] = [
@@ -46,6 +48,14 @@ const WorkSitesListStatusPage: React.FC = () => {
     setSelectedStatus(Object.keys(updatedCheckboxes).filter(key => updatedCheckboxes[key as WorkSiteStatus]) as WorkSiteStatus[]);
   };
 
+  const [modalShow, setModalShow] = useState(false);
+
+  // Fonction pour gérer le clic sur un élément
+  const handleTaskClick = () => {
+    //TODO faire appel api get bdd
+    //ptet rajouter un booleen pour differencier demande et chantier boolean:Boolean
+    setModalShow(true);
+  };
   //Use effect pour refresh les checkbox en temps réel
   useEffect(() => {
     const updatedCheckboxes: { [key in WorkSiteStatus]?: boolean } = {};
@@ -152,6 +162,7 @@ const WorkSitesListStatusPage: React.FC = () => {
                               address={task.address}
                               status={task.status}
                               category={Category.CreaPalette}
+                              onClick={() => handleTaskClick()}
                             />
                           </Col>
                         ))}
@@ -174,6 +185,7 @@ const WorkSitesListStatusPage: React.FC = () => {
                               address={task.address}
                               status={task.status}
                               category={Category.CreaPalette}
+                              onClick={() => handleTaskClick()}
                             />
                           </Col>
                         ))}
@@ -196,6 +208,7 @@ const WorkSitesListStatusPage: React.FC = () => {
                               address={task.address}
                               status={task.status}
                               category={Category.CreaPalette}
+                              onClick={() => handleTaskClick()}
                             />
                           </Col>
                         ))}
@@ -218,6 +231,7 @@ const WorkSitesListStatusPage: React.FC = () => {
                               address={task.address}
                               status={task.status}
                               category={Category.CreaPalette}
+                              onClick={() => handleTaskClick()}
                             />
                           </Col>
                         ))}
