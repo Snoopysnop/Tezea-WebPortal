@@ -88,7 +88,6 @@ export function getEmergencyIcon(status: Emergency) {
     }
 }
 
-
 export function getCategoryIcon(status: Category) {
     switch (status) {
         case Category.Conciergerie:

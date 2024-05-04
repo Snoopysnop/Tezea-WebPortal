@@ -183,7 +183,7 @@ export interface WorkSite {
     status: WorkSiteStatus;
     request: WorkSiteRequest | undefined; //todo a voir si on laisse undefined
     satisfaction: SatisfactionLevel;
-    signature: String;
+    signature?: String;
 }
 
 export interface User {

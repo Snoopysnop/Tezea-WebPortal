@@ -4,6 +4,7 @@ import { Container, Row, Col, Table, InputGroup, Button, Form, Dropdown } from '
 import { Category, Emergency, EmergencyDetails, Task, WorkSiteStatus } from '../api/Model';
 import '../App.css'
 import EmergencyComponent from './EmergencyComponent';
+import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 
 const IncidentsPage: React.FC = () => {
 
@@ -20,28 +21,30 @@ const IncidentsPage: React.FC = () => {
       chantier: "",
       id: 1,
       emergency: Emergency.Medium,
-      task: { id: 1, name: "Chantier 1", date: "11/10/2024", startHours: "5PM", endHour: "9PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Standby },
+      task: { id: 1, name: "Chantier 2", date: "11/10/2024", startHours: "5PM", endHour: "9PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Standby },
     },
     {
       description: "blabla",
       chantier: "",
       id: 1,
       emergency: Emergency.Medium,
-      task: { id: 1, name: "Chantier 1", date: "11/10/2024", startHours: "5PM", endHour: "9PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Standby },
+      task: { id: 1, name: "Chantier 3", date: "11/10/2024", startHours: "5PM", endHour: "9PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Standby },
     },
     {
       description: "blabla",
       chantier: "",
       id: 1,
       emergency: Emergency.High,
-      task: { id: 1, name: "Chantier 1", date: "10/10/2024", startHours: "5PM", endHour: "9PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Standby },
+      task: { id: 1, name: "Chantier 4", date: "10/10/2024", startHours: "5PM", endHour: "9PM", address: "2 Fox Street, NY", status: WorkSiteStatus.Standby },
     },
   ];
 
   const [filterValue, setFilterValue] = useState<string>("");
+  const filteredTasks = tasks.filter(task => task.task.name.toLowerCase().includes(filterValue.toLowerCase()));
+
 
   const mapDateTasks = new Map<string, EmergencyDetails[]>();
-  tasks.forEach(task => {
+  filteredTasks.forEach(task => {
     const taskList = mapDateTasks.get(task.task.date) || [];
     taskList.push(task);
     mapDateTasks.set(task.task.date, taskList);
@@ -78,29 +81,57 @@ const IncidentsPage: React.FC = () => {
     setCheckboxes(initialCheckboxes);
   }, []);
 
+  const items = tasks.map(task => ({
+    id: task.id,
+    name: task.task.name,
+  }));
+
+  const handleOnSearch = (string: any, results: any) => {
+    setFilterValue(string);
+    console.log(string, results);
+  };
+
+  const handleOnSelect = (item: any) => {
+    console.log(item);
+    setFilterValue(item.name);
+  };
 
   return (
-    <Container>
-      <Row>
-        <Col className="col-6 d-flex">
-          <Dropdown>
-            <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-              Filtrer
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu>
-              {Object.values(Emergency).map((status, index) => (
-                <Dropdown.Item key={index}>
-                  <Form.Check
-                    type="checkbox"
-                    label={status}
-                    checked={!!checkboxes[status]}
-                    onChange={() => handleStatusChange(status)}
-                  />
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
+    <Container className='container-xxl'>
+      <Row className='mt-4'>
+        {/* Utiliser ReactSearchAutocomplete */}
+        <Col lg={6}>
+          <Row>
+            <Col>
+              <ReactSearchAutocomplete
+                styling={{ borderRadius: "10px" }}
+                items={items}
+                onSearch={handleOnSearch}
+                onSelect={handleOnSelect}
+                autoFocus
+                placeholder="Filtrer par nom de chantier..."
+              />
+            </Col>
+            <Col lg className='d-flex align-items-center'>
+              <Dropdown>
+                <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                  Filtrer
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {Object.values(Emergency).map((status, index) => (
+                    <Dropdown.Item key={index}>
+                      <Form.Check
+                        type="checkbox"
+                        label={status}
+                        checked={!!checkboxes[status]}
+                        onChange={() => handleStatusChange(status)}
+                      />
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            </Col>
+          </Row>
         </Col>
       </Row>
 
