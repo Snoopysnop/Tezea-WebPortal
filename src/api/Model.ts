@@ -184,7 +184,7 @@ export interface WorkSite {
     status: WorkSiteStatus;
     request: WorkSiteRequest | undefined; //todo a voir si on laisse undefined
     satisfaction: SatisfactionLevel;
-    signature: ArrayBuffer;
+    signature?: ArrayBuffer;
 }
 
 export interface User {
@@ -199,7 +199,7 @@ export interface User {
 export interface ToolUsage {
     id: string;
     tool: Tool;
-    workSite: WorkSite;
+    workSite?: WorkSite;
     quantity: number;
 }
 
