@@ -154,8 +154,8 @@ export interface WorkSite {
     workSiteChief?: User | undefined;
     staff?: User[];
     equipment?: Tool[];
-    begin: string;
-    end: string;
+    begin: Date;
+    end: Date;
     status: WorkSiteStatus;
     request?: WorkSiteRequest ; 
     satisfaction?: SatisfactionLevel;

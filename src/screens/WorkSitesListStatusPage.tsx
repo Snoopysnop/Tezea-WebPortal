@@ -12,52 +12,52 @@ const WorkSitesListStatusPage: React.FC = () => {
 
   const tasks: WorkSite[] = [
     {
-      id: "1", title: "Chantier 1", begin: "2024-10-10 09:00"
-      , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
+      id: "1", title: "Chantier 1", begin:new Date("2024-10-10T17:09:00"),
+      end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
     },
     {
-      id: "2", title: "Chantier 2", begin: "2024-10-10 09:00"
-      , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.Standby
+      id: "2", title: "Chantier 2", begin:new Date("2024-10-10T17:09:00"),
+      end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Standby
     },
     {
-      id: "3", title: "Chantier 2", begin: "2024-10-10 09:00"
-      , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.Done
+      id: "3", title: "Chantier 2", begin:new Date("2024-10-10T17:09:00"),
+      end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Done
     },
     {
-      id: "4", title: "Chantier 2", begin: "2024-10-10 09:00"
-      , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.Done
+      id: "4", title: "Chantier 2", begin:new Date("2024-10-10T17:09:00"),
+      end: new Date("2024-10-10T17:12:00"),address: "2 Fox Street, NY", status: WorkSiteStatus.Done
     },
     {
-      id: "5", title: "Chantier 3", begin: "2024-10-10 09:00"
-      , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.Done
+      id: "5", title: "Chantier 3", begin:new Date("2024-10-10T17:09:00"),
+      end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Done
     },
     {
-      id: "6", title: "Chantier 3", begin: "2024-10-10 09:00"
-      , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.ToComplete
+      id: "6", title: "Chantier 3", begin:new Date("2024-10-10T17:09:00"),
+      end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.ToComplete
     },
     {
-      id: "7", title: "Chantier Test 1", begin: "2024-10-10 09:00"
-      , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.InProgress
+      id: "7", title: "Chantier Test 1", begin:new Date("2024-10-10T17:09:00"),
+      end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.InProgress
     },
     {
-      id: "8", title: "Chantier Test 2", begin: "2024-10-10 09:00"
-      , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.Done
+      id: "8", title: "Chantier Test 2", begin:new Date("2024-10-10T17:09:00"),
+      end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Done
     },
     {
-      id: "9", title: "Chantier Test 3", begin: "2024-10-10 09:00"
-      , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.Done
+      id: "9", title: "Chantier Test 3", begin:new Date("2024-10-10T17:09:00"),
+      end: new Date("2024-10-10T17:12:00"),address: "2 Fox Street, NY", status: WorkSiteStatus.Done
     },
     {
-      id: "10", title: "Chantier Test 14", begin: "2024-10-10 09:00"
-      , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.ToComplete
+      id: "10", title: "Chantier Test 14", begin:new Date("2024-10-10T17:09:00"),
+      end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.ToComplete
     },
     {
-      id: "11", title: "Chantier Test 24", begin: "2024-10-10 09:00"
-      , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
+      id: "11", title: "Chantier Test 24", begin:new Date("2024-10-10T17:09:00"),
+      end: new Date("2024-10-10T17:12:00"),address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
     },
     {
-      id: "12", title: "Chantier Test 35", begin: "2024-10-10 09:00"
-      , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
+      id: "12", title: "Chantier Test 35", begin:new Date("2024-10-10T17:09:00"),
+      end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
     },
   ];
 

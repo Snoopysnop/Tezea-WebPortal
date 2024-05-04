@@ -15,8 +15,8 @@ const IncidentsPage: React.FC = () => {
       id: 1,
       emergency: Emergency.Low,
       worksite: {
-        id: "1", title: "Chantier 1", begin:"2024-10-10 09:00"
-        , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
+        id: "1", title: "Chantier 1", begin:new Date("2024-10-10T17:09:00"),
+         end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
       }, },
     {
       description: "blabla",
@@ -24,8 +24,8 @@ const IncidentsPage: React.FC = () => {
       id: 1,
       emergency: Emergency.Medium,
       worksite: {
-        id: "1", title: "Chantier 1",begin:"2024-10-10 09:00"
-        , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
+        id: "1", title: "Chantier 1", begin:new Date("2024-10-10T17:09:00"),
+        end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
       },   },
     {
       description: "blabla",
@@ -33,8 +33,8 @@ const IncidentsPage: React.FC = () => {
       id: 1,
       emergency: Emergency.Medium,
       worksite: {
-        id: "1", title: "Chantier 1", begin:"2024-10-10 09:00"
-        , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
+        id: "1", title: "Chantier 1", begin:new Date("2024-10-10T17:09:00"),
+        end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
       },     },
     {
       description: "blabla",
@@ -42,8 +42,8 @@ const IncidentsPage: React.FC = () => {
       id: 1,
       emergency: Emergency.High,
       worksite: {
-        id: "1", title: "Chantier 1", begin:"2024-10-10 09:00"
-        , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
+        id: "1", title: "Chantier 1", begin:new Date("2024-10-10T17:09:00"),
+        end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
       },     },
     {
       description: "blabla",
@@ -51,8 +51,8 @@ const IncidentsPage: React.FC = () => {
       id: 1,
       emergency: Emergency.Critical,
       worksite: {
-        id: "1", title: "Chantier 1", begin:"2024-10-10 09:00"
-        , end: "2024-10-10 12:00", address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
+        id: "1", title: "Chantier 1", begin:new Date("2024-10-10T17:09:00"),
+        end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
       },     },
   ];
 
