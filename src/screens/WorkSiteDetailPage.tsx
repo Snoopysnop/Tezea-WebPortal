@@ -55,9 +55,8 @@ const WorkSiteDetailPage: React.FC = () => {
         name: ToolName.Palette,
         quantity: 2,
       }
-    ],
-    begin:"2024-10-10 09:00"
-    , end: "2024-10-10 12:00",
+    ], begin:new Date("2024-10-10T17:09:00"),
+    end: new Date("2024-10-10T17:12:00"),
     status: WorkSiteStatus.InProgress,
     satisfaction: SatisfactionLevel.High,
     request: undefined,
@@ -76,8 +75,8 @@ const WorkSiteDetailPage: React.FC = () => {
               <Card.Text>
                 <p><strong>Chef de chantier :</strong> {exampleWorkSite.workSiteChief?.firstName} {exampleWorkSite.workSiteChief?.lastName}</p>
                 <p><strong>Statut:</strong> {exampleWorkSite.status}</p>
-                <p><strong>Date de début :</strong> {exampleWorkSite.begin}</p>
-                <p><strong>Date de fin :</strong> {exampleWorkSite.end}</p>
+                <p><strong>Date de début :</strong> {exampleWorkSite.begin.toLocaleString()}</p>
+                <p><strong>Date de fin :</strong> {exampleWorkSite.end.toLocaleString()}</p>
               </Card.Text>
               <Button variant="primary" onClick={openModal}>Déclarer un incident</Button>{' '}
               <Button variant="secondary">Voir la demande de chantiers</Button>
