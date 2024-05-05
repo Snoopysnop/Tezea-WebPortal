@@ -74,24 +74,18 @@ export enum Service {
 }
 
 export enum WorkSiteRequestStatus {
-    New = "Nouvelle",
-    QuoteInProgress = "Devis en cours",
-    QuoteSigned = "Devis signé",
-    Duplicate = "Doublon",
-    Billed = "Facturée",
-    Refused = "Refusée",
-    Closed = "Cloturée",
-    Other = "Autre"
-}
-    
-export enum WorkSiteStatus {
-    Standby = "En attente",
-    InProgress = "En cours",
-    Done = "Terminé",
     ToComplete ="A compléter",
+    Standby = "En attente",
+    Done = "Terminé",
     Archive = "Archivé"
 }
 
+export enum WorkSiteStatus {
+    Standby = "En attente",
+    InProgress = "En cours",
+    Archive = "Archivé",
+    Done = "Terminé"
+}
 
 export interface EmergencyDetails {
     description: string,

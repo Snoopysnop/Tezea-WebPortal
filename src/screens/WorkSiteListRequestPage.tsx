@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Table, InputGroup, Button, Form, Dropdown } from 'react-bootstrap';
-import { Category, WorkSite, WorkSiteStatus, WorkSiteRequest, Customer } from '../api/Model';
+import { Category, WorkSite, WorkSiteStatus, WorkSiteRequest, Customer, WorkSiteRequestStatus } from '../api/Model';
 import { WorkSiteRequestJson, CustomerJson } from '../api/ModelJson';
 
 import '../App.css'
@@ -9,74 +9,75 @@ import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 import WorkSiteRequestPopUp from '../components/WorkSiteRequestPopUp';
 import WorkSiteComponent from './WorkSiteComponent';
 import MainApi from "../api/MainApi"
+import WorkSiteRequestComponent from './WorkSiteRequestComponent';
 
 const WorkSiteListRequestPage: React.FC = () => {
 
-  const tasks: WorkSite[] = [
+  const tasks: WorkSiteRequest[] = [
     {
-      id: "1", title: "Chantier 1", begin:new Date("2024-10-10T17:09:00"),
-      end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
+      id: 1, title: "Chantier 1", estimatedDate:new Date("2024-10-10T17:09:00"),requestStatus:WorkSiteRequestStatus.ToComplete,
+       workSites:[{
+        id: "12", title: "Chantier Test 35", begin:new Date("2024-10-10T17:09:00"),
+        end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
+      },
+    ],city:"Saint-Malo"
     },
     {
-      id: "2", title: "Chantier 2", begin:new Date("2024-10-10T17:09:00"),
-      end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Standby
+      id: 1, title: "Chantier 1", estimatedDate:new Date("2024-10-10T17:09:00"),requestStatus:WorkSiteRequestStatus.ToComplete,
+       workSites:[{
+        id: "12", title: "Chantier Test 35", begin:new Date("2024-10-10T17:09:00"),
+        end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
+      },
+    ],city:"Saint-Malo"
     },
     {
-      id: "3", title: "Chantier 2", begin:new Date("2024-10-10T17:09:00"),
-      end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Done
+      id: 1, title: "Chantier 1", estimatedDate:new Date("2024-10-10T17:09:00"),requestStatus:WorkSiteRequestStatus.ToComplete,
+       workSites:[{
+        id: "12", title: "Chantier Test 35", begin:new Date("2024-10-10T17:09:00"),
+        end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
+      },
+    ],city:"Saint-Malo"
     },
     {
-      id: "4", title: "Chantier 2", begin:new Date("2024-10-10T17:09:00"),
-      end: new Date("2024-10-10T17:12:00"),address: "2 Fox Street, NY", status: WorkSiteStatus.Done
+      id: 1, title: "Chantier 1", estimatedDate:new Date("2024-10-10T17:09:00"),requestStatus:WorkSiteRequestStatus.Standby,
+       workSites:[{
+        id: "12", title: "Chantier Test 35", begin:new Date("2024-10-10T17:09:00"),
+        end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
+      },
+    ],city:"Saint-Malo"
     },
     {
-      id: "5", title: "Chantier 3", begin:new Date("2024-10-10T17:09:00"),
-      end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Done
+      id: 1, title: "Chantier 1", estimatedDate:new Date("2024-10-10T17:09:00"),requestStatus:WorkSiteRequestStatus.Done,
+       workSites:[{
+        id: "12", title: "Chantier Test 35", begin:new Date("2024-10-10T17:09:00"),
+        end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
+      },
+    ],city:"Saint-Malo"
     },
     {
-      id: "6", title: "Chantier 3", begin:new Date("2024-10-10T17:09:00"),
-      end: new Date("2024-10-10T17:12:00"),address: "2 Fox Street, NY", status: WorkSiteStatus.ToComplete
-    },
-    {
-      id: "7", title: "Chantier Test 1", begin:new Date("2024-10-10T17:09:00"),
-      end: new Date("2024-10-10T17:12:00"),address: "2 Fox Street, NY", status: WorkSiteStatus.Done
-    },
-    {
-      id: "8", title: "Chantier Test 2", begin:new Date("2024-10-10T17:09:00"),
-      end: new Date("2024-10-10T17:12:00"),address: "2 Fox Street, NY", status: WorkSiteStatus.Done
-    },
-    {
-      id: "9", title: "Chantier Test 3", begin:new Date("2024-10-10T17:09:00"),
-      end: new Date("2024-10-10T17:12:00"),address: "2 Fox Street, NY", status: WorkSiteStatus.Done
-    },
-    {
-      id: "10", title: "Chantier Test 14", begin:new Date("2024-10-10T17:09:00"),
-      end: new Date("2024-10-10T17:12:00"),address: "2 Fox Street, NY", status: WorkSiteStatus.ToComplete
-    },
-    {
-      id: "11", title: "Chantier Test 24", begin:new Date("2024-10-10T17:09:00"),
-      end: new Date("2024-10-10T17:12:00"),address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
-    },
-    {
-      id: "12", title: "Chantier Test 35", begin:new Date("2024-10-10T17:09:00"),
-      end: new Date("2024-10-10T17:12:00"),address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
+      id: 1, title: "Chantier 1", estimatedDate:new Date("2024-10-10T17:09:00"),requestStatus:WorkSiteRequestStatus.Archive,
+       workSites:[{
+        id: "12", title: "Chantier Test 35", begin:new Date("2024-10-10T17:09:00"),
+        end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
+      },
+    ],city:"Saint-Malo"
     },
   ];
 
 
   const [filterValue, setFilterValue] = useState<string>("");
-  const filteredTasks = tasks.filter(task => task.title.toLowerCase().includes(filterValue.toLowerCase()))
+  const filteredTasks = tasks.filter(task => (task.title?.toLowerCase() ?? '').includes(filterValue.toLowerCase()));
 
-  const allStatus: WorkSiteStatus[] = Object.values(WorkSiteStatus);
-  const [selectedStatus, setSelectedStatus] = useState<WorkSiteStatus[]>([]);
+  const allStatus: WorkSiteRequestStatus[] = Object.values(WorkSiteRequestStatus);
+  const [selectedStatus, setSelectedStatus] = useState<WorkSiteRequestStatus[]>([]);
 
-  const [checkboxes, setCheckboxes] = useState<{ [key in WorkSiteStatus]?: boolean }>({});
+  const [checkboxes, setCheckboxes] = useState<{ [key in WorkSiteRequestStatus]?: boolean }>({});
 
-  const handleStatusChange = (status: WorkSiteStatus) => {
+  const handleStatusChange = (status: WorkSiteRequestStatus) => {
     const updatedCheckboxes = { ...checkboxes, [status]: !checkboxes[status] };
     setCheckboxes(updatedCheckboxes);
 
-    setSelectedStatus(Object.keys(updatedCheckboxes).filter(key => updatedCheckboxes[key as WorkSiteStatus]) as WorkSiteStatus[]);
+    setSelectedStatus(Object.keys(updatedCheckboxes).filter(key => updatedCheckboxes[key as WorkSiteRequestStatus]) as WorkSiteRequestStatus[]);
   };
   const [modalShow, setModalShow] = useState(false);
   const [worksiteRequestData, setWorksiteRequestData] = useState<WorkSiteRequest>();
@@ -102,7 +103,7 @@ const WorkSiteListRequestPage: React.FC = () => {
   };
   //Use effect pour refresh les checkbox en temps réel
   useEffect(() => {
-    const updatedCheckboxes: { [key in WorkSiteStatus]?: boolean } = {};
+    const updatedCheckboxes: { [key in WorkSiteRequestStatus]?: boolean } = {};
     selectedStatus.forEach(status => {
       updatedCheckboxes[status] = true;
     });
@@ -111,7 +112,7 @@ const WorkSiteListRequestPage: React.FC = () => {
 
   //Use effect pour initialiser les checkbox a true
   useEffect(() => {
-    const initialCheckboxes: { [key in WorkSiteStatus]?: boolean } = {};
+    const initialCheckboxes: { [key in WorkSiteRequestStatus]?: boolean } = {};
     allStatus.forEach(status => {
       initialCheckboxes[status] = true;
     });
@@ -155,8 +156,7 @@ const WorkSiteListRequestPage: React.FC = () => {
                   Filtrer
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                {Object.values(WorkSiteStatus)
-                    .filter(status => status !== WorkSiteStatus.InProgress)
+                {Object.values(WorkSiteRequestStatus)
                     .map((status, index) => (
                       <Dropdown.Item key={index}>
                         <Form.Check
@@ -177,93 +177,85 @@ const WorkSiteListRequestPage: React.FC = () => {
         <Table responsive>
           <thead>
             <tr>
-              {selectedStatus.includes(WorkSiteStatus.ToComplete) && <th className="col-lg-2">{WorkSiteStatus.ToComplete}</th>}
-              {selectedStatus.includes(WorkSiteStatus.Standby) && <th className="col-lg-2">{WorkSiteStatus.Standby}</th>}
-              {selectedStatus.includes(WorkSiteStatus.Done) && <th className="col-lg-2">{WorkSiteStatus.Done}</th>}
-              {selectedStatus.includes(WorkSiteStatus.Archive) && <th className="col-lg-2">{WorkSiteStatus.Archive}</th>}
+              {selectedStatus.includes(WorkSiteRequestStatus.ToComplete) && <th className="col-lg-2">{WorkSiteRequestStatus.ToComplete}</th>}
+              {selectedStatus.includes(WorkSiteRequestStatus.Standby) && <th className="col-lg-2">{WorkSiteRequestStatus.Standby}</th>}
+              {selectedStatus.includes(WorkSiteRequestStatus.Done) && <th className="col-lg-2">{WorkSiteRequestStatus.Done}</th>}
+              {selectedStatus.includes(WorkSiteRequestStatus.Archive) && <th className="col-lg-2">{WorkSiteRequestStatus.Archive}</th>}
             </tr>
           </thead>
           <tbody>
-          <td className={`col-lg-2 ${!selectedStatus.includes(WorkSiteStatus.ToComplete) && "d-none"}`}>
+          <td className={`col-lg-2 ${!selectedStatus.includes(WorkSiteRequestStatus.ToComplete) && "d-none"}`}>
             <Row>
               {filteredTasks
-                .filter(task => task.status === WorkSiteStatus.ToComplete)
+                .filter(task => task.requestStatus === WorkSiteRequestStatus.ToComplete)
                 .map(task => (
                   <Col key={task.id} lg={12}>
-                    <WorkSiteComponent
-                      id={task.id}
-                      name={task.title}
-                      date={task.begin.toLocaleString()}
-                      startHours={task.begin.toLocaleString()}
-                      endHour={task.end.toLocaleString()}
-                      address={task.address}
-                      status={task.status}
-                      category={Category.CreaPalette}
-                      onClick={() => handleTaskClick(Number(task.id))}
-                    />
+                    <WorkSiteRequestComponent
+                        id={task.id ?? -1}
+                        name={task.title ?? ''}
+                        date={task.estimatedDate?.toLocaleString() ?? ''}
+                        city={task.city ?? ''}
+                        status={task.requestStatus ?? WorkSiteRequestStatus.Archive}
+                        category={Category.CreaPalette}
+                        onClick={() => handleTaskClick(Number(task.id))}
+                      />
                   </Col>
                 ))}
             </Row>
           </td>
-          <td className={`col-lg-2 ${!selectedStatus.includes(WorkSiteStatus.Standby) && "d-none"}`}>
+          <td className={`col-lg-2 ${!selectedStatus.includes(WorkSiteRequestStatus.Standby) && "d-none"}`}>
             <Row>
               {filteredTasks
-                .filter(task => task.status === WorkSiteStatus.Standby)
+                .filter(task => task.requestStatus === WorkSiteRequestStatus.Standby)
                 .map(task => (
                   <Col key={task.id} lg={12}>
-                    <WorkSiteComponent
-                      id={task.id}
-                      name={task.title}
-                      date={task.begin.toLocaleString()}
-                      startHours={task.begin.toLocaleString()}
-                      endHour={task.end.toLocaleString()}
-                      address={task.address}
-                      status={task.status}
-                      category={Category.CreaPalette}
-                      onClick={() => handleTaskClick(Number(task.id))}
-                    />
+                    <WorkSiteRequestComponent
+                        id={task.id ?? -1}
+                        name={task.title ?? ''}
+                        date={task.estimatedDate?.toLocaleString() ?? ''}
+                        city={task.city ?? ''}
+                        status={task.requestStatus ?? WorkSiteRequestStatus.Archive}
+                        category={Category.CreaPalette}
+                        onClick={() => handleTaskClick(Number(task.id))}
+                      />
                   </Col>
                 ))}
             </Row>
           </td>
-          <td className={`col-lg-2 ${!selectedStatus.includes(WorkSiteStatus.Done) && "d-none"}`}>
+          <td className={`col-lg-2 ${!selectedStatus.includes(WorkSiteRequestStatus.Done) && "d-none"}`}>
             <Row>
               {filteredTasks
-                .filter(task => task.status === WorkSiteStatus.Done)
+                .filter(task => task.requestStatus === WorkSiteRequestStatus.Done)
                 .map(task => (
                   <Col key={task.id} lg={12}>
-                    <WorkSiteComponent
-                      id={task.id}
-                      name={task.title}
-                      date={task.begin.toLocaleString()}
-                      startHours={task.begin.toLocaleString()}
-                      endHour={task.end.toLocaleString()}
-                      address={task.address}
-                      status={task.status}
+                  <WorkSiteRequestComponent
+                      id={task.id ?? -1}
+                      name={task.title ?? ''}
+                      date={task.estimatedDate?.toLocaleString() ?? ''}
+                      city={task.city ?? ''}
+                      status={task.requestStatus ?? WorkSiteRequestStatus.Archive}
                       category={Category.CreaPalette}
                       onClick={() => handleTaskClick(Number(task.id))}
                     />
-                  </Col>
+                </Col>
                 ))}
             </Row>
             </td>
-            <td className={`col-lg-2 ${!selectedStatus.includes(WorkSiteStatus.Archive) && "d-none"}`}>
+            <td className={`col-lg-2 ${!selectedStatus.includes(WorkSiteRequestStatus.Archive) && "d-none"}`}>
             <Row>
               {filteredTasks
-                .filter(task => task.status === WorkSiteStatus.Archive)
+                .filter(task => task.requestStatus === WorkSiteRequestStatus.Archive)
                 .map(task => (
                   <Col key={task.id} lg={12}>
-                    <WorkSiteComponent
-                      id={task.id}
-                      name={task.title}
-                      date={task.begin.toLocaleString()}
-                      startHours={task.begin.toLocaleString()}
-                      endHour={task.end.toLocaleString()}
-                      address={task.address}
-                      status={task.status}
-                      category={Category.CreaPalette}
-                      onClick={() => handleTaskClick(Number(task.id))}
-                    />
+                    <WorkSiteRequestComponent
+                        id={task.id ?? -1}
+                        name={task.title ?? ''}
+                        date={task.estimatedDate?.toLocaleString() ?? ''}
+                        city={task.city ?? ''}
+                        status={task.requestStatus ?? WorkSiteRequestStatus.Archive}
+                        category={Category.CreaPalette}
+                        onClick={() => handleTaskClick(Number(task.id))}
+                      />
                   </Col>
                 ))}
             </Row>
