@@ -1,4 +1,4 @@
-import { Category, Emergency, WorkSiteStatus } from "../../api/Model";
+import { Category, Emergency, WorkSiteRequestStatus, WorkSiteStatus } from "../../api/Model";
 import { ReactComponent as InProgressIcon } from 'bootstrap-icons/icons/hourglass-split.svg'
 import { ReactComponent as DoneIcon } from 'bootstrap-icons/icons/check-lg.svg'
 import { ReactComponent as StandByIcon } from 'bootstrap-icons/icons/pause.svg'
@@ -25,8 +25,21 @@ export function getStatusColor(status: WorkSiteStatus): string {
         case WorkSiteStatus.Done:
             return '#6bc238';
         case WorkSiteStatus.Archive:
+            return '#FFB6C1';
+        default:
+            return '#000000';
+    }
+}
+
+export function getRequestStatusColor(status: WorkSiteRequestStatus): string {
+    switch (status) {
+        case WorkSiteRequestStatus.Standby:
+            return '#ebab34';
+        case WorkSiteRequestStatus.Done:
+            return '#6bc238';
+        case WorkSiteRequestStatus.Archive:
             return '#d12424';
-        case WorkSiteStatus.ToComplete:
+        case WorkSiteRequestStatus.ToComplete:
             return '#FFB6C1';
         default:
             return '#000000';
@@ -74,9 +87,21 @@ export function getStatusIcon(status: WorkSiteStatus) {
             return <DoneIcon className='secondary' width='10px' height='100%' />;
         case WorkSiteStatus.Archive:
             return <CanceledIcon className='secondary' width='8px' height='100%' />;
-        case WorkSiteStatus.ToComplete:
+        default:
+            return <NotFoundIcon className='secondary' width='10px' height='100%' />;
+    }
+}
+
+export function getRequestStatusIcon(status: WorkSiteRequestStatus) {
+    switch (status) {
+        case WorkSiteRequestStatus.Standby:
+            return <StandByIcon className='secondary' width='10px' height='100%' />;
+        case WorkSiteRequestStatus.Done:
+            return <DoneIcon className='secondary' width='10px' height='100%' />;
+        case WorkSiteRequestStatus.Archive:
             return <CanceledIcon className='secondary' width='8px' height='100%' />;
-    
+        case WorkSiteRequestStatus.ToComplete:
+            return <CanceledIcon className='secondary' width='8px' height='100%' />;
         default:
             return <NotFoundIcon className='secondary' width='10px' height='100%' />;
     }

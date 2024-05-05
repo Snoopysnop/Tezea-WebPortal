@@ -32,10 +32,6 @@ const WorkSitesListStatusPage: React.FC = () => {
       end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Done
     },
     {
-      id: "6", title: "Chantier 3", begin:new Date("2024-10-10T17:09:00"),
-      end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.ToComplete
-    },
-    {
       id: "7", title: "Chantier Test 1", begin:new Date("2024-10-10T17:09:00"),
       end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.InProgress
     },
@@ -48,16 +44,12 @@ const WorkSitesListStatusPage: React.FC = () => {
       end: new Date("2024-10-10T17:12:00"),address: "2 Fox Street, NY", status: WorkSiteStatus.Done
     },
     {
-      id: "10", title: "Chantier Test 14", begin:new Date("2024-10-10T17:09:00"),
-      end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.ToComplete
-    },
-    {
       id: "11", title: "Chantier Test 24", begin:new Date("2024-10-10T17:09:00"),
       end: new Date("2024-10-10T17:12:00"),address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
     },
     {
       id: "12", title: "Chantier Test 35", begin:new Date("2024-10-10T17:09:00"),
-      end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
+        end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
     },
   ];
 
@@ -141,7 +133,6 @@ const WorkSitesListStatusPage: React.FC = () => {
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   {Object.values(WorkSiteStatus)
-                    .filter(status => status !== WorkSiteStatus.ToComplete)
                     .map((status, index) => (
                       <Dropdown.Item key={index}>
                         <Form.Check
