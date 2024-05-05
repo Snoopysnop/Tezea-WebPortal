@@ -5,56 +5,27 @@ import { Category, WorkSite, WorkSiteStatus } from '../api/Model';
 import TaskComponent from './WorkSiteComponent';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 import WorkSiteComponent from './WorkSiteComponent';
+import { useLocation } from 'react-router-dom';
+
+
 
 
 
 const WorkSitesListStatusPage: React.FC = () => {
 
-  const tasks: WorkSite[] = [
-    {
-      id: "1", title: "Chantier 1", begin:new Date("2024-10-10T17:09:00"),
-      end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
-    },
-    {
-      id: "2", title: "Chantier 2", begin:new Date("2024-10-10T17:09:00"),
-      end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Standby
-    },
-    {
-      id: "3", title: "Chantier 2", begin:new Date("2024-10-10T17:09:00"),
-      end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Done
-    },
-    {
-      id: "4", title: "Chantier 2", begin:new Date("2024-10-10T17:09:00"),
-      end: new Date("2024-10-10T17:12:00"),address: "2 Fox Street, NY", status: WorkSiteStatus.Done
-    },
-    {
-      id: "5", title: "Chantier 3", begin:new Date("2024-10-10T17:09:00"),
-      end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Done
-    },
-    {
-      id: "7", title: "Chantier Test 1", begin:new Date("2024-10-10T17:09:00"),
-      end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.InProgress
-    },
-    {
-      id: "8", title: "Chantier Test 2", begin:new Date("2024-10-10T17:09:00"),
-      end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Done
-    },
-    {
-      id: "9", title: "Chantier Test 3", begin:new Date("2024-10-10T17:09:00"),
-      end: new Date("2024-10-10T17:12:00"),address: "2 Fox Street, NY", status: WorkSiteStatus.Done
-    },
-    {
-      id: "11", title: "Chantier Test 24", begin:new Date("2024-10-10T17:09:00"),
-      end: new Date("2024-10-10T17:12:00"),address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
-    },
-    {
-      id: "12", title: "Chantier Test 35", begin:new Date("2024-10-10T17:09:00"),
-        end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
-    },
-  ];
+  const location = useLocation();
+  console.log("List chantier/location",location)
+
+  const WorksiteOrderedList = location.state ? (location.state as any).worksiteData as WorkSite[] : null;
+
+  console.log("List chantier",WorksiteOrderedList)
+
 
   const [filterValue, setFilterValue] = useState<string>("");
-  const filteredTasks = tasks.filter(task => task.title.toLowerCase().includes(filterValue.toLowerCase()));
+  const filteredTasks = WorksiteOrderedList ? WorksiteOrderedList.filter(task => task.title.toLowerCase().includes(filterValue.toLowerCase())) : [];
+
+  console.log("filter",filteredTasks)
+
 
   const allStatus: WorkSiteStatus[] = Object.values(WorkSiteStatus);
   const [selectedStatus, setSelectedStatus] = useState<WorkSiteStatus[]>([]);
@@ -95,10 +66,13 @@ const WorkSitesListStatusPage: React.FC = () => {
     setCheckboxes(initialCheckboxes);
   }, []);
 
-  const items = tasks.map(task => ({
+  const items = WorksiteOrderedList ? WorksiteOrderedList.map(task => ({
     id: task.id,
     name: task.title,
-  }));
+  })) : [];
+
+  console.log("item",items)
+
 
   const handleOnSearch = (string: any, results: any) => {
     setFilterValue(string);

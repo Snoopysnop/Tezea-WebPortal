@@ -1,6 +1,6 @@
 import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
 import MainApi from "../api/MainApi";
-import React, { useEffect } from "react"; // Importez useEffect
+import React, { useEffect, useState } from "react"; // Importez useEffect
 import PeopleOutlinedIcon from "@mui/icons-material/ListAltOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/Create";
 import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
@@ -8,12 +8,20 @@ import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined
 import HelpOutlineOutlinedIcon from "@mui/icons-material/Warning";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import { LoginOutlined, RequestPageOutlined, RequestQuoteOutlined, SettingsAccessibilityOutlined, SettingsOutlined } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from 'react-router-dom';
 import KeycloakApi from "../api/KeycloakApi";
+import { WorkSiteJson, WorkSiteRequestJson, CustomerJson } from '../api/ModelJson';
+import { WorkSite, WorkSiteRequest, Customer, WorkSiteStatus } from '../api/Model';
+
+
 
 const SidebarComponent: React.FC = () => {
 
-    const [sidebarCollapsed, setSidebarCollapsed] = React.useState(true);
+    const navigate = useNavigate();
+
+    const [worksiteData, setWorksiteData] = useState<WorkSite[]>();
+
+    const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
 
     const handleCollapseSidebar = () => {
         setSidebarCollapsed(!sidebarCollapsed);
@@ -21,6 +29,17 @@ const SidebarComponent: React.FC = () => {
 
     MainApi.initInstance()
     KeycloakApi.initInstance()
+
+    const handleListWorksite = async () => {
+        setSidebarCollapsed(true);
+        const responseWorksite = await MainApi.getInstance().getWorkSites() as WorkSiteJson[];
+        const worksiteMapper = responseWorksite as WorkSite[];
+       
+        setWorksiteData(worksiteMapper);
+        console.log("sidebar:onclick:",worksiteData);
+        navigate("/listeStatus", { state: {worksiteData}})
+    }
+
 
     const handleMenuItemClick = () => {
         setSidebarCollapsed(true); // Rétracter la barre latérale lorsque vous cliquez sur un élément du menu
@@ -69,7 +88,7 @@ const SidebarComponent: React.FC = () => {
                 <MenuItem icon={<LoginOutlined />} style={{ backgroundColor: 'white' }} component={<Link to="/login" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
                     {sidebarCollapsed ? null : 'Connexion'}
                 </MenuItem>
-                <MenuItem icon={<PeopleOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/listeStatus" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
+                <MenuItem icon={<PeopleOutlinedIcon />} style={{ backgroundColor: 'white' }} onClick={handleListWorksite}>
                     {sidebarCollapsed ? null : 'Liste des chantiers'}
                 </MenuItem>
                 <MenuItem icon={<RequestQuoteOutlined />} style={{ backgroundColor: 'white' }} component={<Link to="/listeDemandeChantiers" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
