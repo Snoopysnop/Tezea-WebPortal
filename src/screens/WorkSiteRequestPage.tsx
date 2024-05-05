@@ -1,54 +1,57 @@
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Col, Row, Button, Container } from 'react-bootstrap';
-import { Civility, CustomerStatus, Service, Emergency, Category, WorkSiteStatus, WorkSiteRequestStatus } from '../api/Model';
-
+import { Role, User, Customer, WorkSiteRequest, Civility, CustomerStatus, Service, Emergency, Category, WorkSiteStatus, WorkSiteRequestStatus } from '../api/Model';
+import MainApi from "../api/MainApi"
+import { useLocation } from 'react-router-dom';
 
 
 const WorkSiteRequestPage: React.FC = () => {
 
+
+  const location = useLocation();
+  const updateWorksiteRequest = location.state ? (location.state as any).worksiteRequest as WorkSiteRequest : null;
+
+
   const [customerFormData, customerSetFormData] = useState({
-    customer: {
+    customer: updateWorksiteRequest?.customer || {
       id: '',
       firstName: '',
       lastName: '',
-      civility: Civility.M,
+      civility: undefined,
       email: '',
       phoneNumber: '',
       address: '',
       city: '',
-      postalCode: 0,
-      status: CustomerStatus.Business,
+      postalCode: undefined,
+      status: undefined,
       company: '',
       requests: []
     }
   });
   const [worksiteRequestFormData, worksiteRequestSetFormData] = useState({
-    worksiteRequest: {
-      id: '',
-      concierge: { id: '', firstName: '', lastName: '', role: '', email: '', phoneNumber: '' },
+    worksiteRequest: updateWorksiteRequest || {
+      id: undefined,
+      concierge: { id: '5327ed76-b97f-4cd7-8201-b4a7d2215f18', firstName: 'Bruno', lastName: 'Savon', role: Role.Concierge, email: 'Bruno.Savon@gmail.com', phoneNumber: '1698532499' } as User, //todo remplacer par les infos du user actuel
       siteChief: undefined,
       city: '',
       workSites: undefined,
-      serviceType: Service.Service,
+      serviceType: undefined,
       description: '',
-      emergency: Emergency.Low,
-      status: WorkSiteStatus.Standby,
+      emergency: undefined,
+      status: undefined,
       title: '',
-      category: Category.Conciergerie,
+      category: undefined,
       removal: false,
       delivery: false,
       removalRecycling: false,
       chronoQuote: false,
-      date: new Date(),
-      requestStatus: WorkSiteRequestStatus.New,
-      hourReturnDeposit: '',
-      hourArrival: '',
-      hourDeparture: '',
+      estimatedDate: new Date(),
+      requestStatus: undefined,
       weightEstimate: 0,
-      volumeEstimation: 0,
+      volumeEstimate: 0,
       provider: '',
       tezeaAffectation: ''
-    }
+  }
   });
 
   const handleCustomerChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -81,7 +84,7 @@ const WorkSiteRequestPage: React.FC = () => {
       ...worksiteRequestFormData,
       worksiteRequest: {
         ...worksiteRequestFormData.worksiteRequest,
-        date: dateValue
+        estimatedDate: dateValue
       }
     });
   };
@@ -99,10 +102,61 @@ const WorkSiteRequestPage: React.FC = () => {
 
 
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // TODO faire la requete au back avec les 2 objets à creer
-    console.log(customerFormData, worksiteRequestFormData);
+    try {
+
+      const customer: Customer = {
+        id: '',
+        firstName: customerFormData.customer.firstName,
+        lastName: customerFormData.customer.lastName,
+        civility: customerFormData.customer.civility,
+        email: customerFormData.customer.email,
+        phoneNumber: customerFormData.customer.phoneNumber,
+        address: customerFormData.customer.address,
+        city: customerFormData.customer.city,
+        postalCode: customerFormData.customer.postalCode,
+        status: customerFormData.customer.status,
+        company: customerFormData.customer.company,
+      };
+  
+      const worksiteRequest: WorkSiteRequest = {
+        id: undefined,
+        concierge: worksiteRequestFormData.worksiteRequest.concierge,
+        siteChief: worksiteRequestFormData.worksiteRequest.siteChief,
+        customer: customer,
+        city: worksiteRequestFormData.worksiteRequest.city,
+        workSites: worksiteRequestFormData.worksiteRequest.workSites,
+        serviceType: worksiteRequestFormData.worksiteRequest.serviceType,
+        description: worksiteRequestFormData.worksiteRequest.description,
+        emergency: worksiteRequestFormData.worksiteRequest.emergency,
+        title: worksiteRequestFormData.worksiteRequest.title,
+        category: worksiteRequestFormData.worksiteRequest.category,
+        removal: worksiteRequestFormData.worksiteRequest.removal,
+        delivery: worksiteRequestFormData.worksiteRequest.delivery,
+        removalRecycling: worksiteRequestFormData.worksiteRequest.removalRecycling,
+        chronoQuote: worksiteRequestFormData.worksiteRequest.chronoQuote,
+        estimatedDate: worksiteRequestFormData.worksiteRequest.estimatedDate,
+        requestStatus: worksiteRequestFormData.worksiteRequest.requestStatus,
+        weightEstimate: worksiteRequestFormData.worksiteRequest.weightEstimate,
+        volumeEstimate: worksiteRequestFormData.worksiteRequest.volumeEstimate,
+        provider: worksiteRequestFormData.worksiteRequest.provider,
+        tezeaAffectation: worksiteRequestFormData.worksiteRequest.tezeaAffectation
+      };
+      //console.log("Demande de chantier :", worksiteRequest);
+      const response = await MainApi.getInstance().createWorkSiteRequest(worksiteRequest);
+      console.log(response);
+      //const response1 = await MainApi.getInstance().getUsers();
+      //WorkSiteRequestService.createWorkSiteRequest(worksiteRequest);
+      //console.log("res:",response1);
+      /*const worksiteApi = MainApi.getInstance(); 
+      const createdWorkSiteRequest = await MainApi.getInstance().createWorkSiteRequest(worksiteRequest); 
+      */
+      //console.log("Demande de chantier créée :", createdWorkSiteRequest);
+      
+    } catch (error) {
+      console.error("Erreur lors de la création de la demande de chantier :", error);
+    }
   };
 
 
@@ -222,7 +276,7 @@ const WorkSiteRequestPage: React.FC = () => {
 
           <Form.Group as={Col} controlId="formGridDate">
             <Form.Label >Date</Form.Label>
-            <Form.Control type="date" value={worksiteRequestFormData.worksiteRequest.date.toISOString().split('T')[0]} onChange={handleDateChange} name="date" />
+            <Form.Control type="date" value={worksiteRequestFormData.worksiteRequest.estimatedDate ? worksiteRequestFormData.worksiteRequest.estimatedDate.toISOString().split('T')[0] : ''} onChange={handleDateChange} name="date" />
           </Form.Group>
 
         </Row>
@@ -245,22 +299,6 @@ const WorkSiteRequestPage: React.FC = () => {
           </Form.Group>
         </Row>
 
-        <Row className="mb-3" style={{ color: '#008FE3', fontSize: '18px' }}>
-
-          <Form.Group as={Col} controlId="formGridHourArrival">
-            <Form.Label>Heure d'arrivée du client</Form.Label>
-            <Form.Control type="time" value={worksiteRequestFormData.worksiteRequest.hourArrival} onChange={(e) => handleTimeChange("hourArrival", e.target.value)} />
-          </Form.Group>
-
-          <Form.Group as={Col} controlId="formGridHourDeparture">
-            <Form.Label >Heure de départ du client</Form.Label>
-            <Form.Control type="time" value={worksiteRequestFormData.worksiteRequest.hourDeparture} onChange={(e) => handleTimeChange("hourDeparture", e.target.value)} />
-          </Form.Group>
-          <Form.Group as={Col} controlId="formGridHourReturnDeposit">
-            <Form.Label style={{ color: '#008FE3' }}>Heure de retour du dépôt</Form.Label>
-            <Form.Control type="time" value={worksiteRequestFormData.worksiteRequest.hourReturnDeposit} onChange={(e) => handleTimeChange("hourReturnDeposit", e.target.value)} />
-          </Form.Group>
-        </Row>
 
         <Row className="mb-3" style={{ color: '#008FE3', fontSize: '18px' }}>
 
@@ -316,7 +354,7 @@ const WorkSiteRequestPage: React.FC = () => {
 
           <Form.Group as={Col} controlId="formGridVolumeEstimation">
             <Form.Label style={{ color: '#008FE3' }}>Estimation du volume</Form.Label>
-            <Form.Control type="number" placeholder="Entrez l'estimation du volume" value={worksiteRequestFormData.worksiteRequest.volumeEstimation} onChange={(e) => worksiteRequestSetFormData({ ...worksiteRequestFormData, worksiteRequest: { ...worksiteRequestFormData.worksiteRequest, volumeEstimation: parseInt(e.target.value) } })} />
+            <Form.Control type="number" placeholder="Entrez l'estimation du volume" value={worksiteRequestFormData.worksiteRequest.volumeEstimate} onChange={(e) => worksiteRequestSetFormData({ ...worksiteRequestFormData, worksiteRequest: { ...worksiteRequestFormData.worksiteRequest, volumeEstimate: parseInt(e.target.value) } })} />
           </Form.Group>
         </Row>
         <Row className="mb-5"></Row>
