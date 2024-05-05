@@ -152,7 +152,6 @@ export interface WorkSite {
     satisfaction?: SatisfactionLevel;
     signature?: String;
     title: string;
-    address:string
 }
 
 export interface User {
