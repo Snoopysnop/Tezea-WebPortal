@@ -43,10 +43,10 @@ export enum CustomerStatus {
 }
 
 export enum Emergency {
-    Low = "Faible",
+    Minor = "Faible",
     Medium = "Moyen",
-    High = "Haut",
-    Critical = "Bloquant"
+    Severe = "Haut",
+    Blocking = "Bloquant"
 }
 
 export enum Role {
@@ -88,11 +88,11 @@ export enum WorkSiteStatus {
 }
 
 export interface EmergencyDetails {
-    titre: string,
     description: string,
-    id: number,
-    emergency: Emergency,
-    worksite: WorkSite
+    id: string,
+    level: Emergency,
+    worksite?: WorkSite
+    title: string,
 }
 
 

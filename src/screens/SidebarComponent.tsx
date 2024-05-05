@@ -11,8 +11,8 @@ import { LoginOutlined, RequestPageOutlined, RequestQuoteOutlined, SettingsAcces
 import { Link, useNavigate } from 'react-router-dom';
 import KeycloakApi from "../api/KeycloakApi";
 import { WorkSiteJson, WorkSiteRequestJson, CustomerJson, EmergencyDetailsJson } from '../api/ModelJson';
-import { WorkSite, WorkSiteRequest, Customer, WorkSiteStatus, WorkSiteRequestStatus, EmergencyDetails } from '../api/Model';
-import { getStatusWorksite, getStatusWorksiteRequest } from "../common/utils/utils";
+import { WorkSite, WorkSiteRequest, Customer, WorkSiteStatus, WorkSiteRequestStatus, EmergencyDetails, Emergency } from '../api/Model';
+import { getEmergency, getStatusWorksite, getStatusWorksiteRequest } from "../common/utils/utils";
 
 
 
@@ -22,7 +22,7 @@ const SidebarComponent: React.FC = () => {
 
     const [worksiteData, setWorksiteData] = useState<WorkSite[]>();
     const [worksiteRequestData, setWorksiteRequestData] = useState<WorkSiteRequest[]>();
-    const [emergencyData, setEmergencytData] = useState<EmergencyDetails[]>();
+    const [emergencyData, setEmergencyData] = useState<EmergencyDetails[]>();
 
 
     const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
@@ -93,29 +93,12 @@ const SidebarComponent: React.FC = () => {
         console.log("mapper", worksiteRequestMapper);
         console.log("data", worksiteRequestData);
 
+    }
+
+
+    useEffect(() => {
         navigate("/listeDemandeChantiers", { state: { worksiteRequestData } })
-    }
-
-    const handleListEmergency = async () => {
-        setSidebarCollapsed(true);
-        const responseEmergency = await MainApi.getInstance().getEmergencies() as EmergencyDetailsJson[];
-        console.log("Reponse", responseEmergency);
-
-        /*const emergencyMapper: EmergencyDetails[] = responseEmergency.map(emergencyDetailsJson => ({
-            description: emergencyDetailsJson.description,
-            titre: emergencyDetailsJson.titre,
-            id: emergencyDetailsJson.id,
-            level: Emergency,
-            worksite: undefined
-        }));
-        setEmergencytData(emergencyMapper);
-
-        console.log("Reponse", responseEmergency);
-        console.log("mapper", emergencyMapper);
-        console.log("data", emergencytData);
-
-        navigate("/incidents", { state: { emergencytData } })*/
-    }
+    },[worksiteRequestData])
 
     const handleMenuItemClick = () => {
         setSidebarCollapsed(true); // Rétracter la barre latérale lorsque vous cliquez sur un élément du menu
@@ -176,7 +159,7 @@ const SidebarComponent: React.FC = () => {
                 <MenuItem icon={<ReceiptOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/detailChantier" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
                     {sidebarCollapsed ? null : 'Détail d\'un chantier'}
                 </MenuItem>
-                <MenuItem icon={<HelpOutlineOutlinedIcon />} style={{ backgroundColor: 'white' }} onClick={handleListEmergency}>
+                <MenuItem icon={<HelpOutlineOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/incidents" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
                     {sidebarCollapsed ? null : 'Incidents'}
                 </MenuItem>
                 <MenuItem icon={<CalendarTodayOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/planning" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>

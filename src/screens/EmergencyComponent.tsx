@@ -5,15 +5,14 @@ import { getEmergencyColor, getEmergencyIconColor } from '../common/utils/utils'
 import { ReactComponent as TriangleIcon } from 'bootstrap-icons/icons/exclamation-triangle.svg';
 
 type EmergencyProps = {
-    id: number;
+    id: string;
     description: string;
     emergency: Emergency;
-    worksite: WorkSite;
     category: Category;
     title: string
 };
 
-const EmergencyComponent: React.FC<EmergencyProps> = ({  description, emergency, worksite , title}) => {
+const EmergencyComponent: React.FC<EmergencyProps> = ({  description, emergency, title}) => {
     const [showModal, setShowModal] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
 
@@ -51,9 +50,7 @@ const EmergencyComponent: React.FC<EmergencyProps> = ({  description, emergency,
     <Row className='primary justify-content-center text-center' style={{ fontSize: '14px', whiteSpace: 'nowrap', marginBottom: '5px', marginTop: '5px', marginLeft: '5px' }}>
         {title}
     </Row>
-    <Row className='primary justify-content-center text-center' style={{ fontSize: '10px', whiteSpace: 'nowrap', marginBottom: '5px', marginLeft: '5px' }}>
-        {worksite.begin.toLocaleString()}
-    </Row>
+    
 </Col>
 
 

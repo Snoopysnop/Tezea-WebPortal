@@ -10,7 +10,7 @@ interface PopupEmergencyProps {
 const PopupEmergency: React.FC<PopupEmergencyProps> = ({ showModal, closeModal }) => {
   const [emergencyName, setEmergencyName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
-  const [emergencyLevel, setEmergencyLevel] = useState<string>(Emergency.Low);
+  const [emergencyLevel, setEmergencyLevel] = useState<string>(Emergency.Minor);
 
   const handleEmergencyNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmergencyName(event.target.value);
