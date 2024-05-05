@@ -6,6 +6,9 @@ import TaskComponent from './WorkSiteComponent';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 import WorkSiteComponent from './WorkSiteComponent';
 import { useLocation, useNavigate } from 'react-router-dom';
+import MainApi from '../api/MainApi';
+import { getStatusWorksite } from '../common/utils/utils';
+import { WorkSiteJson } from '../api/ModelJson';
 import { WorkSiteJson } from '../api/ModelJson';
 import MainApi from '../api/MainApi';
 
@@ -21,7 +24,6 @@ const WorkSitesListStatusPage: React.FC = () => {
   const WorksiteOrderedList = location.state ? (location.state as any).worksiteData as WorkSite[] : null;
 
   const [filterValue, setFilterValue] = useState<string>("");
-  const filteredTasks = WorksiteOrderedList ? WorksiteOrderedList.filter(task => task.title.toLowerCase().includes(filterValue.toLowerCase())) : [];
 
   const allStatus: WorkSiteStatus[] = Object.values(WorkSiteStatus);
   const [selectedStatus, setSelectedStatus] = useState<WorkSiteStatus[]>([]);
@@ -36,6 +38,45 @@ const WorkSitesListStatusPage: React.FC = () => {
   };
 
   const [modalShow, setModalShow] = useState(false);
+
+  const [filteredTasks, setFilteredTasks] = useState<WorkSite[]>([]);
+
+  const [dataFetched, setDataFetched] = useState<WorkSite[] | undefined>(undefined);
+
+
+  const handleListWorksite = async () => {
+    const responseWorksite = await MainApi.getInstance().getWorkSites() as WorkSiteJson[];
+
+    const worksiteMapper: WorkSite[] = responseWorksite.map(worksiteJson => ({
+        id: worksiteJson.id,
+        workSiteChief: undefined,
+        staff: undefined,
+        equipment: undefined,
+        begin: worksiteJson.begin ? new Date(worksiteJson.begin) : new Date(),
+        end: worksiteJson.end ? new Date(worksiteJson.end) : new Date(),
+        status: worksiteJson.status ? getStatusWorksite(worksiteJson.status) : WorkSiteStatus.Standby,
+        request: undefined,
+        satisfaction: worksiteJson.satisfaction,
+        signature: worksiteJson.signature,
+        title: worksiteJson.title ? worksiteJson.title : '',
+        address: worksiteJson.address ? worksiteJson.address : ''
+    }));
+    setDataFetched(worksiteMapper);
+
+}
+
+useEffect(() => {
+  handleListWorksite()
+}, [])
+
+useEffect(() => {
+  if (dataFetched) {
+    console.log(dataFetched)
+    setFilteredTasks(dataFetched.filter(task => task.title.toLowerCase().includes(filterValue.toLowerCase())))
+  }
+}, [dataFetched,filterValue])
+
+
 
   // Fonction pour gérer le clic sur un élément
   const handleTaskClick = async (task:any) => {
@@ -68,12 +109,6 @@ const WorkSitesListStatusPage: React.FC = () => {
     setCheckboxes(initialCheckboxes);
   }, []);
 
-  const items = WorksiteOrderedList ? WorksiteOrderedList.map(task => ({
-    id: task.id,
-    name: task.title,
-  })) : [];
-
-
 
   const handleOnSearch = (string: any, results: any) => {
     setFilterValue(string);
@@ -86,6 +121,8 @@ const WorkSitesListStatusPage: React.FC = () => {
   };
 
   return (
+    <>
+      {dataFetched &&
     <Container className='container-xxl'>
       <Row className='mt-4'>
         {/* Utiliser ReactSearchAutocomplete */}
@@ -94,7 +131,9 @@ const WorkSitesListStatusPage: React.FC = () => {
             <Col>
               <ReactSearchAutocomplete
                 styling={{ borderRadius: "10px" }}
-                items={items}
+                items={dataFetched.map(data => {
+                  return {id:data.id, name:data.title}
+                })}
                 onSearch={handleOnSearch}
                 onSelect={handleOnSelect}
                 autoFocus
@@ -224,6 +263,8 @@ const WorkSitesListStatusPage: React.FC = () => {
         </Table>
       </Container>
     </Container>
+    }
+    </>
   );
 };
 

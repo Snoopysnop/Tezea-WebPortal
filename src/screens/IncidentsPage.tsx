@@ -5,68 +5,51 @@ import { Category, Emergency, EmergencyDetails, WorkSiteStatus } from '../api/Mo
 import '../App.css'
 import EmergencyComponent from './EmergencyComponent';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete';
+import { EmergencyDetailsJson } from '../api/ModelJson';
+import MainApi from '../api/MainApi';
+import { getEmergency } from '../common/utils/utils';
 
 const IncidentsPage: React.FC = () => {
-
-  const tasks: EmergencyDetails[] = [
-    {
-      description: "blab laedhgd zgvez dghvezfh vg",
-      id: 1,
-      emergency: Emergency.Low,
-      worksite: {
-        id: "1", title: "Chantier 1", begin:new Date("2024-10-10T17:09:00"),
-         end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
-      }, 
-      titre: "aaa"
-    },
-      
-    {
-      description: "blabla",
-      id: 1,
-      emergency: Emergency.Medium,
-      worksite: {
-        id: "1", title: "Chantier 1", begin:new Date("2024-10-10T17:09:00"),
-        end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
-      },        titre: "vvv"
-    },
-    {
-      description: "blabla",
-      id: 1,
-      emergency: Emergency.Medium,
-      worksite: {
-        id: "1", title: "Chantier 1", begin:new Date("2024-10-10T17:09:00"),
-        end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
-      },      titre: "zsz"
-    },
-      
-    {
-      description: "blabla",
-      id: 1,
-      emergency: Emergency.High,
-      worksite: {
-        id: "1", title: "Chantier 1", begin:new Date("2024-10-10T17:09:00"),
-        end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
-      },      titre: "zssz"
-    },
-    {
-      description: "blabla",
-      id: 1,
-      emergency: Emergency.Critical,
-      worksite: {
-        id: "1", title: "Chantier 1", begin:new Date("2024-10-10T17:09:00"),
-        end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
-      },      titre: "zssz"
-    },
-  ];
-
-
 
   const [filterValue, setFilterValue] = useState<string>("");
   const allStatus: Emergency[] = Object.values(Emergency);
   const [selectedStatus, setSelectedStatus] = useState<Emergency[]>([]);
 
   const [checkboxes, setCheckboxes] = useState<{ [key in Emergency]?: boolean }>({});
-  const filteredTasks = tasks.filter(task => task.worksite.title.toLowerCase().includes(filterValue.toLowerCase()));
+
+  const [filteredTasks, setFilteredTasks] = useState<EmergencyDetails[]>([]);
+
+  const [dataFetched, setDataFetched] = useState<EmergencyDetails[] | undefined>(undefined);
+
+  const handleListEmergency = async () => {
+    const responseEmergency = await MainApi.getInstance().getEmergencies() as EmergencyDetailsJson[];
+    console.log("Reponse", responseEmergency);
+
+    const emergencyMapper: EmergencyDetails[] = responseEmergency.map(emergencyDetailsJson => ({
+      description: emergencyDetailsJson.description,
+      title: emergencyDetailsJson.title,
+      id: emergencyDetailsJson.id,
+      level: emergencyDetailsJson ? getEmergency(emergencyDetailsJson.level) : Emergency.Minor,
+      worksite: undefined
+    }));
+
+    setDataFetched(emergencyMapper);
+
+
+  }
+
+  useEffect(() => {
+    handleListEmergency()
+  }, [])
+
+  useEffect(() => {
+    if (dataFetched) {
+      console.log(dataFetched)
+      setFilteredTasks(dataFetched.filter(task => task.title.toLowerCase().includes(filterValue.toLowerCase())))
+    }
+  }, [dataFetched,filterValue])
+
+  
 
   const handleStatusChange = (status: Emergency) => {
     const updatedCheckboxes = { ...checkboxes, [status]: !checkboxes[status] };
@@ -94,10 +77,6 @@ const IncidentsPage: React.FC = () => {
     setCheckboxes(initialCheckboxes);
   }, []);
 
-  const items = tasks.map(task => ({
-    id: task.id,
-    name: task.worksite.title,
-  }));
 
   const handleOnSearch = (string: any, results: any) => {
     setFilterValue(string);
@@ -110,133 +89,135 @@ const IncidentsPage: React.FC = () => {
   };
 
   return (
-    <Container className='container-xxl'>
-      <Row className='mt-4'>
-        <Col lg={6}>
-          <Row>
-            <Col>
-              <ReactSearchAutocomplete
-                styling={{ borderRadius: "10px" }}
-                items={items}
-                onSearch={handleOnSearch}
-                onSelect={handleOnSelect}
-                autoFocus
-                placeholder="Filtrer par nom de chantier..."
-              />
+    <>
+      {dataFetched &&
+        <Container className='container-xxl'>
+          <Row className='mt-4'>
+            <Col lg={6}>
+              <Row>
+                <Col>
+                  <ReactSearchAutocomplete
+                    styling={{ borderRadius: "10px" }}
+                    items={dataFetched.map(data => {
+                      return {id:data.id, name:data.title}
+                    })}
+                    onSearch={handleOnSearch}
+                    onSelect={handleOnSelect}
+                    autoFocus
+                    placeholder="Filtrer par nom de chantier..."
+                  />
+                </Col>
+                <Col lg className='d-flex align-items-center'>
+                  <Dropdown>
+                    <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                      Filtrer
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                      {Object.values(Emergency).map((status, index) => (
+                        <Dropdown.Item key={index}>
+                          <Form.Check
+                            type="checkbox"
+                            label={status}
+                            checked={!!checkboxes[status]}
+                            onChange={() => handleStatusChange(status)}
+                          />
+                        </Dropdown.Item>
+                      ))}
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </Col>
+              </Row>
             </Col>
-            <Col lg className='d-flex align-items-center'>
-              <Dropdown>
-                <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-                  Filtrer
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  {Object.values(Emergency).map((status, index) => (
-                    <Dropdown.Item key={index}>
-                      <Form.Check
-                        type="checkbox"
-                        label={status}
-                        checked={!!checkboxes[status]}
-                        onChange={() => handleStatusChange(status)}
-                      />
-                    </Dropdown.Item>
-                  ))}
-                </Dropdown.Menu>
-              </Dropdown>
-            </Col>
           </Row>
-        </Col>
-      </Row>
 
-      <Container className="container-xxl mt-4">
-  <Table responsive>
-    <thead>
-      <tr>
-        <th className={`col-lg-2 ${!selectedStatus.includes(Emergency.Low) && "d-none"}`}>{Emergency.Low}</th>
-        <th className={`col-lg-2 ${!selectedStatus.includes(Emergency.Medium) && "d-none"}`}>{Emergency.Medium}</th>
-        <th className={`col-lg-2 ${!selectedStatus.includes(Emergency.High) && "d-none"}`}>{Emergency.High}</th>
-        <th className={`col-lg-2 ${!selectedStatus.includes(Emergency.Critical) && "d-none"}`}>{Emergency.Critical}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td className={`col-lg-2 ${!selectedStatus.includes(Emergency.Low) && "d-none"}`}>
-          <Row>
-            {filteredTasks
-              .filter(task => task.emergency === Emergency.Low)
-              .map(task => (
-                <Col key={task.id} lg={12}>
-                  <EmergencyComponent
-                    id={task.id}
-                    description={task.description}
-                    emergency={Emergency.Low}
-                    category={Category.CreaPalette}
-                    worksite={task.worksite}
-                    title={task.titre}
-                  />
-                </Col>
-              ))}
-          </Row>
-        </td>
-        <td className={`col-lg-2 ${!selectedStatus.includes(Emergency.Medium) && "d-none"}`}>
-          <Row>
-            {filteredTasks
-              .filter(task => task.emergency === Emergency.Medium)
-              .map(task => (
-                <Col key={task.id} lg={12}>
-                  <EmergencyComponent
-                    id={task.id}
-                    description={task.description}
-                    emergency={Emergency.Medium}
-                    category={Category.CreaPalette}
-                    worksite={task.worksite}
-                    title={task.titre}
-                  />
-                </Col>
-              ))}
-          </Row>
-        </td>
-        <td className={`col-lg-2 ${!selectedStatus.includes(Emergency.High) && "d-none"}`}>
-          <Row>
-            {filteredTasks
-              .filter(task => task.emergency === Emergency.High)
-              .map(task => (
-                <Col key={task.id} lg={12}>
-                  <EmergencyComponent
-                    id={task.id}
-                    description={task.description}
-                    emergency={Emergency.High}
-                    category={Category.CreaPalette}
-                    worksite={task.worksite}
-                    title={task.titre}
-                  />
-                </Col>
-              ))}
-          </Row>
-        </td>
-        <td className={`col-lg-2 ${!selectedStatus.includes(Emergency.Critical) && "d-none"}`}>
-          <Row>
-            {filteredTasks
-              .filter(task => task.emergency === Emergency.Critical)
-              .map(task => (
-                <Col key={task.id} lg={12}>
-                  <EmergencyComponent
-                    id={task.id}
-                    description={task.description}
-                    emergency={Emergency.Critical}
-                    category={Category.CreaPalette}
-                    worksite={task.worksite}
-                    title={task.titre}
-                  />
-                </Col>
-              ))}
-          </Row>
-        </td>
-      </tr>
-    </tbody>
-  </Table>
-</Container>
+          <Container className="container-xxl mt-4">
+            <Table responsive>
+              <thead>
+                <tr>
+                  <th className={`col-lg-2 ${!selectedStatus.includes(Emergency.Minor) && "d-none"}`}>{Emergency.Minor}</th>
+                  <th className={`col-lg-2 ${!selectedStatus.includes(Emergency.Medium) && "d-none"}`}>{Emergency.Medium}</th>
+                  <th className={`col-lg-2 ${!selectedStatus.includes(Emergency.Severe) && "d-none"}`}>{Emergency.Severe}</th>
+                  <th className={`col-lg-2 ${!selectedStatus.includes(Emergency.Blocking) && "d-none"}`}>{Emergency.Blocking}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className={`col-lg-2 ${!selectedStatus.includes(Emergency.Minor) && "d-none"}`}>
+                    <Row>
+                      {filteredTasks
+                        .filter(task => task.level === Emergency.Minor)
+                        .map(task => (
+                          <Col key={task.id} lg={12}>
+                            <EmergencyComponent
+                              id={task.id}
+                              description={task.description}
+                              emergency={Emergency.Minor}
+                              category={Category.CreaPalette}
+                              title={task.title}
+                            />
+                          </Col>
+                        ))}
+                    </Row>
+                  </td>
+                  <td className={`col-lg-2 ${!selectedStatus.includes(Emergency.Medium) && "d-none"}`}>
+                    <Row>
+                      {filteredTasks
+                        .filter(task => task.level === Emergency.Medium)
+                        .map(task => (
+                          <Col key={task.id} lg={12}>
+                            <EmergencyComponent
+                              id={task.id}
+                              description={task.description}
+                              emergency={Emergency.Medium}
+                              category={Category.CreaPalette}
+                              title={task.title}
+                            />
+                          </Col>
+                        ))}
+                    </Row>
+                  </td>
+                  <td className={`col-lg-2 ${!selectedStatus.includes(Emergency.Severe) && "d-none"}`}>
+                    <Row>
+                      {filteredTasks
+                        .filter(task => task.level === Emergency.Severe)
+                        .map(task => (
+                          <Col key={task.id} lg={12}>
+                            <EmergencyComponent
+                              id={task.id}
+                              description={task.description}
+                              emergency={Emergency.Severe}
+                              category={Category.CreaPalette}
+                              title={task.title}
+                            />
+                          </Col>
+                        ))}
+                    </Row>
+                  </td>
+                  <td className={`col-lg-2 ${!selectedStatus.includes(Emergency.Blocking) && "d-none"}`}>
+                    <Row>
+                      {filteredTasks
+                        .filter(task => task.level === Emergency.Blocking)
+                        .map(task => (
+                          <Col key={task.id} lg={12}>
+                            <EmergencyComponent
+                              id={task.id}
+                              description={task.description}
+                              emergency={Emergency.Blocking}
+                              category={Category.CreaPalette}
+                              title={task.title}
+                            />
+                          </Col>
+                        ))}
+                    </Row>
+                  </td>
+                </tr>
+              </tbody>
+            </Table>
+          </Container>
 
-    </Container>
+        </Container>
+      }
+    </>
   );
 };
 

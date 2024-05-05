@@ -10,9 +10,15 @@ import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import { LoginOutlined, RequestPageOutlined, RequestQuoteOutlined, SettingsAccessibilityOutlined, SettingsOutlined } from "@mui/icons-material";
 import { Link, useNavigate } from 'react-router-dom';
 import KeycloakApi from "../api/KeycloakApi";
+<<<<<<< HEAD
 import { WorkSiteJson, WorkSiteRequestJson, CustomerJson, EmergencyDetailsJson, UserJson } from '../api/ModelJson';
 import { WorkSite, WorkSiteRequest, Customer, WorkSiteStatus, WorkSiteRequestStatus, EmergencyDetails, User } from '../api/Model';
 import { getStatusWorksite, getStatusWorksiteRequest } from "../common/utils/utils";
+=======
+import { WorkSiteJson, WorkSiteRequestJson, CustomerJson, EmergencyDetailsJson } from '../api/ModelJson';
+import { WorkSite, WorkSiteRequest, Customer, WorkSiteStatus, WorkSiteRequestStatus, EmergencyDetails, Emergency } from '../api/Model';
+import { getEmergency, getStatusWorksite, getStatusWorksiteRequest } from "../common/utils/utils";
+>>>>>>> dc95e00 (branchement écrans list terminé)
 
 
 
@@ -22,7 +28,7 @@ const SidebarComponent: React.FC = () => {
 
     const [worksiteData, setWorksiteData] = useState<WorkSite[]>();
     const [worksiteRequestData, setWorksiteRequestData] = useState<WorkSiteRequest[]>();
-    const [emergencyData, setEmergencytData] = useState<EmergencyDetails[]>();
+    const [emergencyData, setEmergencyData] = useState<EmergencyDetails[]>();
 
 
     const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
@@ -93,9 +99,9 @@ const SidebarComponent: React.FC = () => {
         console.log("mapper", worksiteRequestMapper);
         console.log("data", worksiteRequestData);
 
-        navigate("/listeDemandeChantiers", { state: { worksiteRequestData } })
     }
 
+<<<<<<< HEAD
     const handleSettingsItemClick = async () => {
         setSidebarCollapsed(true);
         const responseUserInfo = await MainApi.getInstance().getUserbyId("2245b540-88c7-42dd-b469-70c82c6beb02") as User;
@@ -122,9 +128,12 @@ const SidebarComponent: React.FC = () => {
         console.log("Reponse", responseEmergency);
         console.log("mapper", emergencyMapper);
         console.log("data", emergencytData);
+=======
+>>>>>>> dc95e00 (branchement écrans list terminé)
 
-        navigate("/incidents", { state: { emergencytData } })*/
-    }
+    useEffect(() => {
+        navigate("/listeDemandeChantiers", { state: { worksiteRequestData } })
+    },[worksiteRequestData])
 
     const handleMenuItemClick = () => {
         setSidebarCollapsed(true); // Rétracter la barre latérale lorsque vous cliquez sur un élément du menu
@@ -182,7 +191,14 @@ const SidebarComponent: React.FC = () => {
                 <MenuItem icon={<ContactsOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/creerDemande" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
                     {sidebarCollapsed ? null : 'Créer une demande'}
                 </MenuItem>
+<<<<<<< HEAD
                 <MenuItem icon={<HelpOutlineOutlinedIcon />} style={{ backgroundColor: 'white' }} onClick={handleListEmergency}>
+=======
+                <MenuItem icon={<ReceiptOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/detailChantier" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
+                    {sidebarCollapsed ? null : 'Détail d\'un chantier'}
+                </MenuItem>
+                <MenuItem icon={<HelpOutlineOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/incidents" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
+>>>>>>> dc95e00 (branchement écrans list terminé)
                     {sidebarCollapsed ? null : 'Incidents'}
                 </MenuItem>
                 <MenuItem icon={<CalendarTodayOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/planning" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>

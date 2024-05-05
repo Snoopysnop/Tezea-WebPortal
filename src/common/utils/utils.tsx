@@ -48,11 +48,11 @@ export function getRequestStatusColor(status: WorkSiteRequestStatus): string {
 
 export function getEmergencyIconColor(status: Emergency): string {
     switch (status) {
-        case Emergency.Low:
+        case Emergency.Minor:
             return 'text-success';
         case Emergency.Medium:
             return 'text-warning';
-        case Emergency.High:
+        case Emergency.Severe:
             return 'text-danger';
         default:
             return '#FFFFFF';
@@ -61,13 +61,13 @@ export function getEmergencyIconColor(status: Emergency): string {
 
 export function getEmergencyColor(status: Emergency): string {
     switch (status) {
-        case Emergency.Low:
+        case Emergency.Minor:
             return '#008000';
         case Emergency.Medium:
             return '#FFFF00';
-        case Emergency.High:
+        case Emergency.Severe:
             return '#FF0000';
-        case Emergency.Critical:
+        case Emergency.Blocking:
             return '#000000';
         default:
             return '#FFFFFF';
@@ -94,13 +94,13 @@ export function getStatusIcon(status: WorkSiteStatus) {
 
 export function getStatusWorksite(status: string) {
     switch (status) {
-        case "Standby" :
+        case "Standby":
             return WorkSiteStatus.Standby;
-        case "InProgress" :
+        case "InProgress":
             return WorkSiteStatus.InProgress;
-        case "Done" :
+        case "Done":
             return WorkSiteStatus.Done;
-        case "Archive" :
+        case "Archive":
             return WorkSiteStatus.Archive;
         default:
             return WorkSiteStatus.Standby;
@@ -109,16 +109,31 @@ export function getStatusWorksite(status: string) {
 
 export function getStatusWorksiteRequest(status: string) {
     switch (status) {
-        case "Standby" :
+        case "Standby":
             return WorkSiteRequestStatus.Standby;
-        case "ToComplete" :
+        case "ToComplete":
             return WorkSiteRequestStatus.ToComplete;
-        case "Done" :
+        case "Done":
             return WorkSiteRequestStatus.Done;
-        case "Archive" :
+        case "Archive":
             return WorkSiteRequestStatus.Archive;
         default:
             return WorkSiteRequestStatus.Standby;
+    }
+}
+
+export function getEmergency(emergency: string) {
+    switch (emergency) {
+        case "Minor":
+            return Emergency.Minor;
+        case "Medium":
+            return Emergency.Medium;
+        case "Severe":
+            return Emergency.Severe;
+        case "Blocking":
+            return Emergency.Blocking;
+        default:
+            return Emergency.Minor;
     }
 }
 
@@ -137,15 +152,16 @@ export function getRequestStatusIcon(status: WorkSiteRequestStatus) {
     }
 }
 
+
 export function getEmergencyIcon(status: Emergency) {
     switch (status) {
-        case Emergency.Low:
+        case Emergency.Minor:
             return <StandByIcon className='secondary' width='10px' height='100%' />;
         case Emergency.Medium:
             return <StandByIcon className='secondary' width='10px' height='100%' />;
-        case Emergency.High:
+        case Emergency.Severe:
             return <StandByIcon className='secondary' width='10px' height='100%' />;
-        case Emergency.Critical:
+        case Emergency.Blocking:
             return <StandByIcon className='secondary' width='10px' height='100%' />;
         default:
             return <StandByIcon className='secondary' width='10px' height='100%' />;
