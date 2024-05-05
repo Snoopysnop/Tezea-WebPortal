@@ -4,7 +4,7 @@ import { WorkSite, User, Role, Tool, WorkSiteStatus, SatisfactionLevel, ToolName
 import PopupEmergency from './PopupEmergency';
 import { useLocation } from 'react-router-dom';
 import MainApi from '../api/MainApi';
-import { getStatusWorksite } from '../common/utils/utils';
+import { getRoleWorksite, getStatusWorksite } from '../common/utils/utils';
 
 const WorkSiteDetailPage: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -13,10 +13,13 @@ const WorkSiteDetailPage: React.FC = () => {
   const worksite = location.state ? (location.state as any).worksiteData as WorkSite : null;
   console.log(worksite)
 
+  const [currentworkSiteChief, setWorkSiteChief] = useState<User | undefined>(undefined);
+  const [currentusers, setWorkSiteUsers] = useState<User[] | undefined>(undefined);
+
   useEffect(() => {
     handleListWorksite();
+    handleUsers();
   }, []); // Le tableau vide indique que cette fonction doit être appelée une seule fois lors du montage du composant
-
 
   const handleListWorksite = async () => {
     if (worksite!.workSiteChief) {
@@ -26,14 +29,28 @@ const WorkSiteDetailPage: React.FC = () => {
       console.log("test");
       console.log(worksiteChief);
       console.log("test");
+      const users = await MainApi.getInstance().getUsersByWorksiteId(String(worksite!.id)) as Array<User>;
+      console.log(users)
+    };
+  }
 
-      // Utilisez worksiteChief ici
-    } else {
-      console.log("erreur");
+  const handleUsers = async () => {
+    const users = await MainApi.getInstance().getUsersByWorksiteId(String(worksite!.id)) as Array<User>;
+    const workSiteChiefFiltered = users.filter(user => getRoleWorksite(user.role) === Role.WorkSiteChief);
 
-      // Gérer le cas où workSiteChief est undefined
+    const workSiteUsersFiltered = users.filter(user => getRoleWorksite(user.role) === Role.Employee);
+
+    console.log(workSiteChiefFiltered[0].firstName)
+    if (workSiteChiefFiltered.length > 0) {
+      setWorkSiteChief(workSiteChiefFiltered[0])
     }
-  };
+    if (workSiteUsersFiltered.length > 0) {
+      setWorkSiteUsers(workSiteUsersFiltered)
+    }
+  }
+  console.log("Triple quoicoubaka");
+
+  console.log(currentusers);
 
   // Fonction pour ouvrir la modale
   const openModal = () => {
@@ -44,7 +61,7 @@ const WorkSiteDetailPage: React.FC = () => {
   const closeModal = () => {
     setShowModal(false);
   };
- 
+
 
   return (
     <Container className='container-xxl'>
@@ -58,7 +75,7 @@ const WorkSiteDetailPage: React.FC = () => {
                   <Col>
                     <Form.Group>
                       <Form.Label>Chef de chantier :</Form.Label>
-                      <Form.Control type="text" value={''} readOnly />
+                      <Form.Control type="text" value={currentworkSiteChief?.firstName} readOnly />
                     </Form.Group>
                   </Col>
                   <Col>
@@ -72,13 +89,13 @@ const WorkSiteDetailPage: React.FC = () => {
                   <Col>
                     <Form.Group>
                       <Form.Label>Date de début :</Form.Label>
-                      <Form.Control type="text" value={worksite!.begin.toLocaleString()} readOnly />
+                      <Form.Control type="text" value={new Date(worksite!.begin).toLocaleString()} readOnly />
                     </Form.Group>
                   </Col>
                   <Col>
                     <Form.Group>
                       <Form.Label>Date de fin :</Form.Label>
-                      <Form.Control type="text" value={worksite!.end.toLocaleString()} readOnly />
+                      <Form.Control type="text" value={new Date(worksite!.end).toLocaleString()} readOnly />
                     </Form.Group>
                   </Col>
                 </Row>
@@ -137,7 +154,15 @@ const WorkSiteDetailPage: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                 
+                  {currentusers && currentusers.map((user, index) => (
+                    <tr key={index}>
+                      <td>{user.firstName}</td>
+                      <td>{user.lastName}</td>
+                      <td>{getRoleWorksite(user.role)}</td>
+                      <td>{user.email}</td>
+                      <td>{user.phoneNumber}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </Table>
             </Card.Body>
