@@ -1,12 +1,39 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Card, Col, Container, Row, Table, Modal, Form } from 'react-bootstrap';
 import { WorkSite, User, Role, Tool, WorkSiteStatus, SatisfactionLevel, ToolName } from '../api/Model';
 import PopupEmergency from './PopupEmergency';
-
-
+import { useLocation } from 'react-router-dom';
+import MainApi from '../api/MainApi';
+import { getStatusWorksite } from '../common/utils/utils';
 
 const WorkSiteDetailPage: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
+  const location = useLocation();
+
+  const worksite = location.state ? (location.state as any).worksiteData as WorkSite : null;
+  console.log(worksite)
+
+  useEffect(() => {
+    handleListWorksite();
+  }, []); // Le tableau vide indique que cette fonction doit être appelée une seule fois lors du montage du composant
+
+
+  const handleListWorksite = async () => {
+    if (worksite!.workSiteChief) {
+      console.log("chef !!!");
+      console.log(worksite!.workSiteChief)
+      const worksiteChief = await MainApi.getInstance().getUserbyId(String(worksite!.workSiteChief)) as User;
+      console.log("test");
+      console.log(worksiteChief);
+      console.log("test");
+
+      // Utilisez worksiteChief ici
+    } else {
+      console.log("erreur");
+
+      // Gérer le cas où workSiteChief est undefined
+    }
+  };
 
   // Fonction pour ouvrir la modale
   const openModal = () => {
@@ -17,94 +44,48 @@ const WorkSiteDetailPage: React.FC = () => {
   const closeModal = () => {
     setShowModal(false);
   };
-  // Création d'un exemple d'objet WorkSite
-  const exampleWorkSite: WorkSite = {
-    id: "1",
-    workSiteChief: {
-      id: "chief123",
-      firstName: "John",
-      lastName: "Doe",
-      role: Role.WorkSiteChief,
-      email: "john.doe@example.com",
-      phoneNumber: "1234567890"
-    },
-    staff: [
-      {
-        id: "staff1",
-        firstName: "Jane",
-        lastName: "Smith",
-        role: Role.Employee,
-        email: "jane.smith@example.com",
-        phoneNumber: "0987654321"
-      },
-      {
-        id: "staff2",
-        firstName: "Alex",
-        lastName: "Johnson",
-        role: Role.Employee,
-        email: "alex.johnson@example.com",
-        phoneNumber: "9876543210"
-      }
-    ],
-    equipment: [
-      {
-        name: ToolName.Stapler,
-        quantity: 1,
-      },
-      {
-        name: ToolName.Palette,
-        quantity: 2,
-      }
-    ], begin:new Date("2024-10-10T17:09:00"),
-    end: new Date("2024-10-10T17:12:00"),
-    status: WorkSiteStatus.InProgress,
-    satisfaction: SatisfactionLevel.High,
-    request: undefined,
-    signature: undefined,
-    title: "",
-    address: ""
-  };
+ 
 
   return (
     <Container className='container-xxl'>
       <Row className='mt-4'>
         <Col lg={6}>
           <Card bg="white" text="dark" className="h-100">
-          <Card.Body>
-  <Card.Title><h2>Détails du chantier</h2></Card.Title>
-  <Card.Text>
-    <Row className="mb-3">
-      <Col>
-        <Form.Group>
-          <Form.Label>Chef de chantier :</Form.Label>
-          <Form.Control type="text" value={`${exampleWorkSite.workSiteChief?.firstName} ${exampleWorkSite.workSiteChief?.lastName}`} readOnly />
-        </Form.Group>
-      </Col>
-      <Col>
-        <Form.Group>
-          <Form.Label>Statut:</Form.Label>
-          <Form.Control type="text" value={exampleWorkSite.status} readOnly />
-        </Form.Group>
-      </Col>
-    </Row>
-    <Row className="mb-3">
-      <Col>
-        <Form.Group>
-          <Form.Label>Date de début :</Form.Label>
-          <Form.Control type="text" value={exampleWorkSite.begin.toLocaleString()} readOnly />
-        </Form.Group>
-      </Col>
-      <Col>
-        <Form.Group>
-          <Form.Label>Date de fin :</Form.Label>
-          <Form.Control type="text" value={exampleWorkSite.end.toLocaleString()} readOnly />
-        </Form.Group>
-      </Col>
-    </Row>
-  </Card.Text>
-  <Button variant="primary" onClick={openModal}>Déclarer un incident</Button>{' '}
-  <Button variant="secondary">Voir la demande de chantiers</Button>
-</Card.Body>
+            <Card.Body>
+              <Card.Title><h2>Détails du chantier</h2></Card.Title>
+              <Card.Text>
+                <Row className="mb-3">
+                  <Col>
+                    <Form.Group>
+                      <Form.Label>Chef de chantier :</Form.Label>
+                      <Form.Control type="text" value={''} readOnly />
+                    </Form.Group>
+                  </Col>
+                  <Col>
+                    <Form.Group>
+                      <Form.Label>Statut:</Form.Label>
+                      <Form.Control type="text" value={getStatusWorksite(worksite!.status)} readOnly />
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row className="mb-3">
+                  <Col>
+                    <Form.Group>
+                      <Form.Label>Date de début :</Form.Label>
+                      <Form.Control type="text" value={worksite!.begin.toLocaleString()} readOnly />
+                    </Form.Group>
+                  </Col>
+                  <Col>
+                    <Form.Group>
+                      <Form.Label>Date de fin :</Form.Label>
+                      <Form.Control type="text" value={worksite!.end.toLocaleString()} readOnly />
+                    </Form.Group>
+                  </Col>
+                </Row>
+              </Card.Text>
+              <Button variant="primary" onClick={openModal}>Déclarer un incident</Button>{' '}
+              <Button variant="secondary">Voir la demande de chantiers</Button>
+            </Card.Body>
 
           </Card>
         </Col>
@@ -130,19 +111,12 @@ const WorkSiteDetailPage: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                {exampleWorkSite.equipment && exampleWorkSite.equipment.length > 0 ? (
-  exampleWorkSite.equipment.map((tool: Tool) => (
-    <tr key={tool.name}>
-      <td>{tool.name}</td>
-      <td>{tool.quantity}</td>
-    </tr>
-  ))
-) : (
-  <tr>
-    <td colSpan={2}>Aucun équipement disponible</td>
-  </tr>
-)}
-
+                  {worksite && worksite.equipments && Object.keys(worksite.equipments).map((toolName: string, qty: number) => (
+                    <tr key={toolName}>
+                      <td>{toolName}</td>
+                      <td>{qty}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </Table>
             </Card.Body>
@@ -163,29 +137,14 @@ const WorkSiteDetailPage: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                {exampleWorkSite.staff && exampleWorkSite.staff.length > 0 ? (
-  exampleWorkSite.staff.map((staffMember: User) => (
-    <tr key={staffMember.id}>
-      <td>{staffMember.firstName}</td>
-      <td>{staffMember.lastName}</td>
-      <td>{staffMember.role}</td>
-      <td>{staffMember.email}</td>
-      <td>{staffMember.phoneNumber}</td>
-    </tr>
-  ))
-) : (
-  <tr>
-    <td colSpan={5}>Aucun membre du personnel disponible</td>
-  </tr>
-)}
-
+                 
                 </tbody>
               </Table>
             </Card.Body>
           </Card>
         </Col>
       </Row>
-<PopupEmergency showModal={showModal} closeModal={closeModal} />
+      <PopupEmergency showModal={showModal} closeModal={closeModal} />
     </Container>
   );
 }

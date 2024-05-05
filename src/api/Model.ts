@@ -144,7 +144,7 @@ export interface WorkSite {
     id: string;
     workSiteChief?: User;
     staff?: User[];
-    equipment?: Tool[];
+    equipments?: Tool[];
     begin: Date;
     end: Date;
     status: WorkSiteStatus;

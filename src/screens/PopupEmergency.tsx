@@ -26,12 +26,17 @@ const PopupEmergency: React.FC<PopupEmergencyProps> = ({ showModal, closeModal }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!emergencyName.trim() || !description.trim()) {
+      alert("Veuillez remplir tous les champs avant de créer l'incident.");
+      return;
+    }
+
     console.log("Nom de l'urgence:", emergencyName);
     console.log("Description:", description);
     console.log("Niveau d'urgence:", emergencyLevel);
     closeModal();
   };
-
+  
   return (
     <Modal show={showModal} onHide={closeModal}>
       <Modal.Header closeButton>

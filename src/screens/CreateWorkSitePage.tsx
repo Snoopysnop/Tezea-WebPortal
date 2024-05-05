@@ -118,7 +118,7 @@ const CreateWorkSitePage: React.FC = () => {
       id: '',
       workSiteChief: selectedWorksiteChief ? selectedWorksiteChief : undefined,
       staff: selectedStaff,
-      equipment: selectedTools.map(toolName => ({
+      equipments: selectedTools.map(toolName => ({
         name: toolName,
         quantity: selectedQuantities[toolName] || 1,
       }) as Tool),

@@ -10,8 +10,8 @@ import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import { LoginOutlined, RequestPageOutlined, RequestQuoteOutlined, SettingsAccessibilityOutlined, SettingsOutlined } from "@mui/icons-material";
 import { Link, useNavigate } from 'react-router-dom';
 import KeycloakApi from "../api/KeycloakApi";
-import { WorkSiteJson, WorkSiteRequestJson, CustomerJson, EmergencyDetailsJson } from '../api/ModelJson';
-import { WorkSite, WorkSiteRequest, Customer, WorkSiteStatus, WorkSiteRequestStatus, EmergencyDetails } from '../api/Model';
+import { WorkSiteJson, WorkSiteRequestJson, CustomerJson, EmergencyDetailsJson, UserJson } from '../api/ModelJson';
+import { WorkSite, WorkSiteRequest, Customer, WorkSiteStatus, WorkSiteRequestStatus, EmergencyDetails, User } from '../api/Model';
 import { getStatusWorksite, getStatusWorksiteRequest } from "../common/utils/utils";
 
 
@@ -96,6 +96,15 @@ const SidebarComponent: React.FC = () => {
         navigate("/listeDemandeChantiers", { state: { worksiteRequestData } })
     }
 
+    const handleSettingsItemClick = async () => {
+        setSidebarCollapsed(true);
+        const responseUserInfo = await MainApi.getInstance().getUserbyId("2245b540-88c7-42dd-b469-70c82c6beb02") as User;
+        console.log(responseUserInfo);
+        navigate("/parametres", { state: { responseUserInfo } })
+
+    }
+
+
     const handleListEmergency = async () => {
         setSidebarCollapsed(true);
         const responseEmergency = await MainApi.getInstance().getEmergencies() as EmergencyDetailsJson[];
@@ -173,16 +182,13 @@ const SidebarComponent: React.FC = () => {
                 <MenuItem icon={<ContactsOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/creerDemande" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
                     {sidebarCollapsed ? null : 'Créer une demande'}
                 </MenuItem>
-                <MenuItem icon={<ReceiptOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/detailChantier" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
-                    {sidebarCollapsed ? null : 'Détail d\'un chantier'}
-                </MenuItem>
                 <MenuItem icon={<HelpOutlineOutlinedIcon />} style={{ backgroundColor: 'white' }} onClick={handleListEmergency}>
                     {sidebarCollapsed ? null : 'Incidents'}
                 </MenuItem>
                 <MenuItem icon={<CalendarTodayOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/planning" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
                     {sidebarCollapsed ? null : 'Planning'}
                 </MenuItem>
-                <MenuItem icon={<SettingsOutlined />} style={{ backgroundColor: 'white' }} component={<Link to="/parametres" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
+                <MenuItem icon={<SettingsOutlined />} style={{ backgroundColor: 'white' }} onClick={handleSettingsItemClick}>
                     {sidebarCollapsed ? null : 'Paramètres'}
                 </MenuItem>
             </Menu>
