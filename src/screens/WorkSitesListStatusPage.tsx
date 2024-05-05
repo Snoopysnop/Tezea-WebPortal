@@ -14,18 +14,11 @@ import { useLocation } from 'react-router-dom';
 const WorkSitesListStatusPage: React.FC = () => {
 
   const location = useLocation();
-  console.log("List chantier/location",location)
 
   const WorksiteOrderedList = location.state ? (location.state as any).worksiteData as WorkSite[] : null;
 
-  console.log("List chantier",WorksiteOrderedList)
-
-
   const [filterValue, setFilterValue] = useState<string>("");
   const filteredTasks = WorksiteOrderedList ? WorksiteOrderedList.filter(task => task.title.toLowerCase().includes(filterValue.toLowerCase())) : [];
-
-  console.log("filter",filteredTasks)
-
 
   const allStatus: WorkSiteStatus[] = Object.values(WorkSiteStatus);
   const [selectedStatus, setSelectedStatus] = useState<WorkSiteStatus[]>([]);
@@ -42,7 +35,8 @@ const WorkSitesListStatusPage: React.FC = () => {
   const [modalShow, setModalShow] = useState(false);
 
   // Fonction pour gérer le clic sur un élément
-  const handleTaskClick = () => {
+  const handleTaskClick = (task:any) => {
+    console.log("task:",task)
     //TODO faire appel api get bdd
     //ptet rajouter un booleen pour differencier demande et chantier boolean:Boolean
     setModalShow(true);
@@ -71,7 +65,6 @@ const WorkSitesListStatusPage: React.FC = () => {
     name: task.title,
   })) : [];
 
-  console.log("item",items)
 
 
   const handleOnSearch = (string: any, results: any) => {
@@ -150,7 +143,7 @@ const WorkSitesListStatusPage: React.FC = () => {
                         address={task.address}
                         status={task.status}
                         category={Category.CreaPalette}
-                        onClick={() => handleTaskClick()}
+                        onClick={() => handleTaskClick(task)}
                       />
                     </Col>
                   ))}
@@ -171,7 +164,7 @@ const WorkSitesListStatusPage: React.FC = () => {
                         address={task.address}
                         status={task.status}
                         category={Category.CreaPalette}
-                        onClick={() => handleTaskClick()}
+                        onClick={() => handleTaskClick(task)}
                       />
                     </Col>
                   ))}
@@ -192,7 +185,7 @@ const WorkSitesListStatusPage: React.FC = () => {
                         address={task.address}
                         status={task.status}
                         category={Category.CreaPalette}
-                        onClick={() => handleTaskClick()}
+                        onClick={() => handleTaskClick(task)}
                       />
                     </Col>
                   ))}
@@ -213,7 +206,7 @@ const WorkSitesListStatusPage: React.FC = () => {
                         address={task.address}
                         status={task.status}
                         category={Category.CreaPalette}
-                        onClick={() => handleTaskClick()}
+                        onClick={() => handleTaskClick(task)}
                       />
                     </Col>
                   ))}

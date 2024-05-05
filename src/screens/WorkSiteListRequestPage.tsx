@@ -10,63 +10,22 @@ import WorkSiteRequestPopUp from '../components/WorkSiteRequestPopUp';
 import WorkSiteComponent from './WorkSiteComponent';
 import MainApi from "../api/MainApi"
 import WorkSiteRequestComponent from './WorkSiteRequestComponent';
+import { useLocation } from 'react-router-dom';
 
 const WorkSiteListRequestPage: React.FC = () => {
 
-  const tasks: WorkSiteRequest[] = [
-    {
-      id: 1, title: "Chantier 1", estimatedDate:new Date("2024-10-10T17:09:00"),requestStatus:WorkSiteRequestStatus.ToComplete,
-       workSites:[{
-        id: "12", title: "Chantier Test 35", begin:new Date("2024-10-10T17:09:00"),
-        end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
-      },
-    ],city:"Saint-Malo"
-    },
-    {
-      id: 1, title: "Chantier 1", estimatedDate:new Date("2024-10-10T17:09:00"),requestStatus:WorkSiteRequestStatus.ToComplete,
-       workSites:[{
-        id: "12", title: "Chantier Test 35", begin:new Date("2024-10-10T17:09:00"),
-        end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
-      },
-    ],city:"Saint-Malo"
-    },
-    {
-      id: 1, title: "Chantier 1", estimatedDate:new Date("2024-10-10T17:09:00"),requestStatus:WorkSiteRequestStatus.ToComplete,
-       workSites:[{
-        id: "12", title: "Chantier Test 35", begin:new Date("2024-10-10T17:09:00"),
-        end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
-      },
-    ],city:"Saint-Malo"
-    },
-    {
-      id: 1, title: "Chantier 1", estimatedDate:new Date("2024-10-10T17:09:00"),requestStatus:WorkSiteRequestStatus.Standby,
-       workSites:[{
-        id: "12", title: "Chantier Test 35", begin:new Date("2024-10-10T17:09:00"),
-        end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
-      },
-    ],city:"Saint-Malo"
-    },
-    {
-      id: 1, title: "Chantier 1", estimatedDate:new Date("2024-10-10T17:09:00"),requestStatus:WorkSiteRequestStatus.Done,
-       workSites:[{
-        id: "12", title: "Chantier Test 35", begin:new Date("2024-10-10T17:09:00"),
-        end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
-      },
-    ],city:"Saint-Malo"
-    },
-    {
-      id: 1, title: "Chantier 1", estimatedDate:new Date("2024-10-10T17:09:00"),requestStatus:WorkSiteRequestStatus.Archive,
-       workSites:[{
-        id: "12", title: "Chantier Test 35", begin:new Date("2024-10-10T17:09:00"),
-        end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
-      },
-    ],city:"Saint-Malo"
-    },
-  ];
+  
+  const location = useLocation();
+
+  const WorksiteRequestOrderedList = location.state ? (location.state as any).worksiteRequestData as WorkSiteRequest[] : null;
+
+  console.log("ECRAN REQUEST:location",location)
+
+  console.log("ECRAN REQUEST:value",WorksiteRequestOrderedList)
 
 
   const [filterValue, setFilterValue] = useState<string>("");
-  const filteredTasks = tasks.filter(task => (task.title?.toLowerCase() ?? '').includes(filterValue.toLowerCase()));
+  const filteredTasks = WorksiteRequestOrderedList ? WorksiteRequestOrderedList.filter(task => (task.title?.toLowerCase() ?? '').includes(filterValue.toLowerCase())): [];
 
   const allStatus: WorkSiteRequestStatus[] = Object.values(WorkSiteRequestStatus);
   const [selectedStatus, setSelectedStatus] = useState<WorkSiteRequestStatus[]>([]);
@@ -120,10 +79,10 @@ const WorkSiteListRequestPage: React.FC = () => {
     setCheckboxes(initialCheckboxes);
   }, []);
 
-  const items = tasks.map(task => ({
+  const items = WorksiteRequestOrderedList ? WorksiteRequestOrderedList.map(task => ({
     id: task.id,
     name: task.title,
-  }));
+  })) : [];
 
   const handleOnSearch = (string: any, results: any) => {
     setFilterValue(string);

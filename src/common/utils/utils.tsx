@@ -92,6 +92,36 @@ export function getStatusIcon(status: WorkSiteStatus) {
     }
 }
 
+export function getStatusWorksite(status: string) {
+    switch (status) {
+        case "Standby" :
+            return WorkSiteStatus.Standby;
+        case "InProgress" :
+            return WorkSiteStatus.InProgress;
+        case "Done" :
+            return WorkSiteStatus.Done;
+        case "Archive" :
+            return WorkSiteStatus.Archive;
+        default:
+            return WorkSiteStatus.Standby;
+    }
+}
+
+export function getStatusWorksiteRequest(status: string) {
+    switch (status) {
+        case "Standby" :
+            return WorkSiteRequestStatus.Standby;
+        case "ToComplete" :
+            return WorkSiteRequestStatus.ToComplete;
+        case "Done" :
+            return WorkSiteRequestStatus.Done;
+        case "Archive" :
+            return WorkSiteRequestStatus.Archive;
+        default:
+            return WorkSiteRequestStatus.Standby;
+    }
+}
+
 export function getRequestStatusIcon(status: WorkSiteRequestStatus) {
     switch (status) {
         case WorkSiteRequestStatus.Standby:

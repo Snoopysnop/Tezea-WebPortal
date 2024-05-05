@@ -54,11 +54,11 @@ export interface WorkSiteRequestJson {
 
 export interface WorkSiteJson {
     id: string;
-    workSiteChief?: string | undefined;
+    workSiteChief?: string;
     staff?: string[];
     equipment?: Tool[];
-    begin?: Date;
-    end?: Date;
+    begin?: string;
+    end?: string;
     status?: WorkSiteStatus;
     request?: string | undefined; //todo a voir si on laisse undefined
     satisfaction?: SatisfactionLevel;

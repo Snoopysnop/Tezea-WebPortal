@@ -142,7 +142,7 @@ export interface WorkSiteRequest {
 
 export interface WorkSite {
     id: string;
-    workSiteChief?: User | undefined;
+    workSiteChief?: User;
     staff?: User[];
     equipment?: Tool[];
     begin: Date;

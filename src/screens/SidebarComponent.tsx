@@ -10,8 +10,9 @@ import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import { LoginOutlined, RequestPageOutlined, RequestQuoteOutlined, SettingsAccessibilityOutlined, SettingsOutlined } from "@mui/icons-material";
 import { Link, useNavigate } from 'react-router-dom';
 import KeycloakApi from "../api/KeycloakApi";
-import { WorkSiteJson, WorkSiteRequestJson, CustomerJson } from '../api/ModelJson';
-import { WorkSite, WorkSiteRequest, Customer, WorkSiteStatus } from '../api/Model';
+import { WorkSiteJson, WorkSiteRequestJson, CustomerJson, EmergencyDetailsJson } from '../api/ModelJson';
+import { WorkSite, WorkSiteRequest, Customer, WorkSiteStatus, WorkSiteRequestStatus, EmergencyDetails } from '../api/Model';
+import { getStatusWorksite, getStatusWorksiteRequest } from "../common/utils/utils";
 
 
 
@@ -20,6 +21,9 @@ const SidebarComponent: React.FC = () => {
     const navigate = useNavigate();
 
     const [worksiteData, setWorksiteData] = useState<WorkSite[]>();
+    const [worksiteRequestData, setWorksiteRequestData] = useState<WorkSiteRequest[]>();
+    const [emergencyData, setEmergencytData] = useState<EmergencyDetails[]>();
+
 
     const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
 
@@ -33,13 +37,85 @@ const SidebarComponent: React.FC = () => {
     const handleListWorksite = async () => {
         setSidebarCollapsed(true);
         const responseWorksite = await MainApi.getInstance().getWorkSites() as WorkSiteJson[];
-        const worksiteMapper = responseWorksite as WorkSite[];
-       
+
+        const worksiteMapper: WorkSite[] = responseWorksite.map(worksiteJson => ({
+            id: worksiteJson.id,
+            workSiteChief: undefined,
+            staff: undefined,
+            equipment: undefined,
+            begin: worksiteJson.begin ? new Date(worksiteJson.begin) : new Date(),
+            end: worksiteJson.end ? new Date(worksiteJson.end) : new Date(),
+            status: worksiteJson.status ? getStatusWorksite(worksiteJson.status) : WorkSiteStatus.Standby,
+            request: undefined,
+            satisfaction: worksiteJson.satisfaction,
+            signature: worksiteJson.signature,
+            title: worksiteJson.title ? worksiteJson.title : '',
+            address: worksiteJson.address ? worksiteJson.address : ''
+        }));
         setWorksiteData(worksiteMapper);
-        console.log("sidebar:onclick:",worksiteData);
-        navigate("/listeStatus", { state: {worksiteData}})
+
+        console.log("sidebar:onclick:", worksiteMapper);
+        navigate("/listeStatus", { state: { worksiteData } })
     }
 
+
+
+    const handleListWorksiteRequest = async () => {
+        setSidebarCollapsed(true);
+        const responseWorksiteRequest = await MainApi.getInstance().getWorkSiteRequests("creationDate") as WorkSiteRequestJson[];
+
+        const worksiteRequestMapper: WorkSiteRequest[] = responseWorksiteRequest.map(worksiteRequestJson => ({
+            id: worksiteRequestJson.id,
+            concierge: undefined,
+            siteChief: undefined,
+            customer: undefined,
+            city: worksiteRequestJson.city,
+            workSites: undefined,
+            serviceType: undefined,
+            description: worksiteRequestJson.description,
+            emergency: worksiteRequestJson.emergency,
+            title: worksiteRequestJson.title,
+            category: undefined,
+            removal: worksiteRequestJson.removal,
+            delivery: worksiteRequestJson.delivery,
+            removalRecycling: worksiteRequestJson.removalRecycling,
+            chronoQuote: worksiteRequestJson.chronoQuote,
+            estimatedDate: worksiteRequestJson.estimatedDate ? new Date(worksiteRequestJson.estimatedDate) : new Date(),
+            requestStatus: worksiteRequestJson.requestStatus ? getStatusWorksiteRequest(worksiteRequestJson.requestStatus) : WorkSiteRequestStatus.Standby,
+            weightEstimate: worksiteRequestJson.weightEstimate,
+            volumeEstimate: worksiteRequestJson.volumeEstimate,
+            provider: worksiteRequestJson.provider,
+            tezeaAffectation: worksiteRequestJson.tezeaAffectation,
+        }));
+        setWorksiteRequestData(worksiteRequestMapper);
+        console.log("Reponse", responseWorksiteRequest);
+
+        console.log("mapper", worksiteRequestMapper);
+        console.log("data", worksiteRequestData);
+
+        navigate("/listeDemandeChantiers", { state: { worksiteRequestData } })
+    }
+
+    const handleListEmergency = async () => {
+        setSidebarCollapsed(true);
+        const responseEmergency = await MainApi.getInstance().getEmergencies() as EmergencyDetailsJson[];
+        console.log("Reponse", responseEmergency);
+
+        /*const emergencyMapper: EmergencyDetails[] = responseEmergency.map(emergencyDetailsJson => ({
+            description: emergencyDetailsJson.description,
+            titre: emergencyDetailsJson.titre,
+            id: emergencyDetailsJson.id,
+            level: Emergency,
+            worksite: undefined
+        }));
+        setEmergencytData(emergencyMapper);
+
+        console.log("Reponse", responseEmergency);
+        console.log("mapper", emergencyMapper);
+        console.log("data", emergencytData);
+
+        navigate("/incidents", { state: { emergencytData } })*/
+    }
 
     const handleMenuItemClick = () => {
         setSidebarCollapsed(true); // Rétracter la barre latérale lorsque vous cliquez sur un élément du menu
@@ -91,7 +167,7 @@ const SidebarComponent: React.FC = () => {
                 <MenuItem icon={<PeopleOutlinedIcon />} style={{ backgroundColor: 'white' }} onClick={handleListWorksite}>
                     {sidebarCollapsed ? null : 'Liste des chantiers'}
                 </MenuItem>
-                <MenuItem icon={<RequestQuoteOutlined />} style={{ backgroundColor: 'white' }} component={<Link to="/listeDemandeChantiers" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
+                <MenuItem icon={<RequestQuoteOutlined />} style={{ backgroundColor: 'white' }} onClick={handleListWorksiteRequest}>
                     {sidebarCollapsed ? null : 'Demandes de chantiers'}
                 </MenuItem>
                 <MenuItem icon={<ContactsOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/creerDemande" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
@@ -100,7 +176,7 @@ const SidebarComponent: React.FC = () => {
                 <MenuItem icon={<ReceiptOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/detailChantier" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
                     {sidebarCollapsed ? null : 'Détail d\'un chantier'}
                 </MenuItem>
-                <MenuItem icon={<HelpOutlineOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/incidents" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
+                <MenuItem icon={<HelpOutlineOutlinedIcon />} style={{ backgroundColor: 'white' }} onClick={handleListEmergency}>
                     {sidebarCollapsed ? null : 'Incidents'}
                 </MenuItem>
                 <MenuItem icon={<CalendarTodayOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/planning" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>

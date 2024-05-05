@@ -144,8 +144,8 @@ const WorkSiteRequestPage: React.FC = () => {
         tezeaAffectation: worksiteRequestFormData.worksiteRequest.tezeaAffectation
       };
       //console.log("Demande de chantier :", worksiteRequest);
-      const response = await MainApi.getInstance().createWorkSiteRequest(worksiteRequest);
-      console.log(response);
+      //TODO const response = await MainApi.getInstance().createWorkSiteRequest(worksiteRequest);
+      //console.log(response);
       //const response1 = await MainApi.getInstance().getUsers();
       //WorkSiteRequestService.createWorkSiteRequest(worksiteRequest);
       //console.log("res:",response1);
