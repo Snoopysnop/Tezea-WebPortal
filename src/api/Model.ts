@@ -30,9 +30,9 @@ export enum ToolName{
 }
 
 export enum Civility {
-    M = "M",
-    Mme = "Mme",
-    Mlle = "Mlle"
+    Mr = "M",
+    Ms = "Mme",
+    Other = "Autre"
 }
 
 export enum CustomerStatus {
