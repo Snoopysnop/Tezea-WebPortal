@@ -38,43 +38,6 @@ const WorkSitesListStatusPage: React.FC = () => {
 
   const [modalShow, setModalShow] = useState(false);
 
-  const [filteredTasks, setFilteredTasks] = useState<WorkSite[]>([]);
-
-  const [dataFetched, setDataFetched] = useState<WorkSite[] | undefined>(undefined);
-
-
-  const handleListWorksite = async () => {
-    const responseWorksite = await MainApi.getInstance().getWorkSites() as WorkSiteJson[];
-
-    const worksiteMapper: WorkSite[] = responseWorksite.map(worksiteJson => ({
-        id: worksiteJson.id,
-        workSiteChief: undefined,
-        staff: undefined,
-        equipment: undefined,
-        begin: worksiteJson.begin ? new Date(worksiteJson.begin) : new Date(),
-        end: worksiteJson.end ? new Date(worksiteJson.end) : new Date(),
-        status: worksiteJson.status ? getStatusWorksite(worksiteJson.status) : WorkSiteStatus.Standby,
-        request: undefined,
-        satisfaction: worksiteJson.satisfaction,
-        signature: worksiteJson.signature,
-        title: worksiteJson.title ? worksiteJson.title : '',
-        address: worksiteJson.address ? worksiteJson.address : ''
-    }));
-    setDataFetched(worksiteMapper);
-
-}
-
-useEffect(() => {
-  handleListWorksite()
-}, [])
-
-useEffect(() => {
-  if (dataFetched) {
-    console.log(dataFetched)
-    setFilteredTasks(dataFetched.filter(task => task.title.toLowerCase().includes(filterValue.toLowerCase())))
-  }
-}, [dataFetched,filterValue])
-
 
 
   const [filteredTasks, setFilteredTasks] = useState<WorkSite[]>([]);
@@ -171,9 +134,6 @@ useEffect(() => {
             <Col>
               <ReactSearchAutocomplete
                 styling={{ borderRadius: "10px" }}
-                items={dataFetched.map(data => {
-                  return {id:data.id, name:data.title}
-                })}
                 items={dataFetched.map(data => {
                   return {id:data.id, name:data.title}
                 })}
