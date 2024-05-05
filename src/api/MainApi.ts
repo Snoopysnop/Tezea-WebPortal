@@ -43,7 +43,7 @@ class MainApi extends AbstractApi {
         }
     }
 
-    public async getUserbyId(id: number): Promise<User> {
+    public async getUserbyId(id: string): Promise<User> {
         try {
             const response = await this.service.get(`/api/users/${id}`)
             return response.data as User
@@ -131,9 +131,9 @@ class MainApi extends AbstractApi {
         }
     }
 
-    public async getWorksitebyId(id: number): Promise<WorkSiteJson> {
+    public async getWorksitebyId(id: string): Promise<WorkSiteJson> {
         try {
-            const response = await this.service.get(`/api/workSiteRequests/${id}`)
+            const response = await this.service.get(`/api/worksites/${id}`)
             return response.data as WorkSiteJson
         } catch(err) {
             throw AbstractApi.handleError(err)
@@ -152,6 +152,25 @@ class MainApi extends AbstractApi {
             throw AbstractApi.handleError(err)
         }
     }
+
+    public async createEmergency(EmergencyData: EmergencyDetailsJson): Promise<EmergencyDetailsJson> {
+        try {
+            const response = await this.service.post<EmergencyDetailsJson>(`/api/worksites/incidents/create`, EmergencyData);
+            return response.data as EmergencyDetailsJson;
+        } catch(err) {
+            throw AbstractApi.handleError(err);
+        }
+    }
+
+        //WorkSiteChief-------------------------------------------------------------------------------------------------------------
+        public async getWorksiteChiefbyId(id: string): Promise<User> {
+            try {
+                const response = await this.service.get(`/api/users/${id}/workSites`)
+                return response.data as User
+            } catch(err) {
+                throw AbstractApi.handleError(err)
+            }
+        }
 
 }
 

@@ -5,13 +5,16 @@ import { Category, WorkSite, WorkSiteStatus } from '../api/Model';
 import TaskComponent from './WorkSiteComponent';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 import WorkSiteComponent from './WorkSiteComponent';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { WorkSiteJson } from '../api/ModelJson';
+import MainApi from '../api/MainApi';
 
 
 
 
 
 const WorkSitesListStatusPage: React.FC = () => {
+  const navigate = useNavigate();
 
   const location = useLocation();
 
@@ -35,8 +38,13 @@ const WorkSitesListStatusPage: React.FC = () => {
   const [modalShow, setModalShow] = useState(false);
 
   // Fonction pour gérer le clic sur un élément
-  const handleTaskClick = (task:any) => {
+  const handleTaskClick = async (task:any) => {
     console.log("task:",task)
+    console.log(task.id)
+
+    const worksiteData = await MainApi.getInstance().getWorksitebyId(task.id) as WorkSiteJson;
+    navigate("/detailChantier", { state: { worksiteData } })
+
     //TODO faire appel api get bdd
     //ptet rajouter un booleen pour differencier demande et chantier boolean:Boolean
     setModalShow(true);

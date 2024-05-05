@@ -2,12 +2,18 @@ import React, { useState } from 'react';
 import { Button, Card, Col, Container, Row, Table, Modal, Form } from 'react-bootstrap';
 import { WorkSite, User, Role, Tool, WorkSiteStatus, SatisfactionLevel, ToolName } from '../api/Model';
 import PopupEmergency from './PopupEmergency';
+import { useLocation } from 'react-router-dom';
 
 
 
 const SettingsPage: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
 
+  const location = useLocation();
+
+  const user = location.state ? (location.state as any).responseUserInfo as User : null;
+
+  console.log(user);
   // Fonction pour ouvrir la modale
   const openModal = () => {
     setShowModal(true);
@@ -38,23 +44,23 @@ const SettingsPage: React.FC = () => {
   <Card.Text>
     <Form.Group className="mb-3">
       <Form.Label>Prénom:</Form.Label>
-      <Form.Control type="text" value={exampleWorkSite.firstName} readOnly />
+      <Form.Control type="text" value={user!.firstName} readOnly />
     </Form.Group>
     <Form.Group className="mb-3">
       <Form.Label>Nom:</Form.Label>
-      <Form.Control type="text" value={exampleWorkSite.lastName} readOnly />
+      <Form.Control type="text" value={user!.lastName} readOnly />
     </Form.Group>
     <Form.Group className="mb-3">
       <Form.Label>Rôle:</Form.Label>
-      <Form.Control type="text" value={exampleWorkSite.role} readOnly />
+      <Form.Control type="text" value={user!.role} readOnly />
     </Form.Group>
     <Form.Group className="mb-3">
       <Form.Label>Email:</Form.Label>
-      <Form.Control type="email" value={exampleWorkSite.email} readOnly />
+      <Form.Control type="email" value={user!.email} readOnly />
     </Form.Group>
     <Form.Group className="mb-3">
       <Form.Label>Téléphone:</Form.Label>
-      <Form.Control type="tel" value={exampleWorkSite.phoneNumber} readOnly />
+      <Form.Control type="tel" value={user!.phoneNumber} readOnly />
     </Form.Group>
   </Card.Text>
 </Card.Body>
