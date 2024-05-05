@@ -38,8 +38,10 @@ const EmergencyComponent: React.FC<EmergencyProps> = ({ id, description, emergen
                 borderRadius: '10px',
                 overflow: 'hidden',
                 marginBottom: '10px',
-                backgroundColor: isHovered ? '#D3D3D3' : 'transparent'
+                backgroundColor: isHovered ? '#D3D3D3' : 'transparent',
+                cursor: 'pointer'
             }}
+            
         >
             <Row onClick={handleModalOpen}>
                 <Col style={{ backgroundColor: getEmergencyColor(emergency), minHeight: '100%' }} lg={1}></Col>
