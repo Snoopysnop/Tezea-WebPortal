@@ -11,49 +11,52 @@ const IncidentsPage: React.FC = () => {
   const tasks: EmergencyDetails[] = [
     {
       description: "blab laedhgd zgvez dghvezfh vg",
-      chantier: "",
       id: 1,
       emergency: Emergency.Low,
       worksite: {
         id: "1", title: "Chantier 1", begin:new Date("2024-10-10T17:09:00"),
          end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
-      }, },
+      }, 
+      titre: "aaa"
+    },
+      
     {
       description: "blabla",
-      chantier: "",
       id: 1,
       emergency: Emergency.Medium,
       worksite: {
         id: "1", title: "Chantier 1", begin:new Date("2024-10-10T17:09:00"),
         end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
-      },   },
+      },        titre: "vvv"
+    },
     {
       description: "blabla",
-      chantier: "",
       id: 1,
       emergency: Emergency.Medium,
       worksite: {
         id: "1", title: "Chantier 1", begin:new Date("2024-10-10T17:09:00"),
         end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
-      },     },
+      },      titre: "zsz"
+    },
+      
     {
       description: "blabla",
-      chantier: "",
       id: 1,
       emergency: Emergency.High,
       worksite: {
         id: "1", title: "Chantier 1", begin:new Date("2024-10-10T17:09:00"),
         end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
-      },     },
+      },      titre: "zssz"
+    },
     {
       description: "blabla",
-      chantier: "",
       id: 1,
       emergency: Emergency.Critical,
       worksite: {
         id: "1", title: "Chantier 1", begin:new Date("2024-10-10T17:09:00"),
         end: new Date("2024-10-10T17:12:00"), address: "2 Fox Street, NY", status: WorkSiteStatus.Archive
-      },     },
+      },      titre: "zssz"
+    },
   ];
 
 
@@ -168,6 +171,7 @@ const IncidentsPage: React.FC = () => {
                     emergency={Emergency.Low}
                     category={Category.CreaPalette}
                     worksite={task.worksite}
+                    title={task.titre}
                   />
                 </Col>
               ))}
@@ -185,6 +189,7 @@ const IncidentsPage: React.FC = () => {
                     emergency={Emergency.Medium}
                     category={Category.CreaPalette}
                     worksite={task.worksite}
+                    title={task.titre}
                   />
                 </Col>
               ))}
@@ -202,6 +207,7 @@ const IncidentsPage: React.FC = () => {
                     emergency={Emergency.High}
                     category={Category.CreaPalette}
                     worksite={task.worksite}
+                    title={task.titre}
                   />
                 </Col>
               ))}
@@ -219,6 +225,7 @@ const IncidentsPage: React.FC = () => {
                     emergency={Emergency.Critical}
                     category={Category.CreaPalette}
                     worksite={task.worksite}
+                    title={task.titre}
                   />
                 </Col>
               ))}

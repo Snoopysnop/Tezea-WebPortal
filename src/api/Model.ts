@@ -88,8 +88,8 @@ export enum WorkSiteStatus {
 }
 
 export interface EmergencyDetails {
+    titre: string,
     description: string,
-    chantier: any,
     id: number,
     emergency: Emergency,
     worksite: WorkSite

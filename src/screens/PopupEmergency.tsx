@@ -8,8 +8,13 @@ interface PopupEmergencyProps {
 }
 
 const PopupEmergency: React.FC<PopupEmergencyProps> = ({ showModal, closeModal }) => {
+  const [emergencyName, setEmergencyName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [emergencyLevel, setEmergencyLevel] = useState<string>(Emergency.Low);
+
+  const handleEmergencyNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmergencyName(event.target.value);
+  };
 
   const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDescription(event.target.value);
@@ -21,6 +26,7 @@ const PopupEmergency: React.FC<PopupEmergencyProps> = ({ showModal, closeModal }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    console.log("Nom de l'urgence:", emergencyName);
     console.log("Description:", description);
     console.log("Niveau d'urgence:", emergencyLevel);
     closeModal();
@@ -33,13 +39,18 @@ const PopupEmergency: React.FC<PopupEmergencyProps> = ({ showModal, closeModal }
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
+          <Form.Group controlId="emergencyName">
+            <Form.Label>Nom de l'incident</Form.Label>
+            <Form.Control type="text" placeholder="Entrez le nom de l'urgence" value={emergencyName} onChange={handleEmergencyNameChange} />
+          </Form.Group>
+
           <Form.Group controlId="description">
             <Form.Label>Description de l'incident</Form.Label>
             <Form.Control type="text" placeholder="Entrez la description de l'incident" value={description} onChange={handleDescriptionChange} />
           </Form.Group>
 
-          <Form.Group  controlId="formGridCategorie">
-            <Form.Label >Catégorie</Form.Label>
+          <Form.Group controlId="formGridCategorie">
+            <Form.Label>Catégorie</Form.Label>
             <Form.Select name="emergency" value={emergencyLevel} onChange={handleEmergencyLevelChange} >
               {Object.keys(Emergency).map((key) => (
                 <option key={key} value={Emergency[key as keyof typeof Emergency]}>

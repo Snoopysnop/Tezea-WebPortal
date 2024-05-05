@@ -10,9 +10,10 @@ type EmergencyProps = {
     emergency: Emergency;
     worksite: WorkSite;
     category: Category;
+    title: string
 };
 
-const EmergencyComponent: React.FC<EmergencyProps> = ({ id, description, emergency, worksite, category }) => {
+const EmergencyComponent: React.FC<EmergencyProps> = ({  description, emergency, worksite , title}) => {
     const [showModal, setShowModal] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
 
@@ -48,7 +49,7 @@ const EmergencyComponent: React.FC<EmergencyProps> = ({ id, description, emergen
 
                 <Col lg={5}>
     <Row className='primary justify-content-center text-center' style={{ fontSize: '14px', whiteSpace: 'nowrap', marginBottom: '5px', marginTop: '5px', marginLeft: '5px' }}>
-        {worksite.title}
+        {title}
     </Row>
     <Row className='primary justify-content-center text-center' style={{ fontSize: '10px', whiteSpace: 'nowrap', marginBottom: '5px', marginLeft: '5px' }}>
         {worksite.begin.toLocaleString()}

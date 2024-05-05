@@ -3,12 +3,11 @@ import {Tool,WorkSiteStatus,Emergency,Civility,CustomerStatus,Service,Category,W
 
 export interface EmergencyDetailsJson {
     description: string,
-    chantier: any,
     id: number,
     emergency: Emergency,
-    task: string
+    worksite: string,
+    titre: string
 }
-
 
 export interface SubErrorDetailsJson {
     message: string
