@@ -7,7 +7,7 @@ import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/Warning";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import { LoginOutlined, RequestPageOutlined, RequestQuoteOutlined } from "@mui/icons-material";
+import { LoginOutlined, RequestPageOutlined, RequestQuoteOutlined, SettingsAccessibilityOutlined, SettingsOutlined } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import KeycloakApi from "../api/KeycloakApi";
 
@@ -86,6 +86,9 @@ const SidebarComponent: React.FC = () => {
                 </MenuItem>
                 <MenuItem icon={<CalendarTodayOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/planning" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
                     {sidebarCollapsed ? null : 'Planning'}
+                </MenuItem>
+                <MenuItem icon={<SettingsOutlined />} style={{ backgroundColor: 'white' }} component={<Link to="/parametres" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
+                    {sidebarCollapsed ? null : 'Paramètres'}
                 </MenuItem>
             </Menu>
         </Sidebar >

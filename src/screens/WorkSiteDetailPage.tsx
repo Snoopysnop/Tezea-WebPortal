@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Card, Col, Container, Row, Table, Modal } from 'react-bootstrap';
+import { Button, Card, Col, Container, Row, Table, Modal, Form } from 'react-bootstrap';
 import { WorkSite, User, Role, Tool, WorkSiteStatus, SatisfactionLevel, ToolName } from '../api/Model';
 import PopupEmergency from './PopupEmergency';
 
@@ -70,17 +70,42 @@ const WorkSiteDetailPage: React.FC = () => {
       <Row className='mt-4'>
         <Col lg={6}>
           <Card bg="white" text="dark" className="h-100">
-            <Card.Body>
-              <Card.Title><h2>Détails du chantier</h2></Card.Title>
-              <Card.Text>
-                <p><strong>Chef de chantier :</strong> {exampleWorkSite.workSiteChief?.firstName} {exampleWorkSite.workSiteChief?.lastName}</p>
-                <p><strong>Statut:</strong> {exampleWorkSite.status}</p>
-                <p><strong>Date de début :</strong> {exampleWorkSite.begin.toLocaleString()}</p>
-                <p><strong>Date de fin :</strong> {exampleWorkSite.end.toLocaleString()}</p>
-              </Card.Text>
-              <Button variant="primary" onClick={openModal}>Déclarer un incident</Button>{' '}
-              <Button variant="secondary">Voir la demande de chantiers</Button>
-            </Card.Body>
+          <Card.Body>
+  <Card.Title><h2>Détails du chantier</h2></Card.Title>
+  <Card.Text>
+    <Row className="mb-3">
+      <Col>
+        <Form.Group>
+          <Form.Label>Chef de chantier :</Form.Label>
+          <Form.Control type="text" value={`${exampleWorkSite.workSiteChief?.firstName} ${exampleWorkSite.workSiteChief?.lastName}`} readOnly />
+        </Form.Group>
+      </Col>
+      <Col>
+        <Form.Group>
+          <Form.Label>Statut:</Form.Label>
+          <Form.Control type="text" value={exampleWorkSite.status} readOnly />
+        </Form.Group>
+      </Col>
+    </Row>
+    <Row className="mb-3">
+      <Col>
+        <Form.Group>
+          <Form.Label>Date de début :</Form.Label>
+          <Form.Control type="text" value={exampleWorkSite.begin.toLocaleString()} readOnly />
+        </Form.Group>
+      </Col>
+      <Col>
+        <Form.Group>
+          <Form.Label>Date de fin :</Form.Label>
+          <Form.Control type="text" value={exampleWorkSite.end.toLocaleString()} readOnly />
+        </Form.Group>
+      </Col>
+    </Row>
+  </Card.Text>
+  <Button variant="primary" onClick={openModal}>Déclarer un incident</Button>{' '}
+  <Button variant="secondary">Voir la demande de chantiers</Button>
+</Card.Body>
+
           </Card>
         </Col>
         <Col lg={6}>

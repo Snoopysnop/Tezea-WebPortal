@@ -168,4 +168,3 @@ export interface Tool {
     name: ToolName;
     quantity: number;
 }
-
