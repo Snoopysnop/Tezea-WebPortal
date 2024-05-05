@@ -67,6 +67,8 @@ const CreateWorkSitePage: React.FC = () => {
   const [error, setError] = useState<string>('');
   const [errorCreation, setErrorCreation] = useState<string>('');
 
+  const [title, setTitle] = useState('');
+
 
   const handleStartTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setStartTime(e.target.value);
@@ -108,7 +110,7 @@ const CreateWorkSitePage: React.FC = () => {
   };
 
   const handleCreateWorkSite = async () => {
-    if (!startTime || !endTime || !selectedStaff.length || !selectedTools.length) {
+    if (!startTime || !endTime || !selectedStaff.length || !selectedTools.length || !title) {
       console.error('Veuillez remplir toutes les informations nécessaires.');
       setErrorCreation('Veuillez remplir toutes les informations nécessaires avant de créer le chantier.')
       return;
@@ -128,8 +130,7 @@ const CreateWorkSitePage: React.FC = () => {
       request: undefined,
       satisfaction: SatisfactionLevel.Perfect,
       signature: "",
-      title: '',
-      address: ''
+      title: ''
     };
 
     try {
@@ -226,8 +227,10 @@ const CreateWorkSitePage: React.FC = () => {
         activeKey={activeTab}
         onSelect={(k) => setActiveTab(k || 'date')}
         id="controlled-tab-example"
-        className="mb-3 flex-grow-1">
-
+        className="mb-3 flex-grow-1"
+        style = {{ width: '100%'}}
+        >
+        
         <Tab eventKey="date" title="Sélectionner une période" style={{ width: '100%' }}>
           <Row className="mb-3"></Row>
           <Row className="mb-5">
@@ -244,7 +247,7 @@ const CreateWorkSitePage: React.FC = () => {
                         type="datetime-local"
                         value={startTime}
                         onChange={e => setStartTime(e.target.value)}
-                        style={{ height: '50px', width: '600px', fontSize: '20px' }}
+                        style={{ height: '50px', width: '600px', fontSize: '20px', cursor: 'pointer' }}
                       />
                     </Form.Group>
                   </Col>
@@ -255,7 +258,7 @@ const CreateWorkSitePage: React.FC = () => {
                         type="datetime-local"
                         value={endTime}
                         onChange={e => setEndTime(e.target.value)}
-                        style={{ height: '50px', width: '600px', fontSize: '20px' }}
+                        style={{ height: '50px', width: '600px', fontSize: '20px', cursor: 'pointer' }}
                       />
                     </Form.Group>
                   </Col>
@@ -272,7 +275,22 @@ const CreateWorkSitePage: React.FC = () => {
               </Form>
             </Col>
           </Row>
+
+          <Row className="mb-5">
+            <h2>Donner un titre pour le chantier :</h2>
+          </Row>
+          <Form.Group as={Col} controlId="formTitreChantier">
+            <Form.Control 
+              style={{width:"35%"}}
+              type="text"
+              placeholder="Entrez un titre"
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+            />
+          </Form.Group>
+          <Row className="mb-5"></Row>
         </Tab>
+        
         {!isInitialSelection && (
 
           <Tab eventKey="personnel" title={'Sélectionner le personnel'} style={{ width: '100%' }}>
@@ -433,24 +451,24 @@ const CreateWorkSitePage: React.FC = () => {
                             </Card.Body>
                             <Card.Body>
                               {selectedTool && (
-                                <Row className="align-items-center">
+                                <Row className="align-items-center" >
 
-                                  <Col xs={2}>
-                                    <Button variant="secondary" onClick={() => handleDecreaseQuantity(toolName)} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '30px', height: '30px' }}>-</Button>
+                                  <Col style={{width:"10%", display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                                    <Button variant="secondary" onClick={() => handleDecreaseQuantity(toolName)} style={{ width: '30px', height: '30px' ,display: 'flex', justifyContent: 'center', alignItems: 'center', paddingBottom:9}}>-</Button>
                                   </Col>
-                                  <Col xs={8}>
+                                  <Col style={{ display: 'flex', alignItems: 'center', width:"80%"}}>
 
                                     <Slider
                                       axis="x"
-                                      x={selectedQuantities[toolName] || 1} // Utilisez la quantité sélectionnée pour l'outil spécifique
+                                      x={selectedQuantities[toolName] || 1} // Utiliser la quantité sélectionnée pour l'outil spécifique
                                       xmin={1}
                                       xmax={selectedTool.quantity}
-                                      onChange={(pos) => handleQuantityChange(toolName, pos.x)} // Passez le nom de l'outil pour identifier quelle quantité changer
+                                      onChange={(pos) => handleQuantityChange(toolName, pos.x)} // Passer le nom de l'outil pour identifier quelle quantité changer
                                     />
 
                                   </Col>
-                                  <Col xs={2}>
-                                    <Button variant="secondary" onClick={() => handleIncreaseQuantity(toolName, selectedTool.quantity)} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '30px', height: '30px' }}>+</Button>
+                                  <Col style={{width:"10%", display: 'flex', flexDirection:"row",justifyContent: 'center', alignItems: 'center', textAlign:"center"}}>
+                                    <Button variant="secondary" onClick={() => handleIncreaseQuantity(toolName, selectedTool.quantity)} style={{width: '30px', height: '30px', display: 'flex', justifyContent: 'center', alignItems: 'center', paddingBottom:9}}>+</Button>
                                   </Col>
 
                                 </Row>
@@ -474,55 +492,68 @@ const CreateWorkSitePage: React.FC = () => {
         )}
         {!isInitialSelection && (
           <Tab eventKey="creation" title="Récapitulatif" style={{ width: '100%' }}>
-            <Container>
-              <Row className="mb-3"></Row>
-              <Row className="mb-5">
-                <h2>Récapitulatif :</h2>
-
-              </Row>
-              <Container>
-                <Row>
-                  <Col xs={1}></Col>
-                  <Col>
+            <Container className="MainContainer">
+              
+              <Container className="TitlePartContainer">
+                <Row className="mb-3"></Row>
+                <Row className="mb-5">
+                  <h2>Récapitulatif de la création de chantier</h2>
+                </Row>
+              </Container>
+              
+              <Container className="BodyPartContainer" style={{ display:"flex", flexDirection:"row"}}>
+                  <Row style={{ display:"flex", width:"20%"}}>
+                    <Row className="mb-5" style={{ fontSize: '20px' }}>
+                      Titre : {title ? `${title}` : 'Aucun' }
+                    </Row>
                     <Row className="mb-5" style={{ fontSize: '20px' }}>
                       Chef de chantier  : {selectedWorksiteChief ? `${selectedWorksiteChief.firstName} ${selectedWorksiteChief.lastName}` : 'Aucun'}
                     </Row>
-                    <Row>
-                      <Col>
-                        <Row className="mb-3">
-                          Employés sélectionnés :
-                        </Row>
-                        <Row>
+                  </Row>
+                  <div style={{ display:"flex", width:"20%"}}></div>
+                  <div style={{ display:"flex", flexDirection:"row" , width:"60%"}}>
+                      
+                    <div className="border border-dark border-3 container_Employees" style={{display:"flex", flexDirection:"column", width:"45%"}}>
+                      
+                      <div style={{ alignItems:"center" , justifyContent:"center"}}>
+                        <div style={{fontSize: 15, fontWeight: "bold"}}>Employés sélectionnés :</div>
+                      </div>
+                      <div>
+                       <div>
                           {selectedStaff.map(user => (
                             <li key={user.id}>{user.firstName} {user.lastName}</li>
                           ))}
-                        </Row>
-                      </Col>
-                      <Col>
-                        <Row className="mb-3">
-                          Outils sélectionnés :
-                        </Row>
-                        <Row>
-                          {selectedTools.map(toolName => (
-                            <li key={toolName}>{toolName} - Quantité : {selectedQuantities[toolName]}</li>
-                          ))}
-                        </Row>
-                      </Col>
-                    </Row>
+                        </div>
+                      </div>
+                      
+                    </div>
+                    
+                    <div className="blankDiv" style={{ display:"flex", width:"10%"}}></div>
+                    
+                    <div className="border border-dark border-3" style={{display:"flex", alignItems:"center", justifyContent:"center", flexDirection:"column", width:"45%"}}>
+                      <div className="mb-3">Outils sélectionnés :</div>
+                      <div>
+                        {selectedTools.map(toolName => (
+                          <li key={toolName}>{toolName} - Quantité : {selectedQuantities[toolName]}</li>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+              </Container>
+
+              <Container className="FooterPartContainer">
+                <Row className="mb-5"></Row>
+                <Row className="mb-5"></Row>
+                <Row>
+                  <Col className="text-center mt-3">
+                    <Button variant="success" onClick={handleCreateWorkSite} style={{ fontSize: '20px' }}>
+                      Créer le chantier
+                    </Button>
+                    <Row className="mb-3"></Row>
+                    {errorCreation && <Alert variant="danger">{errorCreation}</Alert>}
                   </Col>
                 </Row>
               </Container>
-              <Row className="mb-5"></Row>
-              <Row className="mb-5"></Row>
-              <Row>
-                <Col className="text-center mt-3">
-                  <Button variant="success" onClick={handleCreateWorkSite} style={{ fontSize: '20px' }}>
-                    Créer le chantier
-                  </Button>
-                  <Row className="mb-3"></Row>
-                  {errorCreation && <Alert variant="danger">{errorCreation}</Alert>}
-                </Col>
-              </Row>
             </Container>
           </Tab>
 

@@ -14,7 +14,7 @@ type WorkSiteProps = {
     date: string
     startHours: string
     endHour: string
-    address: string
+    address?: string
     status: WorkSiteStatus
     category: Category
     onClick: () => void;

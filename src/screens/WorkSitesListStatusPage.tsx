@@ -190,7 +190,6 @@ useEffect(() => {
                         date={task.begin.toLocaleString()}
                         startHours={task.begin.toLocaleString()}
                         endHour={task.end.toLocaleString()}
-                        address={task.address}
                         status={task.status}
                         category={Category.CreaPalette}
                         onClick={() => handleTaskClick(task)}
@@ -211,7 +210,6 @@ useEffect(() => {
                         date={task.begin.toLocaleString()}
                         startHours={task.begin.toLocaleString()}
                         endHour={task.end.toLocaleString()}
-                        address={task.address}
                         status={task.status}
                         category={Category.CreaPalette}
                         onClick={() => handleTaskClick(task)}
@@ -232,7 +230,6 @@ useEffect(() => {
                         date={task.begin.toLocaleString()}
                         startHours={task.begin.toLocaleString()}
                         endHour={task.end.toLocaleString()}
-                        address={task.address}
                         status={task.status}
                         category={Category.CreaPalette}
                         onClick={() => handleTaskClick(task)}
@@ -253,7 +250,6 @@ useEffect(() => {
                         date={task.begin.toLocaleString()}
                         startHours={task.begin.toLocaleString()}
                         endHour={task.end.toLocaleString()}
-                        address={task.address}
                         status={task.status}
                         category={Category.CreaPalette}
                         onClick={() => handleTaskClick(task)}
