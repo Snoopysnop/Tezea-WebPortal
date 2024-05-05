@@ -12,7 +12,7 @@ type EmergencyProps = {
     title: string
 };
 
-const EmergencyComponent: React.FC<EmergencyProps> = ({  description, emergency, title}) => {
+const EmergencyComponent: React.FC<EmergencyProps> = ({ description, emergency, title }) => {
     const [showModal, setShowModal] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
 
@@ -41,36 +41,29 @@ const EmergencyComponent: React.FC<EmergencyProps> = ({  description, emergency,
                 backgroundColor: isHovered ? '#D3D3D3' : 'transparent',
                 cursor: 'pointer'
             }}
-            
         >
             <Row onClick={handleModalOpen}>
-                <Col style={{ backgroundColor: getEmergencyColor(emergency), minHeight: '100%' }} lg={1}></Col>
-
-                <Col lg={5}>
-    <Row className='primary justify-content-center text-center' style={{ fontSize: '14px', whiteSpace: 'nowrap', marginBottom: '5px', marginTop: '5px', marginLeft: '5px' }}>
-        {title}
-    </Row>
-    
-</Col>
-
-
+                <Col style={{ backgroundColor: getEmergencyColor(emergency) }} lg={1}></Col>
+                <Col lg={5} style={{ overflow: 'hidden' }}>
+                    <Row className='primary justify-content-center text-center' style={{ fontSize: '14px', whiteSpace: 'pre-wrap', marginBottom: '5px', marginTop: '5px', marginLeft: '5px', maxHeight: '50px', overflowY: 'auto' }}>
+                        {title}
+                    </Row>
+                </Col>
                 <Col className='align-items-center d-flex'>
                     <div className='divider-half'></div>
                 </Col>
 
                 <Col lg={5}>
-    <Row className="justify-content-center align-items-center h-100">
-        <Col className='text-end pe-1 secondary' style={{ fontSize: '13px' }}>
-            {emergency}
-        </Col>
-        <Col className='d-flex align-items-center ps-0 pe-2'>
-            <TriangleIcon className={`primary ${getEmergencyIconColor(emergency)}`} width='14px' height='100%' />
-        </Col>
-    </Row>
-</Col>
-
+                    <Row className="justify-content-center align-items-center h-100">
+                        <Col className='text-end pe-1 secondary' style={{ fontSize: '13px' }}>
+                            {emergency}
+                        </Col>
+                        <Col className='d-flex align-items-center ps-0 pe-2'>
+                            <TriangleIcon className={`primary ${getEmergencyIconColor(emergency)}`} width='14px' height='100%' />
+                        </Col>
+                    </Row>
+                </Col>
             </Row>
-
             <Modal show={showModal} onHide={handleModalClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Description de l'incident</Modal.Title>
@@ -87,5 +80,4 @@ const EmergencyComponent: React.FC<EmergencyProps> = ({  description, emergency,
         </Container>
     );
 }
-
 export default EmergencyComponent;

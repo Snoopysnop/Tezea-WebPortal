@@ -140,6 +140,14 @@ class MainApi extends AbstractApi {
         }
     }
 
+    public async getUsersByWorksiteId(id: string): Promise<Array<User>> {
+        try {
+            const response = await this.service.get(`/api/worksites/${id}/allUsers`)
+            return response.data as Array<User>
+        } catch(err) {
+            throw AbstractApi.handleError(err)
+        }
+    }
     //Incidents-------------------------------------------------------------------------------------------------------------
 
     public async getEmergencies(): Promise<Array<EmergencyDetailsJson>> {

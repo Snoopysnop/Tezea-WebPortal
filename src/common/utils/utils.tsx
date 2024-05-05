@@ -1,4 +1,4 @@
-import { Category, Emergency, WorkSiteRequestStatus, WorkSiteStatus } from "../../api/Model";
+import { Category, Emergency, Role, WorkSiteRequestStatus, WorkSiteStatus } from "../../api/Model";
 import { ReactComponent as InProgressIcon } from 'bootstrap-icons/icons/hourglass-split.svg'
 import { ReactComponent as DoneIcon } from 'bootstrap-icons/icons/check-lg.svg'
 import { ReactComponent as StandByIcon } from 'bootstrap-icons/icons/pause.svg'
@@ -107,6 +107,14 @@ export function getStatusWorksite(status: string) {
     }
 }
 
+export function getRoleWorksite(status: string) {
+    switch (status) {
+        case "WorkSiteChief":
+            return Role.WorkSiteChief;
+        case "Employee":
+            return Role.Employee;
+    }
+}
 export function getStatusWorksiteRequest(status: string) {
     switch (status) {
         case "Standby":
