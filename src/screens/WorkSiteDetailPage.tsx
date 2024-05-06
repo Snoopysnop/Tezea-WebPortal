@@ -48,9 +48,24 @@ const WorkSiteDetailPage: React.FC = () => {
       setWorkSiteUsers(workSiteUsersFiltered)
     }
   }
-  console.log("Triple quoicoubaka");
 
   console.log(currentusers);
+
+//TODO
+  const tools: Tool[] = [];
+  for (const key in worksite?.equipments) {
+      if (Object.prototype.hasOwnProperty.call(worksite?.equipments, key)) {
+          const tool: Tool = {
+              name: ToolName.Axe,
+              quantity: worksite ? worksite!.equipments[key as keyof typeof worksite.equipments] as number : 0
+          };
+          tools.push(tool); 
+      }
+  }
+  console.log("jeveuxpasycroire", tools)
+
+
+
 
   // Fonction pour ouvrir la modale
   const openModal = () => {
@@ -128,10 +143,10 @@ const WorkSiteDetailPage: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {worksite && worksite.equipments && Object.keys(worksite.equipments).map((toolName: string, qty: number) => (
-                    <tr key={toolName}>
-                      <td>{toolName}</td>
-                      <td>{qty}</td>
+                { tools.map((tool : Tool) => (
+                    <tr key={tool.name}>
+                      <td>{tool.name}</td>
+                      <td>{tool.quantity}</td>
                     </tr>
                   ))}
                 </tbody>
