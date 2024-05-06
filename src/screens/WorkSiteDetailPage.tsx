@@ -37,7 +37,7 @@ console.log("true value",worksite)
   const handleUsers = async () => {
     const users = await MainApi.getInstance().getUsersByWorksiteId(String(worksite!.id)) as Array<User>;
 
-    const workSiteRequestId: number | undefined = worksite ? parseInt(worksite.workSiteRequest || "0", 10) : undefined;
+    const workSiteRequestId: number | undefined = worksite ? worksite.workSiteRequest : undefined;
 
     
     const workSiteRequest = await MainApi.getInstance().getWorksiteRequestbyId(workSiteRequestId!) as WorkSiteRequestJson;
@@ -231,7 +231,7 @@ console.log("true value",worksite)
           </Card>
         </Col>
       </Row>
-      <PopupEmergency showModal={showModal} closeModal={closeModal} worksiteId={worksite!.id}/>
+      <PopupEmergency showModal={showModal} closeModal={closeModal} worksiteId={worksite!.id!}/>
 <WorkSiteRequestPopUp
   show={modalShow}
   onHide={() => setModalShow(false)}

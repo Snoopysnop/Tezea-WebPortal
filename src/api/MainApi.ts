@@ -98,7 +98,14 @@ class MainApi extends AbstractApi {
 
     public async createWorkSite(workSiteRequestData: WorkSiteJson): Promise<WorkSiteJson> {
         try {
-            const response = await this.service.post<WorkSiteJson>(`/api/workSiteRequests/create`, workSiteRequestData);
+            
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+
+            const response = await this.service.post<WorkSiteJson>(`/api/worksites/create`, workSiteRequestData, config);
             return response.data;
         } catch (err) {
             throw AbstractApi.handleError(err);

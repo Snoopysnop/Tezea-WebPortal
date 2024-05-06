@@ -2,17 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Form, Col, Row, Button, Container, Tab, Tabs, Card, Alert } from 'react-bootstrap';
 import Slider from 'react-input-slider';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { User, Tool, ToolName, Role, WorkSite, WorkSiteStatus, SatisfactionLevel, TimeLine, WorkSiteRequest } from '../api/Model';
-import { Envelope, Telephone, Search, Plus, Dash } from 'react-bootstrap-icons';
+import { User, Tool, WorkSiteStatus, SatisfactionLevel, TimeLine, WorkSiteRequest } from '../api/Model';
+import { Envelope, Telephone, Search } from 'react-bootstrap-icons';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 import MainApi from '../api/MainApi';
 import { getToolName } from '../common/utils/utils';
 import WorkSiteRequestPopUp from '../components/WorkSiteRequestPopUp';
 import { useLocation, useNavigate } from 'react-router-dom';
-
+import { WorkSiteJson } from '../api/ModelJson';
 
 const CreateWorkSitePage: React.FC = () => {
-
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -52,23 +51,27 @@ const CreateWorkSitePage: React.FC = () => {
       return;
     }
 
-    const workSite: WorkSite = {
-      id: '',
-      workSiteChief: selectedWorksiteChief ? selectedWorksiteChief : undefined,
-      staff: selectedStaff,
-      equipments: selectedTools.map(toolName => ({
+    const workSite: WorkSiteJson = {
+      workSiteChief: selectedWorksiteChief ? selectedWorksiteChief.id : undefined,
+      staff: selectedStaff.map((user) => user.id!),
+      equipment: selectedTools.map(toolName => {
+        return {
         name: toolName,
-        quantity: selectedQuantities[toolName] || 1,
-      }) as Tool),
-      begin: new Date(startTime),
-      end: new Date(endTime),
+        quantity: selectedQuantities[toolName] || 1
+        } as Tool
+      }),
+      begin: startTime,
+      end: endTime,
       status: WorkSiteStatus.InProgress,
-      request: undefined,
+      workSiteRequest: worksiteRequestData?.id,
       satisfaction: SatisfactionLevel.Perfect,
       signature: "",
       title: ''
     };
 
+    console.log(workSite)
+
+    await MainApi.getInstance().createWorkSite(workSite)
     //todo brancher le POST
     navigate("/listeStatus")
 
@@ -565,17 +568,17 @@ const CreateWorkSitePage: React.FC = () => {
         </Col>
         <Col xs={1}>
           <Button onClick={handlePopUp} style={{ fontSize: '20px' }}>
-          Consulter Demande de chantier
+            Consulter Demande de chantier
           </Button>
         </Col>
       </Row>
 
       <WorkSiteRequestPopUp
-            show={modalShow}
-            onHide={() => setModalShow(false)}
-            worksiteRequest={worksiteRequestData!}//todo checker le !
-            showButtons={false}
-          />
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        worksiteRequest={worksiteRequestData!}//todo checker le !
+        showButtons={false}
+      />
     </Container>
 
   );

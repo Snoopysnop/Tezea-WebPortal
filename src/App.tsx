@@ -12,7 +12,11 @@ function App() {
 
 KeycloakApi.initInstance()
 const [isLoggedIn, setIsLoggedIn] = useState(KeycloakApi.isTokenValid());
-
+useEffect(() => {
+  if(isLoggedIn && localStorage.getItem("access-token")) {
+    MainApi.initInstance(localStorage.getItem("access-token")!)
+  }
+}, [])
 
   return (
     <Router>

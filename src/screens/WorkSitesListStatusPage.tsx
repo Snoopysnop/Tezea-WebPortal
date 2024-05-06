@@ -43,7 +43,7 @@ const WorkSitesListStatusPage: React.FC = () => {
     const responseWorksite = await MainApi.getInstance().getWorkSites() as WorkSiteJson[];
 
     const worksiteMapper: WorkSite[] = responseWorksite.map(worksiteJson => ({
-        id: worksiteJson.id,
+        id: worksiteJson.id!,
         workSiteChief: undefined,
         staff: undefined,
         equipment: undefined,
@@ -57,7 +57,6 @@ const WorkSitesListStatusPage: React.FC = () => {
         address: worksiteJson.address ? worksiteJson.address : ''
     }));
     setDataFetched(worksiteMapper);
-
 }
 
 useEffect(() => {
