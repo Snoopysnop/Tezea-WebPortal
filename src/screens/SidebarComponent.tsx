@@ -3,18 +3,13 @@ import MainApi from "../api/MainApi";
 import React, { useEffect, useState } from "react"; // Importez useEffect
 import PeopleOutlinedIcon from "@mui/icons-material/ListAltOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/Create";
-import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/Warning";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import { LoginOutlined, RequestPageOutlined, RequestQuoteOutlined, SettingsAccessibilityOutlined, SettingsOutlined } from "@mui/icons-material";
 import { Link, useNavigate } from 'react-router-dom';
 import KeycloakApi from "../api/KeycloakApi";
-import { WorkSiteJson, WorkSiteRequestJson, CustomerJson, EmergencyDetailsJson, UserJson } from '../api/ModelJson';
 import { WorkSite, WorkSiteRequest, Customer, WorkSiteStatus, WorkSiteRequestStatus, EmergencyDetails, User, Emergency } from '../api/Model';
-import { getEmergency, getStatusWorksite, getStatusWorksiteRequest } from "../common/utils/utils";
-
-
 
 const SidebarComponent: React.FC = () => {
 
@@ -37,7 +32,7 @@ const SidebarComponent: React.FC = () => {
 
     const handleSettingsItemClick = async () => {
         setSidebarCollapsed(true);
-        const responseUserInfo = await MainApi.getInstance().getUserbyId("2245b540-88c7-42dd-b469-70c82c6beb02") as User;
+        const responseUserInfo = await MainApi.getInstance().getUserbyId("3618b0e4-7763-4417-ba14-bd778073383b") as User;
         console.log(responseUserInfo);
         navigate("/parametres", { state: { responseUserInfo } })
 
