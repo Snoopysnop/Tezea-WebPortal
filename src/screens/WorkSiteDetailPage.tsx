@@ -184,7 +184,7 @@ const WorkSiteDetailPage: React.FC = () => {
           </Card>
         </Col>
       </Row>
-      <PopupEmergency showModal={showModal} closeModal={closeModal} />
+      <PopupEmergency showModal={showModal} closeModal={closeModal} worksiteId={worksite!.id}/>
     </Container>
   );
 }

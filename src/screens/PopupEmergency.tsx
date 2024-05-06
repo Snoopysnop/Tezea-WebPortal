@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import { Emergency } from '../api/Model';
+import { EmergencyDetailsJson, EmergencyDetailsJsonToSend } from '../api/ModelJson';
+import MainApi from '../api/MainApi';
 
 interface PopupEmergencyProps {
   showModal: boolean;
   closeModal: () => void;
+  worksiteId: string ; // Propriété worksiteId ajoutée
 }
 
-const PopupEmergency: React.FC<PopupEmergencyProps> = ({ showModal, closeModal }) => {
+const PopupEmergency: React.FC<PopupEmergencyProps> = ({ showModal, closeModal, worksiteId }) => {
   const [emergencyName, setEmergencyName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [emergencyLevel, setEmergencyLevel] = useState<string>(Emergency.Minor);
@@ -24,19 +27,28 @@ const PopupEmergency: React.FC<PopupEmergencyProps> = ({ showModal, closeModal }
     setEmergencyLevel(event.target.value as Emergency);
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!emergencyName.trim() || !description.trim()) {
       alert("Veuillez remplir tous les champs avant de créer l'incident.");
       return;
     }
+  
+    const incident:EmergencyDetailsJson = {
+      title: emergencyName,
+      description: description,
+      level: Emergency.Medium,
+      workSiteId:worksiteId,
+      evidences:[]
+    };
 
-    console.log("Nom de l'urgence:", emergencyName);
-    console.log("Description:", description);
-    console.log("Niveau d'urgence:", emergencyLevel);
+  
+    console.log("incident", incident)
+    await MainApi.getInstance().createEmergency(incident, worksiteId) as EmergencyDetailsJson;
+    console.log("Incident:", incident);
     closeModal();
   };
-  
+
   return (
     <Modal show={showModal} onHide={closeModal}>
       <Modal.Header closeButton>
@@ -69,7 +81,7 @@ const PopupEmergency: React.FC<PopupEmergencyProps> = ({ showModal, closeModal }
     <Button variant="secondary" onClick={closeModal}>
       Fermer
     </Button>
-    <Button variant="primary" type="submit">
+    <Button variant="primary" type="submit" >
       Créer
     </Button>
   </div>

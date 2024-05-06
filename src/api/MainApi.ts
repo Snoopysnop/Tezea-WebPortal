@@ -2,7 +2,8 @@ import axios, { AxiosInstance } from 'axios'
 import axiosRetry from 'axios-retry'
 import AbstractApi from './AbstractApi'
 import { Customer, User, WorkSiteRequest, WorkSite, TimeLine, Tool } from './Model'
-import { CustomerJson, UserJson, WorkSiteRequestJson, WorkSiteJson, EmergencyDetailsJson } from './ModelJson'
+import { CustomerJson, UserJson, WorkSiteRequestJson, WorkSiteJson, EmergencyDetailsJson, EmergencyDetailsJsonToSend } from './ModelJson'
+import { stringify } from 'querystring'
 
 const standaloneInstance = axios.create({
     baseURL: process.env.REACT_APP_URL,
@@ -161,14 +162,39 @@ class MainApi extends AbstractApi {
         }
     }
 
-    public async createEmergency(EmergencyData: EmergencyDetailsJson): Promise<EmergencyDetailsJson> {
+    public async createEmergency(emergencyData: EmergencyDetailsJson, id: string): Promise<EmergencyDetailsJson> {
         try {
-            const response = await this.service.post<EmergencyDetailsJson>(`/api/worksites/incidents/create`, EmergencyData);
+
+            const config = {
+                headers: { 
+                    'Content-Type': 'application/json'
+                }
+            }
+
+            /*
+            const temp = {
+                level: "Minor",
+                title: "string",
+                description: "string",
+                id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                evidences: [
+                  [
+                    "string"
+                  ]
+                ],
+                workSiteId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+              }*/
+
+              
+            const data = JSON.stringify(emergencyData);
+            const response = await this.service.put(`/api/worksites/${id}/incident`, data, config);
             return response.data as EmergencyDetailsJson;
         } catch (err) {
             throw AbstractApi.handleError(err);
         }
     }
+
+
 
     //WorkSiteChief-------------------------------------------------------------------------------------------------------------
     public async getWorksiteChiefbyId(id: string): Promise<User> {
