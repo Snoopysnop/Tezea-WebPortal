@@ -68,7 +68,7 @@ export interface WorkSiteJson {
     begin?: string;
     end?: string;
     status?: WorkSiteStatus;
-    request?: string | undefined; //todo a voir si on laisse undefined
+    workSiteRequest?: string | undefined; //todo a voir si on laisse undefined
     satisfaction?: SatisfactionLevel;
     signature?: String;
     title?: string;

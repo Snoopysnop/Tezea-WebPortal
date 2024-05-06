@@ -1,4 +1,4 @@
-import { Category, Emergency, ToolName, Role, WorkSiteRequestStatus, WorkSiteStatus } from "../../api/Model";
+import { Category, Emergency, ToolName, Role, WorkSiteRequestStatus, WorkSiteStatus, CustomerStatus, Civility } from "../../api/Model";
 import { ReactComponent as InProgressIcon } from 'bootstrap-icons/icons/hourglass-split.svg'
 import { ReactComponent as DoneIcon } from 'bootstrap-icons/icons/check-lg.svg'
 import { ReactComponent as StandByIcon } from 'bootstrap-icons/icons/pause.svg'
@@ -184,6 +184,17 @@ export function getToolName(toolname: string) {
         case "Pelle":
             return ToolName.Shovel;
     }
+}
+
+export function getCivilityName(civility: string) {
+switch(civility){
+    case "Mr":
+        return Civility.Mr;
+    case "Ms":
+        return Civility.Ms;
+    case "Other":
+        return Civility.Other;
+}       
 }
 
 export function getRequestStatusIcon(status: WorkSiteRequestStatus) {

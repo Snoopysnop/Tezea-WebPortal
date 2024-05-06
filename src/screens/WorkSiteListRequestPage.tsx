@@ -67,7 +67,6 @@ const WorkSiteListRequestPage: React.FC = () => {
       tezeaAffectation: worksiteRequestJson.tezeaAffectation,
     }));
     setDataFetched(worksiteRequestMapper);
-
   }
 
   useEffect(() => {
@@ -91,7 +90,6 @@ const WorkSiteListRequestPage: React.FC = () => {
     const date = new Date(dateString);
     worksiteRequestMapper.estimatedDate = date;
 
-    console.log(worksiteRequestMapper);
     setWorksiteRequestData(worksiteRequestMapper);
 
     setModalShow(true);
