@@ -156,7 +156,7 @@ const CreateWorkSitePage: React.FC = () => {
     setModalShow(true);
   }
 
-
+  
   const handleSearchDispo = async () => {
 
     if (new Date(startTime) > new Date(endTime)) {
@@ -220,12 +220,40 @@ const CreateWorkSitePage: React.FC = () => {
     console.log("responseTool", availableTools)
   }, [availableStaff, availableWorksiteChief, availableTools])
 
+
+  function displayDay(dateString:String) {
+    const parts = dateString.split('T')[0].split('-');
+    const year = parseInt(parts[0]);
+    const month = parseInt(parts[1]);
+    const day = parseInt(parts[2]);
+    const formattedDay = day < 10 ? `0${day}` : day;
+    const formattedMonth = month < 10 ? `0${month}` : month;
+    return `${formattedDay}/${formattedMonth}/${year}`;
+}
+
+function displayHours(dateString:String) {
+    const parts = dateString.split('T')[1].split(':');
+    const hours = parseInt(parts[0]);
+    const minutes = parseInt(parts[1]);
+    const formattedHours = hours < 10 ? `0${hours}` : hours;
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    return `${formattedHours}H${formattedMinutes}`;
+}
+
   return (
 
     <Container>
       <Row className="mb-5"></Row>
       <Row>
-        <Col xs={11}>
+      <Col xs={9}></Col>
+      <Col xs={3}>
+        <Button onClick={handlePopUp} style={{ fontSize: '20px'}}>
+        Consulter la demande
+        </Button> 
+      </Col>
+      </Row>
+      <Row>
+        <Col xs={12} >
           <Tabs
             activeKey={activeTab}
             onSelect={(k) => setActiveTab(k || 'date')}
@@ -236,6 +264,21 @@ const CreateWorkSitePage: React.FC = () => {
 
             <Tab eventKey="date" title="Sélectionner une période" >
               <Row className="mb-3"></Row>
+
+              <Row className="mb-5">
+                <h2>Donner un titre pour le chantier :</h2>
+              </Row>
+              <Form.Group as={Col} controlId="formTitreChantier">
+                <Form.Control
+                  style={{ width: "35%" }}
+                  type="text"
+                  placeholder="Entrez un titre"
+                  value={title}
+                  onChange={e => setTitle(e.target.value)}
+                />
+              </Form.Group>
+              <Row className="mb-5"></Row>
+
               <Row className="mb-5">
                 <h2>Selectionner une période pour le chantier :</h2>
               </Row>
@@ -278,20 +321,6 @@ const CreateWorkSitePage: React.FC = () => {
                   </Container>
                 </Col>
               </Row>
-
-              <Row className="mb-5">
-                <h2>Donner un titre pour le chantier :</h2>
-              </Row>
-              <Form.Group as={Col} controlId="formTitreChantier">
-                <Form.Control
-                  style={{ width: "35%" }}
-                  type="text"
-                  placeholder="Entrez un titre"
-                  value={title}
-                  onChange={e => setTitle(e.target.value)}
-                />
-              </Form.Group>
-              <Row className="mb-5"></Row>
             </Tab>
 
             {!isInitialSelection && (
@@ -315,9 +344,9 @@ const CreateWorkSitePage: React.FC = () => {
                     <Col xs={1}></Col>
                     {selectedWorksiteChief && (
                       <Col key={selectedWorksiteChief.id} xs={4} className="mb-3">
-                        <Card>
-                          <Container style={{ backgroundColor: 'lightgreen' }}>
-                            <Card.Body className="text-center">
+                        <Card style={{border:"2px solid", borderRadius:"7px", borderColor:"#0D6EFD"}}>
+                          <Container style={{  backgroundColor: '#bedaec', borderTopLeftRadius:"5px", borderTopRightRadius:"5px"}}>
+                            <Card.Body className="text-center" style={{color: '#0D6EFD' }}>
                               <Card.Title>{selectedWorksiteChief.firstName} {selectedWorksiteChief.lastName}</Card.Title>
                               <Card.Text>
                                 {selectedWorksiteChief.role}
@@ -325,9 +354,9 @@ const CreateWorkSitePage: React.FC = () => {
                             </Card.Body>
                           </Container>
                           <hr className="m-0" />
-                          <Container style={{ backgroundColor: 'lightgrey' }}>
+                          <Container style={{ backgroundColor: '#FFFFFF', borderBottomLeftRadius:"15px", borderBottomRightRadius:"15px" }}>
                             <Card.Body>
-                              <Card.Text>
+                              <Card.Text style={{color: '#0D6EFD' }}>
                                 <Envelope /> : {selectedWorksiteChief.email}
                                 <br />
                                 <Telephone /> : {selectedWorksiteChief.phoneNumber}
@@ -378,9 +407,9 @@ const CreateWorkSitePage: React.FC = () => {
                         <Row>
                           {selectedStaff.map((user) => (
                             <Col key={user.id} xs={4} className="mb-3">
-                              <Card>
-                                <Container style={{ backgroundColor: 'lightgreen' }}>
-                                  <Card.Body className="text-center">
+                              <Card style={{border:"2px solid", borderRadius:"7px", borderColor:"#0D6EFD"}}>
+                                <Container style={{  backgroundColor: '#bedaec', borderTopLeftRadius:"5px", borderTopRightRadius:"5px"}}>
+                                  <Card.Body className="text-center" style={{color: '#0D6EFD' }}>
                                     <Card.Title>{user.firstName} {user.lastName}</Card.Title>
                                     <Card.Text>
                                       {user.role}
@@ -388,9 +417,9 @@ const CreateWorkSitePage: React.FC = () => {
                                   </Card.Body>
                                 </Container>
                                 <hr className="m-0" />
-                                <Container style={{ backgroundColor: 'lightgrey' }}>
+                                <Container style={{ backgroundColor: '#FFFFFF', borderBottomLeftRadius:"15px", borderBottomRightRadius:"15px" }}>
                                   <Card.Body>
-                                    <Card.Text>
+                                    <Card.Text style={{color: '#0D6EFD' }}>
                                       <Envelope /> : {user.email}
                                       <br />
                                       <Telephone /> : {user.phoneNumber}
@@ -419,6 +448,7 @@ const CreateWorkSitePage: React.FC = () => {
                 <Row className="mb-5">
                   <h2>Selectionner les outils nécessaires au chantier :</h2>
                 </Row>
+                <div className="autocomplete-container" style={{ position:"relative", zIndex: 2 }}>
                 <ReactSearchAutocomplete
                   items={availableTools ? availableTools.map(tool => ({ id: tool.name, name: tool.name })) : []}
                   onSearch={handleOnSearch}
@@ -426,6 +456,7 @@ const CreateWorkSitePage: React.FC = () => {
                   autoFocus
                   placeholder="Filtrer par nom d'outils"
                 />
+                </div>
                 <Row className="mb-5"></Row>
                 {selectedTools.length > 0 && (
                   <Container>
@@ -437,9 +468,9 @@ const CreateWorkSitePage: React.FC = () => {
                         const selectedTool = availableTools.find(tool => tool.name === toolName);
                         return (
                           <Col key={index} xs={4} className="mb-3">
-                            <Card>
-                              <Container style={{ backgroundColor: 'lightgreen' }}>
-                                <Card.Body className="text-center">
+                            <Card style={{border:"2px solid", borderRadius:"7px", borderColor:"#0D6EFD"}}>
+                              <Container style={{  backgroundColor: '#bedaec', borderTopLeftRadius:"5px", borderTopRightRadius:"5px"}}>
+                                <Card.Body className="text-center" style={{color: '#0D6EFD' }}>
                                   <Card.Title>{toolName}</Card.Title>
                                   {selectedTool && (
                                     <Card.Text>
@@ -448,8 +479,8 @@ const CreateWorkSitePage: React.FC = () => {
                                   )}
                                 </Card.Body>
                               </Container>
-                              <Container style={{ backgroundColor: 'lightgrey' }}>
-                                <Card.Body className="text-center">
+                              <Container style={{ backgroundColor: '#FFFFFF', borderBottomLeftRadius:"15px", borderBottomRightRadius:"15px" }}>
+                                <Card.Body className="text-center" style={{color: '#0D6EFD' }}>
                                   Quantité sélectionnée : {selectedQuantities[toolName]}
                                 </Card.Body>
                                 <Card.Body>
@@ -505,43 +536,107 @@ const CreateWorkSitePage: React.FC = () => {
                   </Container>
 
                   <Container className="BodyPartContainer" style={{ display: "flex", flexDirection: "row" }}>
-                    <Row style={{ display: "flex", width: "20%" }}>
-                      <Row className="mb-5" style={{ fontSize: '20px' }}>
-                        Titre : {title ? `${title}` : 'Aucun'}
-                      </Row>
-                      <Row className="mb-5" style={{ fontSize: '20px' }}>
-                        Chef de chantier  : {selectedWorksiteChief ? `${selectedWorksiteChief.firstName} ${selectedWorksiteChief.lastName}` : 'Aucun'}
-                      </Row>
-                    </Row>
-                    <div style={{ display: "flex", width: "20%" }}></div>
-                    <div style={{ display: "flex", flexDirection: "row", width: "60%" }}>
+                  
+                    <Container className="EmptyContainer" style={{ display: "flex", width: "4%" }}></Container>
 
-                      <div className="border border-dark border-3 container_Employees" style={{ display: "flex", flexDirection: "column", width: "45%" }}>
+                    <Container className="container_Title&SiteChief" style={{ display: "flex", width: "28%", flexDirection: "column" , paddingTop:"20px",  backgroundColor:"#bedaec",borderRadius:7}}>
 
-                        <div style={{ alignItems: "center", justifyContent: "center" }}>
-                          <div style={{ fontSize: 15, fontWeight: "bold" }}>Employés sélectionnés :</div>
+                        <div style={{ display:"flex",alignItems: "center", justifyContent: "center", marginBottom:"5px" }}>
+                          <div style={{ fontSize: 20, fontWeight: "bold" }}>Informations générales</div>
                         </div>
-                        <div>
-                          <div>
-                            {selectedStaff.map(user => (
-                              <li key={user.id}>{user.firstName} {user.lastName}</li>
-                            ))}
+                        
+                        <div className="lineUnderTitle" style={{display:"flex", marginBottom:"15px"}}>
+                          <div style={{display:"flex", width: "10%"}}></div>
+                          <div style={{ display:"flex", width: "80%", height:"1px", backgroundColor:"black"}}></div>
+                          <div style={{display:"flex", width: "10%"}}></div>
+                        </div>
+                        <div>  
+                          
+                          <div style={{display:"flex"}}>
+                            <div style={{display:"flex", width:"20%"}}></div>
+                            
+                            <div className="infoWorksite" style={{display:"flex", flexDirection:"column", width:"60%"}}>
+                              <div className="titreDiv" style={{marginBottom:"20px"}} >
+                                <div style={{ fontSize: 18, fontWeight: "bold"}}>Titre du chantier :</div>
+                                <div style={{ fontSize: 16, marginLeft:7}}>{title ? `${title}` : 'Aucun'}</div>
+                              </div>
+
+                              <div className="dateDiv" style={{marginBottom:"20px"}}>
+                                <div style={{ fontSize: 18, fontWeight: "bold"}}>Dates du chantier :</div>
+                                <div style={{ fontSize: 16, marginLeft:7}}>Du : { startTime? displayDay(startTime) : ''}, { startTime? displayHours(startTime) : ''}</div>
+                                <div style={{ fontSize: 16, marginLeft:7}}>Au : { endTime? displayDay(endTime) : ''}, { endTime? displayHours(endTime) : ''}</div>
+                              </div>
+                    
+                              <div className="siteChiefDiv" style={{marginBottom:"25px"}}>
+                                <div style={{ fontSize: 18, fontWeight: "bold"}}>Chef de chantier : </div>
+                                <div style={{ fontSize: 16, marginLeft:7}}>{selectedWorksiteChief ? `${selectedWorksiteChief.firstName} ${selectedWorksiteChief.lastName}` : 'Aucun'}</div>
+                              </div>
+
+                            </div>
+                            
+                            <div style={{display:"flex", width:"20%"}}></div>                  
                           </div>
                         </div>
 
+                    </Container>
+                    
+                    <Container className="EmptyContainer" style={{ display: "flex", width: "4%" }}></Container>
+                    
+                    
+                    <Container className="container_Employees" style={{ display: "flex", flexDirection: "column", width: "28%", paddingTop:"20px", backgroundColor:"#bedaec", borderRadius:7}}>
+
+                      <div style={{ display:"flex",alignItems: "center", justifyContent: "center", marginBottom:"5px" }}>
+                        <div style={{ fontSize: 20, fontWeight: "bold" }}>Employés sélectionnés</div>
                       </div>
 
-                      <div className="blankDiv" style={{ display: "flex", width: "10%" }}></div>
+                      <div className="lineUnderTitle" style={{display:"flex", marginBottom:"20px"}}>
+                        <div style={{display:"flex", width: "10%"}}></div>
+                        <div style={{ display:"flex", width: "80%", height:"1px", backgroundColor:"black"}}></div>
+                        <div style={{display:"flex", width: "10%"}}></div>
+                      </div>
+                      
+                      <div className="listOfEmployees" style={{ display:"flex", flexDirection:"row", marginBottom:"25px"}}>
+                        <div style={{display:"flex", width:"21%"}}></div>
+                        <div style={{display:"flex", width:"74%", flexDirection:"column", justifyContent:"space-around"}}>
+                          {selectedStaff.map(user => (
+                            <li key={user.id}>{user.firstName} {user.lastName}</li>
+                          ))}
+                        </div>
+                        <div style={{display:"flex", width:"5%"}}></div>
+                      </div>
 
-                      <div className="border border-dark border-3" style={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", width: "45%" }}>
-                        <div className="mb-3">Outils sélectionnés :</div>
-                        <div>
+                    </Container>
+
+                    <Container className="EmptyContainer" style={{ display: "flex", width: "4%" }}></Container>
+
+                    <Container className="container_Tools" style={{ display: "flex", flexDirection: "column", width: "28%", paddingTop:"20px", backgroundColor:"#bedaec",borderRadius:7}}>
+
+                      <div style={{ display:"flex", alignItems: "center", justifyContent: "center", marginBottom:"5px" }}>
+                        <div style={{ fontSize: 20, fontWeight: "bold" }}>Outils sélectionnés</div>
+                      </div>
+
+                      <div className="lineUnderTitle" style={{display:"flex", marginBottom:"20px"}}>
+                        <div style={{display:"flex", width: "10%"}}></div>
+                        <div style={{ display:"flex", width: "80%", height:"1px", backgroundColor:"black"}}></div>
+                        <div style={{display:"flex", width: "10%"}}></div>
+                      </div>
+
+                      <div className="listOfTools" style={{ display:"flex", flexDirection:"row", marginBottom:"25px"}}>
+                        <div style={{display:"flex", width:"21%"}}></div>
+                        
+                        <div style={{display:"flex", width:"74%", flexDirection:"column", justifyContent:"space-around"}}>
                           {selectedTools.map(toolName => (
                             <li key={toolName}>{toolName} - Quantité : {selectedQuantities[toolName]}</li>
                           ))}
                         </div>
+
+                        <div style={{display:"flex", width:"5%"}}></div>
                       </div>
-                    </div>
+                    </Container>
+                   
+
+                    <Container className="EmptyContainer" style={{ display: "flex", width: "4%" }}></Container>
+
                   </Container>
 
                   <Container className="FooterPartContainer">
@@ -562,11 +657,6 @@ const CreateWorkSitePage: React.FC = () => {
 
             )}
           </Tabs>
-        </Col>
-        <Col xs={1}>
-          <Button onClick={handlePopUp} style={{ fontSize: '20px' }}>
-          Consulter Demande de chantier
-          </Button>
         </Col>
       </Row>
 
