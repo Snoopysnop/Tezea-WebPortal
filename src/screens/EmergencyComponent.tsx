@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Modal, Button } from 'react-bootstrap';
-import { Category, Emergency, WorkSite } from '../api/Model';
-import { getEmergencyColor, getEmergencyIconColor } from '../common/utils/utils';
+import { Category, IncidentLevel, WorkSite } from '../api/Model';
+import { getIncidentLevelColor, getIncidentLevelIconColor } from '../common/utils/utils';
 import { ReactComponent as TriangleIcon } from 'bootstrap-icons/icons/exclamation-triangle.svg';
 
 type EmergencyProps = {
     id: string;
     description: string;
-    emergency: Emergency;
+    emergency: IncidentLevel;
     category: Category;
     title: string
 };
@@ -43,7 +43,7 @@ const EmergencyComponent: React.FC<EmergencyProps> = ({ description, emergency, 
             }}
         >
             <Row onClick={handleModalOpen}>
-                <Col style={{ backgroundColor: getEmergencyColor(emergency) }} lg={1}></Col>
+                <Col style={{ backgroundColor: getIncidentLevelColor(emergency) }} lg={1}></Col>
                 <Col lg={5} style={{ overflow: 'hidden' }}>
                     <Row className='primary justify-content-center text-center' style={{ fontSize: '14px', whiteSpace: 'pre-wrap', marginBottom: '5px', marginTop: '5px', marginLeft: '5px', maxHeight: '50px', overflowY: 'auto' }}>
                         {title}
@@ -59,7 +59,7 @@ const EmergencyComponent: React.FC<EmergencyProps> = ({ description, emergency, 
                             {emergency}
                         </Col>
                         <Col className='d-flex align-items-center ps-0 pe-2'>
-                            <TriangleIcon className={`primary ${getEmergencyIconColor(emergency)}`} width='14px' height='100%' />
+                            <TriangleIcon className={`primary ${getIncidentLevelIconColor(emergency)}`} width='14px' height='100%' />
                         </Col>
                     </Row>
                 </Col>

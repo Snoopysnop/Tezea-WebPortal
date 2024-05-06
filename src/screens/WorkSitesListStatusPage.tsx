@@ -83,8 +83,7 @@ useEffect(() => {
     const worksiteData = await MainApi.getInstance().getWorksitebyId(task.id) as WorkSiteJson;
     navigate("/detailChantier", { state: { worksiteData } })
 
-    //TODO faire appel api get bdd
-    //ptet rajouter un booleen pour differencier demande et chantier boolean:Boolean
+
     setModalShow(true);
   };
   //Use effect pour refresh les checkbox en temps réel

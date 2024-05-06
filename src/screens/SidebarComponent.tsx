@@ -9,7 +9,11 @@ import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import { LoginOutlined, RequestPageOutlined, RequestQuoteOutlined, SettingsAccessibilityOutlined, SettingsOutlined } from "@mui/icons-material";
 import { Link, useNavigate } from 'react-router-dom';
 import KeycloakApi from "../api/KeycloakApi";
-import { WorkSite, WorkSiteRequest, Customer, WorkSiteStatus, WorkSiteRequestStatus, EmergencyDetails, User, Emergency } from '../api/Model';
+import { WorkSiteJson, WorkSiteRequestJson, CustomerJson, EmergencyDetailsJson, UserJson } from '../api/ModelJson';
+import { WorkSite, WorkSiteRequest, Customer, WorkSiteStatus, EmergencyDetails, User, IncidentLevel } from '../api/Model';
+import { getIncidentLevel, getStatusWorksite, getStatusWorksiteRequest } from "../common/utils/utils";
+
+
 
 const SidebarComponent: React.FC = () => {
 

@@ -69,10 +69,10 @@ class MainApi extends AbstractApi {
 
     //WorksiteRequest-------------------------------------------------------------------------------------------------------------
 
-    public async createWorkSiteRequest(workSiteRequestData: WorkSiteRequestJson): Promise<WorkSiteRequestJson> {
+    public async createWorkSiteRequest(workSiteRequest: WorkSiteRequestJson): Promise<WorkSiteRequestJson> {
         try {
-            const response = await this.service.post<WorkSiteRequestJson>(`/api/workSiteRequests/create`, workSiteRequestData);
-            return response.data;
+            const response = await this.service.post(`/api/workSiteRequests/create`, workSiteRequest);
+            return response.data as WorkSiteRequestJson;
         } catch (err) {
             throw AbstractApi.handleError(err);
         }
@@ -98,12 +98,63 @@ class MainApi extends AbstractApi {
         }
     }
 
+    
+
+    public async getRandomConcierge(): Promise<User> {
+        try {
+            const response = await this.service.get(`/api/users/Concierge`)
+            return response.data as User
+        } catch (err) {
+            throw AbstractApi.handleError(err)
+        }
+    }
+
+    
+    public async updateStatusWorksiteRequest(id: number, status: string): Promise<void> {
+        try {
+            const response = await this.service.patch(`/api/workSiteRequests/${id}/update_status?status=${status}`)
+            return response.data 
+        } catch (err) {
+            throw AbstractApi.handleError(err)
+        }
+    }
+   
+    public async updateWorksiteRequest(id: number, workSiteRequest : WorkSiteRequestJson): Promise<WorkSiteRequestJson> {
+        try {
+            const response = await this.service.patch(`/api/workSiteRequests/${id}/patch`,workSiteRequest)
+            return response.data as WorkSiteRequestJson
+        } catch (err) {
+            throw AbstractApi.handleError(err)
+        }
+    }
     //Customer-------------------------------------------------------------------------------------------------------------
 
+    public async updateCustomer(id: string, customer :CustomerJson): Promise<CustomerJson> {
+        try {
+            const response = await this.service.patch(`/api/customers/${id}/update`,customer)
+            return response.data as CustomerJson
+        } catch (err) {
+            throw AbstractApi.handleError(err)
+        }
+    }
 
     public async getCustomerbyId(id: string): Promise<CustomerJson> {
         try {
             const response = await this.service.get(`/api/customers/${id}`)
+            return response.data as CustomerJson
+        } catch (err) {
+            throw AbstractApi.handleError(err)
+        }
+    }
+
+    public async createCustomer(customer: CustomerJson): Promise<CustomerJson> {
+        try {
+            const config = {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }
+            const response = await this.service.post(`/api/customers/create`, customer, config)
             return response.data as CustomerJson
         } catch (err) {
             throw AbstractApi.handleError(err)

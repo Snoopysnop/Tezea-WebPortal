@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Table, InputGroup, Button, Form, Dropdown } from 'react-bootstrap';
-import { Category, Emergency, EmergencyDetails, WorkSiteStatus } from '../api/Model';
+import { Category, IncidentLevel, EmergencyDetails, WorkSiteStatus } from '../api/Model';
 import '../App.css'
 import EmergencyComponent from './EmergencyComponent';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 import { EmergencyDetailsJson } from '../api/ModelJson';
 import MainApi from '../api/MainApi';
-import { getEmergency } from '../common/utils/utils';
+import { getIncidentLevel } from '../common/utils/utils';
 
 const IncidentsPage: React.FC = () => {
 
   const [filterValue, setFilterValue] = useState<string>("");
-  const allStatus: Emergency[] = Object.values(Emergency);
-  const [selectedStatus, setSelectedStatus] = useState<Emergency[]>([]);
+  const allStatus: IncidentLevel[] = Object.values(IncidentLevel);
+  const [selectedStatus, setSelectedStatus] = useState<IncidentLevel[]>([]);
 
-  const [checkboxes, setCheckboxes] = useState<{ [key in Emergency]?: boolean }>({});
+  const [checkboxes, setCheckboxes] = useState<{ [key in IncidentLevel]?: boolean }>({});
 
   const [filteredTasks, setFilteredTasks] = useState<EmergencyDetails[]>([]);
 
@@ -28,8 +28,8 @@ const IncidentsPage: React.FC = () => {
     const emergencyMapper: EmergencyDetails[] = responseEmergency.map(emergencyDetailsJson => ({
       description: emergencyDetailsJson.description,
       title: emergencyDetailsJson.title,
-      id: emergencyDetailsJson.id ? emergencyDetailsJson.id : "",
-      level: emergencyDetailsJson ? getEmergency(emergencyDetailsJson.level) : Emergency.Minor,
+      id: emergencyDetailsJson.id,
+      level: emergencyDetailsJson ? getIncidentLevel(emergencyDetailsJson.level) : IncidentLevel.Minor,
       worksite: undefined
     }));
 
@@ -51,16 +51,16 @@ const IncidentsPage: React.FC = () => {
 
   
 
-  const handleStatusChange = (status: Emergency) => {
+  const handleStatusChange = (status: IncidentLevel) => {
     const updatedCheckboxes = { ...checkboxes, [status]: !checkboxes[status] };
     setCheckboxes(updatedCheckboxes);
 
-    setSelectedStatus(Object.keys(updatedCheckboxes).filter(key => updatedCheckboxes[key as Emergency]) as Emergency[]);
+    setSelectedStatus(Object.keys(updatedCheckboxes).filter(key => updatedCheckboxes[key as IncidentLevel]) as IncidentLevel[]);
   };
 
   //Use effect pour refresh les checkbox en temps réel
   useEffect(() => {
-    const updatedCheckboxes: { [key in Emergency]?: boolean } = {};
+    const updatedCheckboxes: { [key in IncidentLevel]?: boolean } = {};
     selectedStatus.forEach(status => {
       updatedCheckboxes[status] = true;
     });
@@ -69,7 +69,7 @@ const IncidentsPage: React.FC = () => {
 
   //Use effect pour initialiser les checkbox a true
   useEffect(() => {
-    const initialCheckboxes: { [key in Emergency]?: boolean } = {};
+    const initialCheckboxes: { [key in IncidentLevel]?: boolean } = {};
     allStatus.forEach(status => {
       initialCheckboxes[status] = true;
     });
@@ -113,7 +113,7 @@ const IncidentsPage: React.FC = () => {
                       Filtrer
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
-                      {Object.values(Emergency).map((status, index) => (
+                      {Object.values(IncidentLevel).map((status, index) => (
                         <Dropdown.Item key={index}>
                           <Form.Check
                             type="checkbox"
@@ -134,24 +134,24 @@ const IncidentsPage: React.FC = () => {
             <Table responsive>
               <thead>
                 <tr>
-                  <th className={`col-lg-2 ${!selectedStatus.includes(Emergency.Minor) && "d-none"}`}>{Emergency.Minor}</th>
-                  <th className={`col-lg-2 ${!selectedStatus.includes(Emergency.Medium) && "d-none"}`}>{Emergency.Medium}</th>
-                  <th className={`col-lg-2 ${!selectedStatus.includes(Emergency.Severe) && "d-none"}`}>{Emergency.Severe}</th>
-                  <th className={`col-lg-2 ${!selectedStatus.includes(Emergency.Blocking) && "d-none"}`}>{Emergency.Blocking}</th>
+                  <th className={`col-lg-2 ${!selectedStatus.includes(IncidentLevel.Minor) && "d-none"}`}>{IncidentLevel.Minor}</th>
+                  <th className={`col-lg-2 ${!selectedStatus.includes(IncidentLevel.Medium) && "d-none"}`}>{IncidentLevel.Medium}</th>
+                  <th className={`col-lg-2 ${!selectedStatus.includes(IncidentLevel.Severe) && "d-none"}`}>{IncidentLevel.Severe}</th>
+                  <th className={`col-lg-2 ${!selectedStatus.includes(IncidentLevel.Blocking) && "d-none"}`}>{IncidentLevel.Blocking}</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td className={`col-lg-2 ${!selectedStatus.includes(Emergency.Minor) && "d-none"}`}>
+                  <td className={`col-lg-2 ${!selectedStatus.includes(IncidentLevel.Minor) && "d-none"}`}>
                     <Row>
                       {filteredTasks
-                        .filter(task => task.level === Emergency.Minor)
+                        .filter(task => task.level === IncidentLevel.Minor)
                         .map(task => (
                           <Col key={task.id} lg={12}>
                             <EmergencyComponent
                               id={task.id} 
                               description={task.description}
-                              emergency={Emergency.Minor}
+                              emergency={IncidentLevel.Minor}
                               category={Category.CreaPalette}
                               title={task.title}
                             />
@@ -159,16 +159,16 @@ const IncidentsPage: React.FC = () => {
                         ))}
                     </Row>
                   </td>
-                  <td className={`col-lg-2 ${!selectedStatus.includes(Emergency.Medium) && "d-none"}`}>
+                  <td className={`col-lg-2 ${!selectedStatus.includes(IncidentLevel.Medium) && "d-none"}`}>
                     <Row>
                       {filteredTasks
-                        .filter(task => task.level === Emergency.Medium)
+                        .filter(task => task.level === IncidentLevel.Medium)
                         .map(task => (
                           <Col key={task.id} lg={12}>
                             <EmergencyComponent
                               id={task.id}
                               description={task.description}
-                              emergency={Emergency.Medium}
+                              emergency={IncidentLevel.Medium}
                               category={Category.CreaPalette}
                               title={task.title}
                             />
@@ -176,16 +176,16 @@ const IncidentsPage: React.FC = () => {
                         ))}
                     </Row>
                   </td>
-                  <td className={`col-lg-2 ${!selectedStatus.includes(Emergency.Severe) && "d-none"}`}>
+                  <td className={`col-lg-2 ${!selectedStatus.includes(IncidentLevel.Severe) && "d-none"}`}>
                     <Row>
                       {filteredTasks
-                        .filter(task => task.level === Emergency.Severe)
+                        .filter(task => task.level === IncidentLevel.Severe)
                         .map(task => (
                           <Col key={task.id} lg={12}>
                             <EmergencyComponent
                               id={task.id}
                               description={task.description}
-                              emergency={Emergency.Severe}
+                              emergency={IncidentLevel.Severe}
                               category={Category.CreaPalette}
                               title={task.title}
                             />
@@ -193,16 +193,16 @@ const IncidentsPage: React.FC = () => {
                         ))}
                     </Row>
                   </td>
-                  <td className={`col-lg-2 ${!selectedStatus.includes(Emergency.Blocking) && "d-none"}`}>
+                  <td className={`col-lg-2 ${!selectedStatus.includes(IncidentLevel.Blocking) && "d-none"}`}>
                     <Row>
                       {filteredTasks
-                        .filter(task => task.level === Emergency.Blocking)
+                        .filter(task => task.level === IncidentLevel.Blocking)
                         .map(task => (
                           <Col key={task.id} lg={12}>
                             <EmergencyComponent
                               id={task.id}
                               description={task.description}
-                              emergency={Emergency.Blocking}
+                              emergency={IncidentLevel.Blocking}
                               category={Category.CreaPalette}
                               title={task.title}
                             />
