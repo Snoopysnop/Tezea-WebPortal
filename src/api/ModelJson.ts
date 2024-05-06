@@ -64,9 +64,9 @@ export interface WorkSiteJson {
     id: string;
     workSiteChief?: string;
     staff?: string[];
-    equipment?: Tool[];
-    begin?: string;
-    end?: string;
+    equipments?: Tool[];
+    begin: string;
+    end: string;
     status?: WorkSiteStatus;
     workSiteRequest?: string | undefined; //todo a voir si on laisse undefined
     satisfaction?: SatisfactionLevel;
