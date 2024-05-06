@@ -455,7 +455,6 @@ function displayHours(dateString:String) {
                   onSelect={handleOnSelect}
                   autoFocus
                   placeholder="Filtrer par nom d'outils"
-                  
                 />
                 </div>
                 <Row className="mb-5"></Row>
