@@ -16,7 +16,7 @@ interface ModalProps {
 
 const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
   const { show, onHide, worksiteRequest, showButtons }: ModalProps = props;
-
+//console.log("Customer", worksiteRequest.customer)
   const navigate = useNavigate();
 
   function formatBoolean(boolean: Boolean) {

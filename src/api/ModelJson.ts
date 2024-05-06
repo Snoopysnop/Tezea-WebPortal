@@ -4,7 +4,7 @@ import {Tool,WorkSiteStatus,Emergency,Civility,CustomerStatus,Service,Category,W
 export interface EmergencyDetailsJson {
     description: string,
     id?: string ,
-    level: Emergency,
+    level: string,
     title: string,
     evidences? : any[],
     workSiteId? : string
@@ -68,7 +68,7 @@ export interface WorkSiteJson {
     begin?: string;
     end?: string;
     status?: WorkSiteStatus;
-    request?: string | undefined; //todo a voir si on laisse undefined
+    workSiteRequest?: string | undefined; //todo a voir si on laisse undefined
     satisfaction?: SatisfactionLevel;
     signature?: String;
     title?: string;

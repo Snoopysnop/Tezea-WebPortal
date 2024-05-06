@@ -3,6 +3,7 @@ import { Button, Modal, Form } from 'react-bootstrap';
 import { Emergency } from '../api/Model';
 import { EmergencyDetailsJson, EmergencyDetailsJsonToSend } from '../api/ModelJson';
 import MainApi from '../api/MainApi';
+import { getEmergencyJsonFormat } from '../common/utils/utils';
 
 interface PopupEmergencyProps {
   showModal: boolean;
@@ -37,15 +38,12 @@ const PopupEmergency: React.FC<PopupEmergencyProps> = ({ showModal, closeModal, 
     const incident:EmergencyDetailsJson = {
       title: emergencyName,
       description: description,
-      level: Emergency.Medium,
+      level:  emergencyLevel ? getEmergencyJsonFormat(emergencyLevel)! : "",
       workSiteId:worksiteId,
       evidences:[]
     };
 
-  
-    console.log("incident", incident)
-    await MainApi.getInstance().createEmergency(incident, worksiteId) as EmergencyDetailsJson;
-    console.log("Incident:", incident);
+      await MainApi.getInstance().createEmergency(incident, worksiteId) as EmergencyDetailsJson;
     closeModal();
   };
 
