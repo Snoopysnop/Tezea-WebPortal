@@ -4,7 +4,7 @@ import { WorkSite, User, Role, Tool, WorkSiteStatus, SatisfactionLevel, ToolName
 import PopupEmergency from './PopupEmergency';
 import { useLocation } from 'react-router-dom';
 import MainApi from '../api/MainApi';
-import { getCategorie, getCivilityName, getCustomerStatus, getEmergency, getRoleWorksite, getServiceType, getStatusWorksite, getStatusWorksiteRequest, getToolName } from '../common/utils/utils';
+import { getCategorie, getCivilityName, getCustomerStatus, getEmergency, getRoleWorksite, getServiceType, getStatusName, getStatusWorksite, getStatusWorksiteRequest, getToolName } from '../common/utils/utils';
 import WorkSiteRequestPopUp from '../components/WorkSiteRequestPopUp';
 import { CustomerJson, WorkSiteJson, WorkSiteRequestJson } from '../api/ModelJson';
 
@@ -20,24 +20,15 @@ console.log("true value",worksite)
   const [currentCustomer, setCustomer] = useState<Customer| undefined>(undefined);
 
   useEffect(() => {
-    handleListWorksite();
     handleUsers();
     worksite!.signature = "iVBORw0KGgoAAAANSUhEUgAAAJgAAABlCAYAAACxzirmAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFpSURBVHhe7dixbcMwEEBRbaLFjBQZxGkyhJEJAmgKFem0E+M6JgII0O9e8Rpe+3EguazrOqAiMFICIyUwUgIjJTBSAiMlMFLTwO7bMY5jG/fJDM5YPieHAuMqy/fkEK6y/LzPB3AFG4zUP3ewfXy9vc7gjOkr8vbYn4EdY3/cXmZwxvwf7GOzwbjEn8DuY3tuLnFxFT/5pARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERmgdvwEFpgF42yNjAAAAAElFTkSuQmCC"
   }, []); // Le tableau vide indique que cette fonction doit être appelée une seule fois lors du montage du composant
-
-  const handleListWorksite = async () => {
-    if (worksite!.workSiteChief) {
-      const worksiteChief = await MainApi.getInstance().getUserbyId(String(worksite!.workSiteChief)) as User;
-      const users = await MainApi.getInstance().getUsersByWorksiteId(String(worksite!.id)) as Array<User>;
-    };
-  }
   
   const handleUsers = async () => {
     const users = await MainApi.getInstance().getUsersByWorksiteId(String(worksite!.id)) as Array<User>;
 
     const workSiteRequestId: number | undefined = worksite ? parseInt(worksite.workSiteRequest || "0", 10) : undefined;
 
-    
     const workSiteRequest = await MainApi.getInstance().getWorksiteRequestbyId(workSiteRequestId!) as WorkSiteRequestJson;
 
     const customerjson = await MainApi.getInstance().getCustomerbyId(String(workSiteRequest.customer)) as CustomerJson;
@@ -52,7 +43,6 @@ console.log("true value",worksite)
     if (workSiteUsersFiltered.length > 0) {
       setWorkSiteUsers(workSiteUsersFiltered)
     }
-    
 
     const customer: Customer = {
       id: customerjson.id,
@@ -122,7 +112,6 @@ console.log(worksite!.equipments)
   };
 
   const [modalShow, setModalShow] = useState(false);
-   
 
   return (
     <Container className='container-xxl'>
@@ -142,7 +131,7 @@ console.log(worksite!.equipments)
                   <Col>
                     <Form.Group>
                       <Form.Label>Statut:</Form.Label>
-                      <Form.Control type="text" value={worksite!.status} readOnly />
+                      <Form.Control type="text" value={getStatusName(worksite!.status!)} readOnly />
                     </Form.Group>
                   </Col>
                 </Row>

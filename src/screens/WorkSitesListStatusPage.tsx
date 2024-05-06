@@ -146,12 +146,12 @@ useEffect(() => {
                 <Dropdown.Menu>
                   {Object.values(WorkSiteStatus)
                     .map((status, index) => (
-                      <Dropdown.Item key={index}>
+                      <Dropdown.Item key={index} onClick={() => handleStatusChange(status)}>
                         <Form.Check
                           type="checkbox"
                           label={status}
                           checked={!!checkboxes[status]}
-                          onChange={() => handleStatusChange(status)}
+                          onChange={() => {}}
                         />
                       </Dropdown.Item>
                     ))}
@@ -161,9 +161,8 @@ useEffect(() => {
           </Row>
         </Col>
       </Row>
-
       <Container className="container-xxl mt-4">
-        <Table responsive>
+        <Table>
           <thead>
             <tr>
               {selectedStatus.includes(WorkSiteStatus.Standby) && <th className="col-lg-2">{WorkSiteStatus.Standby}</th>}
