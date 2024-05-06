@@ -1,49 +1,25 @@
-import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Col, Row, Button, Container, Tab, Tabs, Card, Alert } from 'react-bootstrap';
 import Slider from 'react-input-slider';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { User, Tool, ToolName, Role, WorkSite, WorkSiteStatus, WorkSiteRequest, SatisfactionLevel } from '../api/Model';
+import { User, Tool, ToolName, Role, WorkSite, WorkSiteStatus, SatisfactionLevel, TimeLine, WorkSiteRequest } from '../api/Model';
 import { Envelope, Telephone, Search, Plus, Dash } from 'react-bootstrap-icons';
-import SearchAutocomplete from 'react-search-autocomplete';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
-import { Height, Padding } from '@mui/icons-material';
-
-
-const mockStaff: User[] = [
-  { id: '1', firstName: 'John', lastName: 'Doe', role: Role.Employee, email: 'john@example.com', phoneNumber: '123456789' },
-  { id: '2', firstName: 'Jane', lastName: 'Terre', role: Role.Employee, email: 'jane@example.com', phoneNumber: '987654321' },
-  { id: '3', firstName: 'Albert', lastName: 'Vie', role: Role.Employee, email: 'john@example.com', phoneNumber: '123456789' },
-  { id: '4', firstName: 'Hugo', lastName: 'Eau', role: Role.Employee, email: 'jane@example.com', phoneNumber: '987654321' },
-  { id: '5', firstName: 'Floriant', lastName: 'Savon', role: Role.Employee, email: 'john@example.com', phoneNumber: '123456789' },
-  { id: '6', firstName: 'Chris', lastName: 'Douche', role: Role.Employee, email: 'jane@example.com', phoneNumber: '987654321' },
-  { id: '7', firstName: 'Gwen', lastName: 'Savon', role: Role.Employee, email: 'john@example.com', phoneNumber: '123456789' },
-  { id: '8', firstName: 'Brian', lastName: 'Douche', role: Role.Employee, email: 'jane@example.com', phoneNumber: '987654321' },
-  { id: '9', firstName: 'Jaufret', lastName: 'Savon', role: Role.Employee, email: 'john@example.com', phoneNumber: '123456789' },
-  { id: '10', firstName: 'Lise', lastName: 'Douche', role: Role.Employee, email: 'jane@example.com', phoneNumber: '987654321' },
-];
-
-const mockWorksiteChief: User[] = [
-  { id: '3', firstName: 'Alice', lastName: 'Smith', role: Role.WorkSiteChief, email: 'jaufret.dufeil@soprasteria.com', phoneNumber: '111111111' },
-  { id: '4', firstName: 'Bob', lastName: 'Johnson', role: Role.WorkSiteChief, email: 'bob@example.com', phoneNumber: '222222222' },
-];
-
-const mockTools: Tool[] = [
-  { name: ToolName.Stapler, quantity: 5 },
-  { name: ToolName.CementMixer, quantity: 2 },
-  { name: ToolName.Shear, quantity: 3 },
-  { name: ToolName.Wrench, quantity: 4 },
-  { name: ToolName.Ladder, quantity: 6 },
-  { name: ToolName.Axe, quantity: 2 },
-  { name: ToolName.Palette, quantity: 8 },
-  { name: ToolName.Rake, quantity: 3 },
-  { name: ToolName.Saw, quantity: 5 },
-  { name: ToolName.Drill, quantity: 4 },
-  { name: ToolName.Shovel, quantity: 16 },
-];
+import MainApi from '../api/MainApi';
+import { getToolName } from '../common/utils/utils';
+import WorkSiteRequestPopUp from '../components/WorkSiteRequestPopUp';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 
 const CreateWorkSitePage: React.FC = () => {
+
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const worksiteRequestData = location.state ? (location.state as any).worksiteRequest as WorkSiteRequest : null;
+
+  const [modalShow, setModalShow] = useState(false);
+
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [isInitialSelection, setIsInitialSelection] = useState(true);
@@ -56,13 +32,11 @@ const CreateWorkSitePage: React.FC = () => {
   const [availableWorksiteChief, setAvailableWorksiteChief] = useState<User[]>([]);
   const [selectedWorksiteChief, setSelectedWorksiteChief] = useState<User>();
 
-  const [tools, setTools] = useState<Tool[]>([]);
+  const [availableTools, setAvailableTools] = useState<Tool[]>([]);
 
-  const [selectedTool, setSelectedTool] = useState<Tool | null>(null);
 
   const [selectedTools, setSelectedTools] = useState<string[]>([]);
   const [filterValue, setFilterValue] = useState<string>("");
-  const items = mockTools.map(tool => ({ id: tool.name, name: tool.name }));
   const [selectedQuantities, setSelectedQuantities] = useState<{ [key: string]: number }>({});
   const [error, setError] = useState<string>('');
   const [errorCreation, setErrorCreation] = useState<string>('');
@@ -70,44 +44,6 @@ const CreateWorkSitePage: React.FC = () => {
   const [title, setTitle] = useState('');
 
 
-  const handleStartTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setStartTime(e.target.value);
-  };
-
-  const handleEndTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEndTime(e.target.value);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (new Date(startTime) > new Date(endTime)) {
-      setError('La date de début doit être antérieure à la date de fin.');
-      setIsInitialSelection(true);
-      return;
-    }
-    if (startTime === '' || endTime === '') {
-      setError('Selectionnez une date de début et une date de fin de chantier');
-      setIsInitialSelection(true);
-      return;
-    }
-
-    setSelectedStaff([]);
-    setSelectedWorksiteChief(undefined);
-    setSelectedTools([]);
-    setSelectedQuantities({});
-
-    setError('')
-    //todo faire le branchement
-    try {
-      setAvailableStaff(mockStaff);
-      setAvailableWorksiteChief(mockWorksiteChief);
-      setTools(mockTools);
-      setIsInitialSelection(false);
-    } catch (error) {
-      console.error('Erreur lors de la requête au backend :', error);
-    }
-  };
 
   const handleCreateWorkSite = async () => {
     if (!startTime || !endTime || !selectedStaff.length || !selectedTools.length || !title) {
@@ -133,11 +69,9 @@ const CreateWorkSitePage: React.FC = () => {
       title: ''
     };
 
-    try {
-      console.log('WorkSite créé avec succès :', workSite);
-    } catch (error) {
-      console.error('Erreur lors de la création du WorkSite :', error);
-    }
+    //todo brancher le POST
+    navigate("/listeStatus")
+
   };
 
   const handleSelectStaff = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -159,9 +93,9 @@ const CreateWorkSitePage: React.FC = () => {
 
   const handleRandomStaffSelection = () => {
     //TODO rendre la selection aléatoire ?
-    const selectedStaff = mockStaff.slice(0, numRandomStaff);
+    const selectedStaff = availableStaff.slice(0, numRandomStaff);
     setSelectedStaff(selectedStaff);
-    setAvailableStaff(mockStaff);
+    setAvailableStaff(availableStaff);
     setAvailableStaff(prevStaff => prevStaff.filter(
       (staff) => !selectedStaff.some((user) => user.id === staff.id)
     ));
@@ -218,347 +152,430 @@ const CreateWorkSitePage: React.FC = () => {
     }
   };
 
+  const handlePopUp = () => {
+    setModalShow(true);
+  }
+
+
+  const handleSearchDispo = async () => {
+
+    if (new Date(startTime) > new Date(endTime)) {
+      setError('La date de début doit être antérieure à la date de fin.');
+      setIsInitialSelection(true);
+      return;
+    }
+    if (startTime === '' || endTime === '') {
+      setError('Selectionnez une date de début et une date de fin de chantier');
+      setIsInitialSelection(true);
+      return;
+    }
+    setError('')
+
+    setSelectedStaff([]);
+    setSelectedWorksiteChief(undefined);
+    setSelectedTools([]);
+    setSelectedQuantities({});
+
+    const timeLine: TimeLine = {
+      begin: new Date(startTime),
+      end: new Date(endTime)
+    };
+
+    const responseWorksiteChief = await MainApi.getInstance().getWorksiteChiefAvaibilities(timeLine) as User[]
+    const responseStaff = await MainApi.getInstance().getStaffAvaibilities(timeLine) as User[]
+    const responseTool = await MainApi.getInstance().getToolAvaibilities(timeLine)
+
+    const tools: Tool[] = [];
+
+    for (const key in responseTool) {
+      if (Object.prototype.hasOwnProperty.call(responseTool, key)) {
+        const tool: Tool = {
+          name: getToolName(key),
+          quantity: responseTool[key],
+        };
+        tools.push(tool);
+      }
+    }
+
+
+    console.log("azfzafzfsqwfdsg", tools)
+
+
+    console.log("responseStaff", responseStaff)
+    console.log("responseWorksiteChief", responseWorksiteChief)
+    console.log("responseTool", responseTool)
+
+    setAvailableStaff(responseStaff);
+    setAvailableWorksiteChief(responseWorksiteChief);
+    setAvailableTools(tools);
+
+
+
+    setIsInitialSelection(false);
+  }
+
+  useEffect(() => {
+    console.log("responseStaff", availableStaff)
+    console.log("responseWorksiteChief", availableWorksiteChief)
+    console.log("responseTool", availableTools)
+  }, [availableStaff, availableWorksiteChief, availableTools])
 
   return (
 
     <Container>
       <Row className="mb-5"></Row>
-      <Tabs
-        activeKey={activeTab}
-        onSelect={(k) => setActiveTab(k || 'date')}
-        id="controlled-tab-example"
-        className="mb-3 flex-grow-1"
-        style = {{ width: '100%'}}
-        >
-        
-        <Tab eventKey="date" title="Sélectionner une période" style={{ width: '100%' }}>
-          <Row className="mb-3"></Row>
-          <Row className="mb-5">
-            <h2>Selectionner une période pour le chantier :</h2>
-          </Row>
-          <Row className="justify-content-md-center">
-            <Col md="auto">
-              <Form onSubmit={handleSubmit}>
-                <Row>
-                  <Col>
-                    <Form.Group controlId="startTime">
-                      <Form.Label>Début du chantier</Form.Label>
-                      <Form.Control
-                        type="datetime-local"
-                        value={startTime}
-                        onChange={e => setStartTime(e.target.value)}
-                        style={{ height: '50px', width: '600px', fontSize: '20px', cursor: 'pointer' }}
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col>
-                    <Form.Group controlId="endTime">
-                      <Form.Label>Fin du chantier</Form.Label>
-                      <Form.Control
-                        type="datetime-local"
-                        value={endTime}
-                        onChange={e => setEndTime(e.target.value)}
-                        style={{ height: '50px', width: '600px', fontSize: '20px', cursor: 'pointer' }}
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
-                <Row className="mb-5"></Row>
-                <Row className="mb-5" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                  <Button variant="primary" type="submit" style={{ height: '50px', width: '300px', fontSize: '20px' }}>
-                    {isInitialSelection ? 'Sélectionner' : 'Modifier'}
-                  </Button>
-                </Row>
-                <Row className="text-center">
-                  {error && <Alert variant="danger">{error}</Alert>}
-                </Row>
-              </Form>
-            </Col>
-          </Row>
+      <Row>
+        <Col xs={11}>
+          <Tabs
+            activeKey={activeTab}
+            onSelect={(k) => setActiveTab(k || 'date')}
+            id="controlled-tab-example"
+            className="mb-3 flex-grow-1"
+            style={{ width: '100%' }}
+          >
 
-          <Row className="mb-5">
-            <h2>Donner un titre pour le chantier :</h2>
-          </Row>
-          <Form.Group as={Col} controlId="formTitreChantier">
-            <Form.Control 
-              style={{width:"35%"}}
-              type="text"
-              placeholder="Entrez un titre"
-              value={title}
-              onChange={e => setTitle(e.target.value)}
-            />
-          </Form.Group>
-          <Row className="mb-5"></Row>
-        </Tab>
-        
-        {!isInitialSelection && (
-
-          <Tab eventKey="personnel" title={'Sélectionner le personnel'} style={{ width: '100%' }}>
-            <Row className="mb-3"></Row>
-            <Row className="mb-5">
-              <h2>Selectionner le personnel nécessaire au chantier :</h2>
-            </Row>
-            <Container style={{ height: '300px' }}>
-              <Row className="mt-3">
-                <Col xs={5}>
-                  <h4>Liste des chefs de chantier disponibles :</h4>
-                  <Form.Select onChange={handleSelectWorksiteChief}>
-                    <option value="">Sélectionner un chef de chantier</option>
-                    {availableWorksiteChief.map(user => (
-                      <option key={user.id} value={user.id}>{user.firstName} {user.lastName}</option>
-                    ))}
-                  </Form.Select>
-                </Col>
-                <Col xs={1}></Col>
-                {selectedWorksiteChief && (
-                  <Col key={selectedWorksiteChief.id} xs={4} className="mb-3">
-                    <Card>
-                      <Container style={{ backgroundColor: 'lightgreen' }}>
-                        <Card.Body className="text-center">
-                          <Card.Title>{selectedWorksiteChief.firstName} {selectedWorksiteChief.lastName}</Card.Title>
-                          <Card.Text>
-                            {selectedWorksiteChief.role}
-                          </Card.Text>
-                        </Card.Body>
-                      </Container>
-                      <hr className="m-0" />
-                      <Container style={{ backgroundColor: 'lightgrey' }}>
-                        <Card.Body>
-                          <Card.Text>
-                            <Envelope /> : {selectedWorksiteChief.email}
-                            <br />
-                            <Telephone /> : {selectedWorksiteChief.phoneNumber}
-                          </Card.Text>
-                        </Card.Body>
-                        <Card.Body className="text-center">
-                          <Button variant="danger" style={{ height: '40px', width: '80' }} onClick={() => handleRemoveSelectedWorksiteChief(selectedWorksiteChief.id)}>
-                            Retirer
-                          </Button>
-                        </Card.Body>
-                      </Container>
-                    </Card>
-                  </Col>
-                )}
+            <Tab eventKey="date" title="Sélectionner une période" >
+              <Row className="mb-3"></Row>
+              <Row className="mb-5">
+                <h2>Selectionner une période pour le chantier :</h2>
               </Row>
-            </Container>
-            <Container style={{ height: '300px' }}>
-              <Row className="mt-3">
-                <Col xs={5}>
-                  <h4>Liste des employés disponibles :</h4>
-                  <Form.Select onChange={handleSelectStaff}>
-                    <option value="">Sélectionner un employé</option>
-                    {availableStaff.map(user => (
-                      <option key={user.id} value={user.id}>{user.firstName} {user.lastName}</option>
-                    ))}
-                  </Form.Select>
-                </Col>
-                <Col xs={1}></Col>
-                <Col xs={3} className="d-flex justify-content-between align-items-end">
-                  <div>
-                    <h4>Sélection aléatoire :</h4>
-                    <Form.Group controlId="numRandomStaff" style={{ width: '200px' }}>
-                      <Form.Control
-                        type="number"
-                        min={1}
-                        value={numRandomStaff}
-                        onChange={(e) => setNumRandomStaff(parseInt(e.target.value))}
-                      />
-                    </Form.Group>
-                  </div>
-                  <Button variant="primary" onClick={handleRandomStaffSelection}><Search /></Button>
-                </Col>
-                <Row className="mb-5"></Row>
-                <Row className="mb-5"></Row>
-
-                {selectedStaff.length > 0 && (
+              <Row className="justify-content-md-center">
+                <Col md="auto">
                   <Container>
                     <Row>
-                      {selectedStaff.map((user) => (
-                        <Col key={user.id} xs={4} className="mb-3">
-                          <Card>
-                            <Container style={{ backgroundColor: 'lightgreen' }}>
-                              <Card.Body className="text-center">
-                                <Card.Title>{user.firstName} {user.lastName}</Card.Title>
-                                <Card.Text>
-                                  {user.role}
-                                </Card.Text>
-                              </Card.Body>
-                            </Container>
-                            <hr className="m-0" />
-                            <Container style={{ backgroundColor: 'lightgrey' }}>
-                              <Card.Body>
-                                <Card.Text>
-                                  <Envelope /> : {user.email}
-                                  <br />
-                                  <Telephone /> : {user.phoneNumber}
-                                </Card.Text>
-                              </Card.Body>
-                              <Card.Body className="text-center">
-                                <Button variant="danger" style={{ height: '40px', width: '80' }} onClick={() => handleRemoveSelectedStaff(user.id)}>
-                                  Retirer
-                                </Button>
-                              </Card.Body>
-                            </Container>
-                          </Card>
-                        </Col>
-                      ))}
+                      <Col>
+                        <Form.Group controlId="startTime">
+                          <Form.Label>Début du chantier</Form.Label>
+                          <Form.Control
+                            type="datetime-local"
+                            value={startTime}
+                            onChange={e => setStartTime(e.target.value)}
+                            style={{ height: '50px', width: '500px', fontSize: '20px', cursor: 'pointer' }}
+                          />
+                        </Form.Group>
+                      </Col>
+                      <Col>
+                        <Form.Group controlId="endTime">
+                          <Form.Label>Fin du chantier</Form.Label>
+                          <Form.Control
+                            type="datetime-local"
+                            value={endTime}
+                            onChange={e => setEndTime(e.target.value)}
+                            style={{ height: '50px', width: '500px', fontSize: '20px', cursor: 'pointer' }}
+                          />
+                        </Form.Group>
+                      </Col>
+                    </Row>
+                    <Row className="mb-5"></Row>
+                    <Row className="mb-5" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                      <Button onClick={async () => await handleSearchDispo()} variant="primary" style={{ height: '50px', width: '300px', fontSize: '20px' }}>
+                        {isInitialSelection ? 'Sélectionner' : 'Modifier'}
+                      </Button>
+                    </Row>
+                    <Row className="text-center">
+                      {error && <Alert variant="danger">{error}</Alert>}
                     </Row>
                   </Container>
-                )}
-                <Row className="mb-5"></Row>
+                </Col>
               </Row>
-            </Container>
-          </Tab>
-        )}
-        {!isInitialSelection && (
-          <Tab eventKey="outilage" title={'Sélectionner l\'outillage'} style={{ width: '100%' }}>
-            <Row className="mb-3"></Row>
-            <Row className="mb-5">
-              <h2>Selectionner les outils nécessaires au chantier :</h2>
-            </Row>
-            <ReactSearchAutocomplete
-              items={items}
-              onSearch={handleOnSearch}
-              onSelect={handleOnSelect}
-              autoFocus
-              placeholder="Filtrer par nom d'outils"
-            />
-            <Row className="mb-5"></Row>
-            {selectedTools.length > 0 && (
-              <Container>
-                <Row className="mb-3">
-                  <h4>Outils sélectionnés :</h4>
+
+              <Row className="mb-5">
+                <h2>Donner un titre pour le chantier :</h2>
+              </Row>
+              <Form.Group as={Col} controlId="formTitreChantier">
+                <Form.Control
+                  style={{ width: "35%" }}
+                  type="text"
+                  placeholder="Entrez un titre"
+                  value={title}
+                  onChange={e => setTitle(e.target.value)}
+                />
+              </Form.Group>
+              <Row className="mb-5"></Row>
+            </Tab>
+
+            {!isInitialSelection && (
+
+              <Tab eventKey="personnel" title={'Sélectionner le personnel'} style={{ width: '100%' }}>
+                <Row className="mb-3"></Row>
+                <Row className="mb-5">
+                  <h2>Selectionner le personnel nécessaire au chantier :</h2>
                 </Row>
-                <Row>
-                  {selectedTools.map((toolName, index) => {
-                    const selectedTool = mockTools.find(tool => tool.name === toolName);
-                    return (
-                      <Col key={index} xs={4} className="mb-3">
+                <Container style={{ height: '300px' }}>
+                  <Row className="mt-3">
+                    <Col xs={5}>
+                      <h4>Liste des chefs de chantier disponibles :</h4>
+                      <Form.Select onChange={handleSelectWorksiteChief}>
+                        <option value="">Sélectionner un chef de chantier</option>
+                        {availableWorksiteChief.map(user => (
+                          <option key={user.id} value={user.id}>{user.firstName} {user.lastName}</option>
+                        ))}
+                      </Form.Select>
+                    </Col>
+                    <Col xs={1}></Col>
+                    {selectedWorksiteChief && (
+                      <Col key={selectedWorksiteChief.id} xs={4} className="mb-3">
                         <Card>
                           <Container style={{ backgroundColor: 'lightgreen' }}>
                             <Card.Body className="text-center">
-                              <Card.Title>{toolName}</Card.Title>
-                              {selectedTool && (
-                                <Card.Text>
-                                  Quantité disponible : {selectedTool.quantity}
-                                </Card.Text>
-                              )}
+                              <Card.Title>{selectedWorksiteChief.firstName} {selectedWorksiteChief.lastName}</Card.Title>
+                              <Card.Text>
+                                {selectedWorksiteChief.role}
+                              </Card.Text>
                             </Card.Body>
                           </Container>
+                          <hr className="m-0" />
                           <Container style={{ backgroundColor: 'lightgrey' }}>
-                            <Card.Body className="text-center">
-                              Quantité sélectionnée : {selectedQuantities[toolName]}
-                            </Card.Body>
                             <Card.Body>
-                              {selectedTool && (
-                                <Row className="align-items-center" >
-
-                                  <Col style={{width:"10%", display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                                    <Button variant="secondary" onClick={() => handleDecreaseQuantity(toolName)} style={{ width: '30px', height: '30px' ,display: 'flex', justifyContent: 'center', alignItems: 'center', paddingBottom:9}}>-</Button>
-                                  </Col>
-                                  <Col style={{ display: 'flex', alignItems: 'center', width:"80%"}}>
-
-                                    <Slider
-                                      axis="x"
-                                      x={selectedQuantities[toolName] || 1} // Utiliser la quantité sélectionnée pour l'outil spécifique
-                                      xmin={1}
-                                      xmax={selectedTool.quantity}
-                                      onChange={(pos) => handleQuantityChange(toolName, pos.x)} // Passer le nom de l'outil pour identifier quelle quantité changer
-                                    />
-
-                                  </Col>
-                                  <Col style={{width:"10%", display: 'flex', flexDirection:"row",justifyContent: 'center', alignItems: 'center', textAlign:"center"}}>
-                                    <Button variant="secondary" onClick={() => handleIncreaseQuantity(toolName, selectedTool.quantity)} style={{width: '30px', height: '30px', display: 'flex', justifyContent: 'center', alignItems: 'center', paddingBottom:9}}>+</Button>
-                                  </Col>
-
-                                </Row>
-                              )}
+                              <Card.Text>
+                                <Envelope /> : {selectedWorksiteChief.email}
+                                <br />
+                                <Telephone /> : {selectedWorksiteChief.phoneNumber}
+                              </Card.Text>
                             </Card.Body>
-
                             <Card.Body className="text-center">
-                              <Button variant="danger" style={{ height: '40px', width: '80' }} onClick={() => handleRemoveSelectedTool(toolName)}>
+                              <Button variant="danger" style={{ height: '40px', width: '80' }} onClick={() => handleRemoveSelectedWorksiteChief(selectedWorksiteChief.id)}>
                                 Retirer
                               </Button>
                             </Card.Body>
                           </Container>
                         </Card>
                       </Col>
-                    );
-                  })}
-                </Row>
-              </Container>
+                    )}
+                  </Row>
+                </Container>
+                <Container style={{ height: '300px' }}>
+                  <Row className="mt-3">
+                    <Col xs={5}>
+                      <h4>Liste des employés disponibles :</h4>
+                      <Form.Select onChange={handleSelectStaff}>
+                        <option value="">Sélectionner un employé</option>
+                        {availableStaff.map(user => (
+                          <option key={user.id} value={user.id}>{user.firstName} {user.lastName}</option>
+                        ))}
+                      </Form.Select>
+                    </Col>
+                    <Col xs={1}></Col>
+                    <Col xs={3} className="d-flex justify-content-between align-items-end">
+                      <div>
+                        <h4>Sélection aléatoire :</h4>
+                        <Form.Group controlId="numRandomStaff" style={{ width: '200px' }}>
+                          <Form.Control
+                            type="number"
+                            min={1}
+                            value={numRandomStaff}
+                            onChange={(e) => setNumRandomStaff(parseInt(e.target.value))}
+                          />
+                        </Form.Group>
+                      </div>
+                      <Button variant="primary" onClick={handleRandomStaffSelection}><Search /></Button>
+                    </Col>
+                    <Row className="mb-5"></Row>
+                    <Row className="mb-5"></Row>
+
+                    {selectedStaff.length > 0 && (
+                      <Container>
+                        <Row>
+                          {selectedStaff.map((user) => (
+                            <Col key={user.id} xs={4} className="mb-3">
+                              <Card>
+                                <Container style={{ backgroundColor: 'lightgreen' }}>
+                                  <Card.Body className="text-center">
+                                    <Card.Title>{user.firstName} {user.lastName}</Card.Title>
+                                    <Card.Text>
+                                      {user.role}
+                                    </Card.Text>
+                                  </Card.Body>
+                                </Container>
+                                <hr className="m-0" />
+                                <Container style={{ backgroundColor: 'lightgrey' }}>
+                                  <Card.Body>
+                                    <Card.Text>
+                                      <Envelope /> : {user.email}
+                                      <br />
+                                      <Telephone /> : {user.phoneNumber}
+                                    </Card.Text>
+                                  </Card.Body>
+                                  <Card.Body className="text-center">
+                                    <Button variant="danger" style={{ height: '40px', width: '80' }} onClick={() => handleRemoveSelectedStaff(user.id)}>
+                                      Retirer
+                                    </Button>
+                                  </Card.Body>
+                                </Container>
+                              </Card>
+                            </Col>
+                          ))}
+                        </Row>
+                      </Container>
+                    )}
+                    <Row className="mb-5"></Row>
+                  </Row>
+                </Container>
+              </Tab>
             )}
-          </Tab>
-        )}
-        {!isInitialSelection && (
-          <Tab eventKey="creation" title="Récapitulatif" style={{ width: '100%' }}>
-            <Container className="MainContainer">
-              
-              <Container className="TitlePartContainer">
+            {!isInitialSelection && (
+              <Tab eventKey="outilage" title={'Sélectionner l\'outillage'} style={{ width: '100%' }}>
                 <Row className="mb-3"></Row>
                 <Row className="mb-5">
-                  <h2>Récapitulatif de la création de chantier</h2>
+                  <h2>Selectionner les outils nécessaires au chantier :</h2>
                 </Row>
-              </Container>
-              
-              <Container className="BodyPartContainer" style={{ display:"flex", flexDirection:"row"}}>
-                  <Row style={{ display:"flex", width:"20%"}}>
-                    <Row className="mb-5" style={{ fontSize: '20px' }}>
-                      Titre : {title ? `${title}` : 'Aucun' }
+                <ReactSearchAutocomplete
+                  items={availableTools ? availableTools.map(tool => ({ id: tool.name, name: tool.name })) : []}
+                  onSearch={handleOnSearch}
+                  onSelect={handleOnSelect}
+                  autoFocus
+                  placeholder="Filtrer par nom d'outils"
+                />
+                <Row className="mb-5"></Row>
+                {selectedTools.length > 0 && (
+                  <Container>
+                    <Row className="mb-3">
+                      <h4>Outils sélectionnés :</h4>
                     </Row>
-                    <Row className="mb-5" style={{ fontSize: '20px' }}>
-                      Chef de chantier  : {selectedWorksiteChief ? `${selectedWorksiteChief.firstName} ${selectedWorksiteChief.lastName}` : 'Aucun'}
+                    <Row>
+                      {selectedTools.map((toolName, index) => {
+                        const selectedTool = availableTools.find(tool => tool.name === toolName);
+                        return (
+                          <Col key={index} xs={4} className="mb-3">
+                            <Card>
+                              <Container style={{ backgroundColor: 'lightgreen' }}>
+                                <Card.Body className="text-center">
+                                  <Card.Title>{toolName}</Card.Title>
+                                  {selectedTool && (
+                                    <Card.Text>
+                                      Quantité disponible : {selectedTool.quantity}
+                                    </Card.Text>
+                                  )}
+                                </Card.Body>
+                              </Container>
+                              <Container style={{ backgroundColor: 'lightgrey' }}>
+                                <Card.Body className="text-center">
+                                  Quantité sélectionnée : {selectedQuantities[toolName]}
+                                </Card.Body>
+                                <Card.Body>
+                                  {selectedTool && (
+                                    <Row className="align-items-center" >
+
+                                      <Col style={{ width: "10%", display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                        <Button variant="secondary" onClick={() => handleDecreaseQuantity(toolName)} style={{ width: '30px', height: '30px', display: 'flex', justifyContent: 'center', alignItems: 'center', paddingBottom: 9 }}>-</Button>
+                                      </Col>
+                                      <Col style={{ display: 'flex', alignItems: 'center', width: "80%" }}>
+
+                                        <Slider
+                                          axis="x"
+                                          x={selectedQuantities[toolName] || 1} // Utiliser la quantité sélectionnée pour l'outil spécifique
+                                          xmin={1}
+                                          xmax={selectedTool.quantity}
+                                          onChange={(pos) => handleQuantityChange(toolName, pos.x)} // Passer le nom de l'outil pour identifier quelle quantité changer
+                                        />
+
+                                      </Col>
+                                      <Col style={{ width: "10%", display: 'flex', flexDirection: "row", justifyContent: 'center', alignItems: 'center', textAlign: "center" }}>
+                                        <Button variant="secondary" onClick={() => handleIncreaseQuantity(toolName, selectedTool.quantity)} style={{ width: '30px', height: '30px', display: 'flex', justifyContent: 'center', alignItems: 'center', paddingBottom: 9 }}>+</Button>
+                                      </Col>
+
+                                    </Row>
+                                  )}
+                                </Card.Body>
+
+                                <Card.Body className="text-center">
+                                  <Button variant="danger" style={{ height: '40px', width: '80' }} onClick={() => handleRemoveSelectedTool(toolName)}>
+                                    Retirer
+                                  </Button>
+                                </Card.Body>
+                              </Container>
+                            </Card>
+                          </Col>
+                        );
+                      })}
                     </Row>
-                  </Row>
-                  <div style={{ display:"flex", width:"20%"}}></div>
-                  <div style={{ display:"flex", flexDirection:"row" , width:"60%"}}>
-                      
-                    <div className="border border-dark border-3 container_Employees" style={{display:"flex", flexDirection:"column", width:"45%"}}>
-                      
-                      <div style={{ alignItems:"center" , justifyContent:"center"}}>
-                        <div style={{fontSize: 15, fontWeight: "bold"}}>Employés sélectionnés :</div>
+                  </Container>
+                )}
+              </Tab>
+            )}
+            {!isInitialSelection && (
+              <Tab eventKey="creation" title="Récapitulatif" style={{ width: '100%' }}>
+                <Container className="MainContainer">
+
+                  <Container className="TitlePartContainer">
+                    <Row className="mb-3"></Row>
+                    <Row className="mb-5">
+                      <h2>Récapitulatif de la création de chantier</h2>
+                    </Row>
+                  </Container>
+
+                  <Container className="BodyPartContainer" style={{ display: "flex", flexDirection: "row" }}>
+                    <Row style={{ display: "flex", width: "20%" }}>
+                      <Row className="mb-5" style={{ fontSize: '20px' }}>
+                        Titre : {title ? `${title}` : 'Aucun'}
+                      </Row>
+                      <Row className="mb-5" style={{ fontSize: '20px' }}>
+                        Chef de chantier  : {selectedWorksiteChief ? `${selectedWorksiteChief.firstName} ${selectedWorksiteChief.lastName}` : 'Aucun'}
+                      </Row>
+                    </Row>
+                    <div style={{ display: "flex", width: "20%" }}></div>
+                    <div style={{ display: "flex", flexDirection: "row", width: "60%" }}>
+
+                      <div className="border border-dark border-3 container_Employees" style={{ display: "flex", flexDirection: "column", width: "45%" }}>
+
+                        <div style={{ alignItems: "center", justifyContent: "center" }}>
+                          <div style={{ fontSize: 15, fontWeight: "bold" }}>Employés sélectionnés :</div>
+                        </div>
+                        <div>
+                          <div>
+                            {selectedStaff.map(user => (
+                              <li key={user.id}>{user.firstName} {user.lastName}</li>
+                            ))}
+                          </div>
+                        </div>
+
                       </div>
-                      <div>
-                       <div>
-                          {selectedStaff.map(user => (
-                            <li key={user.id}>{user.firstName} {user.lastName}</li>
+
+                      <div className="blankDiv" style={{ display: "flex", width: "10%" }}></div>
+
+                      <div className="border border-dark border-3" style={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", width: "45%" }}>
+                        <div className="mb-3">Outils sélectionnés :</div>
+                        <div>
+                          {selectedTools.map(toolName => (
+                            <li key={toolName}>{toolName} - Quantité : {selectedQuantities[toolName]}</li>
                           ))}
                         </div>
                       </div>
-                      
                     </div>
-                    
-                    <div className="blankDiv" style={{ display:"flex", width:"10%"}}></div>
-                    
-                    <div className="border border-dark border-3" style={{display:"flex", alignItems:"center", justifyContent:"center", flexDirection:"column", width:"45%"}}>
-                      <div className="mb-3">Outils sélectionnés :</div>
-                      <div>
-                        {selectedTools.map(toolName => (
-                          <li key={toolName}>{toolName} - Quantité : {selectedQuantities[toolName]}</li>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-              </Container>
+                  </Container>
 
-              <Container className="FooterPartContainer">
-                <Row className="mb-5"></Row>
-                <Row className="mb-5"></Row>
-                <Row>
-                  <Col className="text-center mt-3">
-                    <Button variant="success" onClick={handleCreateWorkSite} style={{ fontSize: '20px' }}>
-                      Créer le chantier
-                    </Button>
-                    <Row className="mb-3"></Row>
-                    {errorCreation && <Alert variant="danger">{errorCreation}</Alert>}
-                  </Col>
-                </Row>
-              </Container>
-            </Container>
-          </Tab>
+                  <Container className="FooterPartContainer">
+                    <Row className="mb-5"></Row>
+                    <Row className="mb-5"></Row>
+                    <Row>
+                      <Col className="text-center mt-3">
+                        <Button variant="success" onClick={handleCreateWorkSite} style={{ fontSize: '20px' }}>
+                          Créer le chantier
+                        </Button>
+                        <Row className="mb-3"></Row>
+                        {errorCreation && <Alert variant="danger">{errorCreation}</Alert>}
+                      </Col>
+                    </Row>
+                  </Container>
+                </Container>
+              </Tab>
 
-        )}
-      </Tabs>
+            )}
+          </Tabs>
+        </Col>
+        <Col xs={1}>
+          <Button onClick={handlePopUp} style={{ fontSize: '20px' }}>
+          Consulter Demande de chantier
+          </Button>
+        </Col>
+      </Row>
+
+      <WorkSiteRequestPopUp
+            show={modalShow}
+            onHide={() => setModalShow(false)}
+            worksiteRequest={worksiteRequestData!}//todo checker le !
+            showButtons={false}
+          />
     </Container>
 
   );
