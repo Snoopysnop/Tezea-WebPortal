@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Table, InputGroup, Button, Form, Dropdown } from 'react-bootstrap';
-import { Category, WorkSite, WorkSiteStatus, WorkSiteRequest, Customer, WorkSiteRequestStatus } from '../api/Model';
+import { Category, WorkSite, WorkSiteStatus, WorkSiteRequest, Emergency, Customer, WorkSiteRequestStatus } from '../api/Model';
 import { WorkSiteRequestJson, CustomerJson } from '../api/ModelJson';
 
 import '../App.css'
@@ -10,11 +10,20 @@ import WorkSiteRequestPopUp from '../components/WorkSiteRequestPopUp';
 import WorkSiteComponent from './WorkSiteComponent';
 import MainApi from "../api/MainApi"
 import WorkSiteRequestComponent from './WorkSiteRequestComponent';
-import { useLocation } from 'react-router-dom';
-import { getStatusWorksiteRequest } from '../common/utils/utils';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { getCivility, getCivilityJsonFormat, getCustomerStatus, getCustomerStatusJsonFormat, getEmergency, getIncidentLevel, getStatusWorksiteRequest } from '../common/utils/utils';
 
 const WorkSiteListRequestPage: React.FC = () => {
 
+  const location = useLocation();
+
+  const [dataFetched, setDataFetched] = useState<WorkSiteRequest[]>([]);
+
+  useEffect(() => {
+    if(location.state) {
+    setDataFetched((location.state as any).worksiteRequestMapper as WorkSiteRequest[])
+    }
+  }, [location.state])
 
 
   const [filterValue, setFilterValue] = useState<string>("");
@@ -25,6 +34,7 @@ const WorkSiteListRequestPage: React.FC = () => {
   const [checkboxes, setCheckboxes] = useState<{ [key in WorkSiteRequestStatus]?: boolean }>({});
 
   const handleStatusChange = (status: WorkSiteRequestStatus) => {
+    console.log("appel")
     const updatedCheckboxes = { ...checkboxes, [status]: !checkboxes[status] };
     setCheckboxes(updatedCheckboxes);
 
@@ -37,7 +47,6 @@ const WorkSiteListRequestPage: React.FC = () => {
 
   const [filteredTasks, setFilteredTasks] = useState<WorkSiteRequest[]>([]);
 
-  const [dataFetched, setDataFetched] = useState<WorkSiteRequest[] | undefined>(undefined);
 
   const handleListWorksiteRequest = async () => {
 
@@ -52,7 +61,7 @@ const WorkSiteListRequestPage: React.FC = () => {
       workSites: undefined,
       serviceType: undefined,
       description: worksiteRequestJson.description,
-      emergency: worksiteRequestJson.emergency,
+      emergency: worksiteRequestJson.emergency ? getEmergency(worksiteRequestJson.emergency) : undefined,
       title: worksiteRequestJson.title,
       category: undefined,
       removal: worksiteRequestJson.removal,
@@ -60,12 +69,13 @@ const WorkSiteListRequestPage: React.FC = () => {
       removalRecycling: worksiteRequestJson.removalRecycling,
       chronoQuote: worksiteRequestJson.chronoQuote,
       estimatedDate: worksiteRequestJson.estimatedDate ? new Date(worksiteRequestJson.estimatedDate) : new Date(),
-      requestStatus: worksiteRequestJson.requestStatus ? getStatusWorksiteRequest(worksiteRequestJson.requestStatus) : WorkSiteRequestStatus.Standby,
+      requestStatus: worksiteRequestJson.status ? getStatusWorksiteRequest(worksiteRequestJson.status) : WorkSiteRequestStatus.ToComplete,
       weightEstimate: worksiteRequestJson.weightEstimate,
       volumeEstimate: worksiteRequestJson.volumeEstimate,
       provider: worksiteRequestJson.provider,
       tezeaAffectation: worksiteRequestJson.tezeaAffectation,
     }));
+
     setDataFetched(worksiteRequestMapper);
   }
 
@@ -82,13 +92,44 @@ const WorkSiteListRequestPage: React.FC = () => {
   const handleTaskClick = async (id: number) => {
     const responseWorksiteRequest = await MainApi.getInstance().getWorksiteRequestbyId(id) as WorkSiteRequestJson;
     const responseCustomer = await MainApi.getInstance().getCustomerbyId(responseWorksiteRequest.customer!) as CustomerJson;
-    const worksiteRequestMapper = responseWorksiteRequest as WorkSiteRequest;
-    const customerMapper = responseCustomer as Customer;
-    worksiteRequestMapper.customer = customerMapper;
 
-    const dateString = responseWorksiteRequest.estimatedDate!; //todo ! ?????
-    const date = new Date(dateString);
-    worksiteRequestMapper.estimatedDate = date;
+    const customerMapper : Customer = {
+      id: responseCustomer.id,
+      firstName: responseCustomer.firstName,
+      lastName: responseCustomer.lastName,
+      civility: responseCustomer.civility ? getCivility(responseCustomer.civility) : undefined,
+      email: responseCustomer.email,
+      phoneNumber: responseCustomer.phoneNumber,
+      address: responseCustomer.address,
+      city: responseCustomer.city,
+      postalCode: responseCustomer.postalCode,
+      status: responseCustomer.status ? getCustomerStatus(responseCustomer.status) : undefined,
+      company: responseCustomer.company,
+    }
+
+    const worksiteRequestMapper: WorkSiteRequest = {
+      id: responseWorksiteRequest.id,
+      concierge: undefined,
+      siteChief: undefined,
+      customer: customerMapper,
+      city: responseWorksiteRequest.city,
+      workSites: undefined,
+      serviceType: undefined,
+      description: responseWorksiteRequest.description,
+      emergency: responseWorksiteRequest.emergency ? getEmergency(responseWorksiteRequest.emergency) : undefined,
+      title: responseWorksiteRequest.title,
+      category: undefined,
+      removal: responseWorksiteRequest.removal,
+      delivery: responseWorksiteRequest.delivery,
+      removalRecycling: responseWorksiteRequest.removalRecycling,
+      chronoQuote: responseWorksiteRequest.chronoQuote,
+      estimatedDate: responseWorksiteRequest.estimatedDate ? new Date(responseWorksiteRequest.estimatedDate) : new Date(),
+      requestStatus: responseWorksiteRequest.status ? getStatusWorksiteRequest(responseWorksiteRequest.status) : WorkSiteRequestStatus.ToComplete,
+      weightEstimate: responseWorksiteRequest.weightEstimate,
+      volumeEstimate: responseWorksiteRequest.volumeEstimate,
+      provider: responseWorksiteRequest.provider,
+      tezeaAffectation: responseWorksiteRequest.tezeaAffectation,
+    }
 
     setWorksiteRequestData(worksiteRequestMapper);
 
@@ -115,11 +156,9 @@ const WorkSiteListRequestPage: React.FC = () => {
 
   const handleOnSearch = (string: any, results: any) => {
     setFilterValue(string);
-    console.log(string, results);
   };
 
   const handleOnSelect = (item: any) => {
-    console.log(item);
     setFilterValue(item.name);
   };
 
@@ -148,17 +187,16 @@ const WorkSiteListRequestPage: React.FC = () => {
                       Filtrer
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
-                      {Object.values(WorkSiteRequestStatus)
-                        .map((status, index) => (
-                          <Dropdown.Item key={index}>
-                            <Form.Check
-                              type="checkbox"
-                              label={status}
-                              checked={!!checkboxes[status]}
-                              onChange={() => handleStatusChange(status)}
-                            />
-                          </Dropdown.Item>
-                        ))}
+                      {Object.values(WorkSiteRequestStatus).map((status, index) => (
+                        <Dropdown.Item key={index} onClick={() => handleStatusChange(status)}>
+                          <Form.Check
+                            type="checkbox"
+                            label={status}
+                            checked={!!checkboxes[status]}
+                            onChange={() => { }}
+                          />
+                        </Dropdown.Item>
+                      ))}
                     </Dropdown.Menu>
                   </Dropdown>
                 </Col>
@@ -166,7 +204,7 @@ const WorkSiteListRequestPage: React.FC = () => {
             </Col>
           </Row>
           <Container className="container-xxl mt-4">
-            <Table responsive>
+            <Table>
               <thead>
                 <tr>
                   {selectedStatus.includes(WorkSiteRequestStatus.ToComplete) && <th className="col-lg-2">{WorkSiteRequestStatus.ToComplete}</th>}
@@ -187,7 +225,7 @@ const WorkSiteListRequestPage: React.FC = () => {
                             name={task.title ?? ''}
                             date={task.estimatedDate?.toLocaleString() ?? ''}
                             city={task.city ?? ''}
-                            status={task.requestStatus ?? WorkSiteRequestStatus.Archive}
+                            status={task.requestStatus ?? WorkSiteRequestStatus.ToComplete}
                             category={Category.CreaPalette}
                             onClick={() => handleTaskClick(Number(task.id))}
                           />
@@ -206,7 +244,7 @@ const WorkSiteListRequestPage: React.FC = () => {
                             name={task.title ?? ''}
                             date={task.estimatedDate?.toLocaleString() ?? ''}
                             city={task.city ?? ''}
-                            status={task.requestStatus ?? WorkSiteRequestStatus.Archive}
+                            status={task.requestStatus ?? WorkSiteRequestStatus.Standby}
                             category={Category.CreaPalette}
                             onClick={() => handleTaskClick(Number(task.id))}
                           />
@@ -225,7 +263,7 @@ const WorkSiteListRequestPage: React.FC = () => {
                             name={task.title ?? ''}
                             date={task.estimatedDate?.toLocaleString() ?? ''}
                             city={task.city ?? ''}
-                            status={task.requestStatus ?? WorkSiteRequestStatus.Archive}
+                            status={task.requestStatus ?? WorkSiteRequestStatus.Done}
                             category={Category.CreaPalette}
                             onClick={() => handleTaskClick(Number(task.id))}
                           />
@@ -259,7 +297,8 @@ const WorkSiteListRequestPage: React.FC = () => {
             show={modalShow}
             onHide={() => setModalShow(false)}
             worksiteRequest={worksiteRequestData!}//todo checker le !
-            showButtons={true}
+            showButtonEditValidate={true}
+            showButtonCreate={true}
           />
         </Container>
       }

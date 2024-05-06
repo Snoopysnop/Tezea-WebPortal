@@ -42,11 +42,19 @@ export enum CustomerStatus {
     Particular = "Particulier"
 }
 
-export enum Emergency {
+export enum IncidentLevel {
     Minor = "Faible",
     Medium = "Moyen",
     Severe = "Haut",
     Blocking = "Bloquant"
+}
+
+export enum Emergency {
+    Low = "Très Faible",
+    Average = "Faible",
+    Medium = "Moyen",
+    High = "Elevé",
+    VeryHigh = "Très Elevé",
 }
 
 export enum Role {
@@ -90,7 +98,7 @@ export enum WorkSiteStatus {
 export interface EmergencyDetails {
     description: string,
     id: string,
-    level: Emergency,
+    level: IncidentLevel,
     worksite?: WorkSite
     title: string,
 }

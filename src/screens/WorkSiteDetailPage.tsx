@@ -4,7 +4,7 @@ import { WorkSite, User, Role, Tool, WorkSiteStatus, SatisfactionLevel, ToolName
 import PopupEmergency from './PopupEmergency';
 import { useLocation } from 'react-router-dom';
 import MainApi from '../api/MainApi';
-import { getCivilityName, getRole, getStatusWorksite, getToolName } from '../common/utils/utils';
+import { getCategorie, getCivilityName, getCustomerStatus, getEmergency, getRole, getServiceType, getStatusName, getStatusWorksite, getStatusWorksiteRequest, getToolName } from '../common/utils/utils';
 import WorkSiteRequestPopUp from '../components/WorkSiteRequestPopUp';
 import { CustomerJson, WorkSiteJson, WorkSiteRequestJson } from '../api/ModelJson';
 
@@ -13,60 +13,39 @@ const WorkSiteDetailPage: React.FC = () => {
   const location = useLocation();
 
   const worksite = location.state ? (location.state as any).worksiteData as WorkSiteJson : null;
-console.log("true value",worksite)
   const [currentworkSiteChief, setWorkSiteChief] = useState<User | undefined>(undefined);
   const [currentusers, setWorkSiteUsers] = useState<User[] | undefined>(undefined);
   const [currentstate, setWorksiteRequest] = useState<WorkSiteRequest| undefined>(undefined);
-  const [currentCustomer, setCustomer] = useState<Customer| undefined>(undefined);
-
-
 
   useEffect(() => {
-    handleListWorksite();
     handleUsers();
     worksite!.signature = "iVBORw0KGgoAAAANSUhEUgAAAJgAAABlCAYAAACxzirmAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFpSURBVHhe7dixbcMwEEBRbaLFjBQZxGkyhJEJAmgKFem0E+M6JgII0O9e8Rpe+3EguazrOqAiMFICIyUwUgIjJTBSAiMlMFLTwO7bMY5jG/fJDM5YPieHAuMqy/fkEK6y/LzPB3AFG4zUP3ewfXy9vc7gjOkr8vbYn4EdY3/cXmZwxvwf7GOzwbjEn8DuY3tuLnFxFT/5pARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERmgdvwEFpgF42yNjAAAAAElFTkSuQmCC"
   }, []); // Le tableau vide indique que cette fonction doit être appelée une seule fois lors du montage du composant
-
-  const handleListWorksite = async () => {
-    if (worksite!.workSiteChief) {
-      const worksiteChief = await MainApi.getInstance().getUserbyId(String(worksite!.workSiteChief)) as User;
-      const users = await MainApi.getInstance().getUsersByWorksiteId(String(worksite!.id)) as Array<User>;
-    };
-  }
   
   const handleUsers = async () => {
     const users = await MainApi.getInstance().getUsersByWorksiteId(String(worksite!.id)) as Array<User>;
-
+  
     const workSiteRequestId: number | undefined = worksite ? worksite.workSiteRequest : undefined;
-
-    
+  
     const workSiteRequest = await MainApi.getInstance().getWorksiteRequestbyId(workSiteRequestId!) as WorkSiteRequestJson;
-
-    const customerjson = await MainApi.getInstance().getCustomerbyId(String(workSiteRequest.customer)) as CustomerJson;
-
-    const workSiteChiefFiltered = users.filter(user => getRole(user.role) === Role.WorkSiteChief);
-
-    const workSiteUsersFiltered = users.filter(user => getRole(user.role) === Role.Employee);
-
-    if (workSiteChiefFiltered.length > 0) {
-      setWorkSiteChief(workSiteChiefFiltered[0])
-    }
-    if (workSiteUsersFiltered.length > 0) {
-      setWorkSiteUsers(workSiteUsersFiltered)
-    }
-
-    const customer: Customer = {
-      id: customerjson.id,
-      firstName: customerjson.firstName,
-      lastName: customerjson.lastName,
-      civility: customerjson.civility ? getCivilityName(customerjson.civility) : undefined,
-      email: customerjson.email,
-      phoneNumber: customerjson.phoneNumber,
-      address: customerjson.address,
-      city: customerjson.city,
-      postalCode: customerjson.postalCode,
-      status: customerjson.status,
-      company: customerjson.company
+    
+    let customer: Customer | undefined = undefined;
+  
+    if (workSiteRequest.customer) {
+      const customerjson = await MainApi.getInstance().getCustomerbyId(String(workSiteRequest.customer)) as CustomerJson;
+      customer = {
+        id: customerjson.id,
+        firstName: customerjson.firstName,
+        lastName: customerjson.lastName,
+        civility: customerjson.civility ? getCivilityName(customerjson.civility) : undefined,
+        email: customerjson.email,
+        phoneNumber: customerjson.phoneNumber,
+        address: customerjson.address,
+        city: customerjson.city,
+        postalCode: customerjson.postalCode,
+        status: customerjson.status ? getCustomerStatus(customerjson.status) : undefined,
+        company: customerjson.company
+      };
     }
 
     const worksiterequestsend: WorkSiteRequest = {
@@ -75,35 +54,33 @@ console.log("true value",worksite)
       siteChief: undefined,
       customer: customer,
       city: workSiteRequest.city,
-      serviceType: workSiteRequest.serviceType,
+      serviceType: workSiteRequest.serviceType ? getServiceType(workSiteRequest.serviceType) : undefined,
       description: workSiteRequest.description,
-      emergency: workSiteRequest.emergency,
+      emergency: workSiteRequest.emergency ? getEmergency(workSiteRequest.emergency) : undefined,
       title: workSiteRequest.title,
-      category: workSiteRequest.category,
+      category: workSiteRequest.category ? getCategorie(workSiteRequest.category) : undefined,
       removal: workSiteRequest.removal,
       delivery: workSiteRequest.delivery,
       removalRecycling: workSiteRequest.removalRecycling,
       chronoQuote: workSiteRequest.chronoQuote,
       estimatedDate: workSiteRequest.estimatedDate ? new Date(workSiteRequest.estimatedDate) : undefined,
-      requestStatus: workSiteRequest.requestStatus,
+      requestStatus: workSiteRequest.status ? getStatusWorksiteRequest(workSiteRequest.status) : undefined,
       weightEstimate: workSiteRequest.weightEstimate,
       volumeEstimate: workSiteRequest.volumeEstimate,
       provider: workSiteRequest.provider,
       tezeaAffectation: workSiteRequest.tezeaAffectation
   };
-  
 
   setWorksiteRequest(worksiterequestsend);
   }
 
-//TODO
   const tools: Tool[] = [];
-  for (const key in worksite!.equipment) {
-      if (Object.prototype.hasOwnProperty.call(worksite?.equipment, key)) {
+  for (const key in worksite!.equipments) {
+      if (Object.prototype.hasOwnProperty.call(worksite?.equipments, key)) {
         const toolName: string = key; // Récupère le nom de l'outil à partir de la clé
           const tool: Tool = {
               name: getToolName(toolName),
-              quantity: worksite ? worksite!.equipment[key as keyof typeof worksite.equipment] as number : 0
+              quantity: worksite ? worksite!.equipments[key as keyof typeof worksite.equipments] as number : 0
           };
           tools.push(tool); 
       }
@@ -120,48 +97,52 @@ console.log("true value",worksite)
   };
 
   const [modalShow, setModalShow] = useState(false);
-   
 
   return (
     <Container className='container-xxl'>
       <Row className='mt-4'>
         <Col lg={6}>
           <Card bg="white" text="dark" className="h-100">
-            <Card.Body>
-              <Card.Title><h2>Détails du chantier</h2></Card.Title>
-              <Card.Text>
-                <Row className="mb-3">
-                  <Col>
-                    <Form.Group>
-                      <Form.Label>Chef de chantier :</Form.Label>
-                      <Form.Control type="text" value={currentworkSiteChief?.firstName + " "+ currentworkSiteChief?.lastName} readOnly />
-                    </Form.Group>
-                  </Col>
-                  <Col>
-                    <Form.Group>
-                      <Form.Label>Statut:</Form.Label>
-                      <Form.Control type="text" value={worksite!.status} readOnly />
-                    </Form.Group>
-                  </Col>
-                </Row>
-                <Row className="mb-3">
-                  <Col>
-                    <Form.Group>
-                      <Form.Label>Date de début :</Form.Label>
-                      <Form.Control type="text" value={worksite!.begin} readOnly />
-                    </Form.Group>
-                  </Col>
-                  <Col>
-                    <Form.Group>
-                      <Form.Label>Date de fin :</Form.Label>
-                      <Form.Control type="text" value={worksite!.end} readOnly />
-                    </Form.Group>
-                  </Col>
-                </Row>
-              </Card.Text>
-              <Button variant="primary" onClick={() => setShowModal(true)}>Déclarer un incident</Button>{' '}
-              <Button variant="secondary" onClick={() => setModalShow(true)}>Voir la demande de chantiers</Button>{' '}
-            </Card.Body>
+          <Card.Body>
+  <Card.Title><h2>Détails du chantier</h2></Card.Title>
+  <Card.Text>
+    <Row className="mb-3">
+      <Col>
+        <Form.Group>
+          <Form.Label>Chef de chantier :</Form.Label>
+          <Form.Control 
+  type="text" 
+  value={(currentworkSiteChief ? currentworkSiteChief.firstName + " " + currentworkSiteChief.lastName : "")} 
+  readOnly 
+/>
+        </Form.Group>
+      </Col>
+      <Col>
+        <Form.Group>
+          <Form.Label>Statut:</Form.Label>
+          <Form.Control type="text" value={getStatusName(worksite!.status!)} readOnly />
+        </Form.Group>
+      </Col>
+    </Row>
+    <Row className="mb-3">
+      <Col>
+        <Form.Group>
+          <Form.Label>Date de début :</Form.Label>
+          <Form.Control type="text" value={new Date(worksite!.begin).toLocaleString()} readOnly />
+        </Form.Group>
+      </Col>
+      <Col>
+        <Form.Group>
+          <Form.Label>Date de fin :</Form.Label>
+          <Form.Control type="text" value={new Date(worksite!.end).toLocaleString()} readOnly />
+        </Form.Group>
+      </Col>
+    </Row>
+  </Card.Text>
+  <Button variant="primary" onClick={() => setShowModal(true)}>Déclarer un incident</Button>{' '}
+  <Button variant="secondary" onClick={() => setModalShow(true)} className="float-end">Voir la demande de chantiers</Button>{' '}
+</Card.Body>
+
 
           </Card>
         </Col>
@@ -236,7 +217,8 @@ console.log("true value",worksite)
   show={modalShow}
   onHide={() => setModalShow(false)}
   worksiteRequest={currentstate!}
-  showButtons={false}
+  showButtonEditValidate={false}
+  showButtonCreate={false}
 />
     </Container>
   );

@@ -5,6 +5,7 @@ const SchedulePage: React.FC = () => {
     <div>
       <h1>SchedulePage</h1>
       {/* Contenu de la page SchedulePage */}
+      work in progress
     </div>
   );
 }

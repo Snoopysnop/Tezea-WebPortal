@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
-import { Emergency } from '../api/Model';
+import { IncidentLevel } from '../api/Model';
 import { EmergencyDetailsJson, EmergencyDetailsJsonToSend } from '../api/ModelJson';
 import MainApi from '../api/MainApi';
 import { getEmergencyJsonFormat } from '../common/utils/utils';
@@ -14,7 +14,7 @@ interface PopupEmergencyProps {
 const PopupEmergency: React.FC<PopupEmergencyProps> = ({ showModal, closeModal, worksiteId }) => {
   const [emergencyName, setEmergencyName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
-  const [emergencyLevel, setEmergencyLevel] = useState<string>(Emergency.Minor);
+  const [emergencyLevel, setEmergencyLevel] = useState<string>(IncidentLevel.Minor);
 
   const handleEmergencyNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmergencyName(event.target.value);
@@ -25,7 +25,7 @@ const PopupEmergency: React.FC<PopupEmergencyProps> = ({ showModal, closeModal, 
   };
 
   const handleEmergencyLevelChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setEmergencyLevel(event.target.value as Emergency);
+    setEmergencyLevel(event.target.value as IncidentLevel);
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -67,9 +67,9 @@ const PopupEmergency: React.FC<PopupEmergencyProps> = ({ showModal, closeModal, 
   <Form.Group controlId="formGridCategorie" style={{ marginTop: '15px' }}>
     <Form.Label>Catégorie</Form.Label>
     <Form.Select name="emergency" value={emergencyLevel} onChange={handleEmergencyLevelChange} >
-      {Object.keys(Emergency).map((key) => (
-        <option key={key} value={Emergency[key as keyof typeof Emergency]}>
-          {Emergency[key as keyof typeof Emergency]}
+      {Object.keys(IncidentLevel).map((key) => (
+        <option key={key} value={IncidentLevel[key as keyof typeof IncidentLevel]}>
+          {IncidentLevel[key as keyof typeof IncidentLevel]}
         </option>
       ))}
     </Form.Select>
