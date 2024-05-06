@@ -33,7 +33,7 @@ const SidebarComponent: React.FC = () => {
 
     const handleSettingsItemClick = async () => {
         setSidebarCollapsed(true);
-        const responseUserInfo = await MainApi.getInstance().getUserbyId("3618b0e4-7763-4417-ba14-bd778073383b") as User;
+        const responseUserInfo = await MainApi.getInstance().getRandomConcierge() as User;
         console.log(responseUserInfo);
         navigate("/parametres", { state: { responseUserInfo } })
 
