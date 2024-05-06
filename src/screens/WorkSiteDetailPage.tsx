@@ -78,8 +78,8 @@ const WorkSiteDetailPage: React.FC = () => {
 
   const handleUsersAndWorksiteChief = async () => {
     const users = await MainApi.getInstance().getUsersByWorksiteId(String(worksite!.id)) as Array<User>;
-    const workSiteChiefFiltered = users.filter(user => getRoleWorksite(user.role) === Role.WorkSiteChief);
-    const workSiteUsersFiltered = users.filter(user => getRoleWorksite(user.role) === Role.Employee);
+    const workSiteChiefFiltered = users.filter(user => getRole(user.role) === Role.WorkSiteChief);
+    const workSiteUsersFiltered = users.filter(user => getRole(user.role) === Role.Employee);
     console.log(workSiteChiefFiltered[0].firstName)
     if (workSiteChiefFiltered.length > 0) {
       setWorkSiteChief(workSiteChiefFiltered[0])
