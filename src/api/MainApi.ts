@@ -127,6 +127,21 @@ class MainApi extends AbstractApi {
             throw AbstractApi.handleError(err)
         }
     }
+
+    public async getWorksiteStatusOfWorkSiteRequest(ids: number[]): Promise<Map<string,Map<string,string>>> {
+        try {
+            const response = await this.service.get(`/api/workSiteRequests/statistics/workSitesStatus`, {
+                params: {
+                    ids: ids.join(',') 
+                }
+            });
+            return response.data 
+        } catch (err) {
+            throw AbstractApi.handleError(err)
+        }
+    }
+
+
     //Customer-------------------------------------------------------------------------------------------------------------
 
     public async updateCustomer(id: string, customer :CustomerJson): Promise<CustomerJson> {
