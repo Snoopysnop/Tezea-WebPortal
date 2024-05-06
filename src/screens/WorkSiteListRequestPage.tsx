@@ -20,8 +20,8 @@ const WorkSiteListRequestPage: React.FC = () => {
   const [dataFetched, setDataFetched] = useState<WorkSiteRequest[]>([]);
 
   useEffect(() => {
-    if(location.state) {
-    setDataFetched((location.state as any).worksiteRequestMapper as WorkSiteRequest[])
+    if (location.state) {
+      setDataFetched((location.state as any).worksiteRequestMapper as WorkSiteRequest[])
     }
   }, [location.state])
 
@@ -86,14 +86,43 @@ const WorkSiteListRequestPage: React.FC = () => {
   useEffect(() => {
     if (dataFetched) {
       setFilteredTasks(dataFetched.filter(task => (task.title?.toLowerCase() ?? '').includes(filterValue.toLowerCase())))
+    
+      handleRefreshStatus(dataFetched)
+
     }
   }, [dataFetched, filterValue])
+
+  const handleRefreshStatus = async (datas: WorkSiteRequest[]) => {
+    const standbyWorksiteRequests = datas.filter(request => request.requestStatus === WorkSiteRequestStatus.Standby);
+    const standbyWorksiteRequestIds = standbyWorksiteRequests.map(request => request.id);
+    const standbyWorksiteRequestIdsFiltered = standbyWorksiteRequestIds.filter(id => id !== undefined) as number[];
+
+    if (standbyWorksiteRequestIdsFiltered.length > 0) {
+        const responseGetWorksiteStatusOfWorkSiteRequest = await MainApi.getInstance().getWorksiteStatusOfWorkSiteRequest(standbyWorksiteRequestIdsFiltered);
+
+        const entries = Object.entries(responseGetWorksiteStatusOfWorkSiteRequest);
+
+        for (const [key, value] of entries) {
+            const archiveCount = value.Archive || 0;
+            const doneCount = value.Done || 0;
+            const standbyCount = value.Standby || 0;
+            const inProgressCount = value.InProgress || 0;
+
+            if ((archiveCount > 0 || doneCount > 0) && standbyCount === 0 && inProgressCount === 0) {
+                console.log("test")
+                const responseUpdateStatusWorksiteRequest = await MainApi.getInstance().updateStatusWorksiteRequest(Number(key), "Done");
+            }
+        }
+    }
+};
+
+
 
   const handleTaskClick = async (id: number) => {
     const responseWorksiteRequest = await MainApi.getInstance().getWorksiteRequestbyId(id) as WorkSiteRequestJson;
     const responseCustomer = await MainApi.getInstance().getCustomerbyId(responseWorksiteRequest.customer!) as CustomerJson;
 
-    const customerMapper : Customer = {
+    const customerMapper: Customer = {
       id: responseCustomer.id,
       firstName: responseCustomer.firstName,
       lastName: responseCustomer.lastName,
