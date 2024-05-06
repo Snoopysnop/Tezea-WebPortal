@@ -1,19 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Col, Container, Row, Table, Modal, Form } from 'react-bootstrap';
-import { WorkSite, User, Role, Tool, WorkSiteStatus, SatisfactionLevel, ToolName } from '../api/Model';
+import { WorkSite, User, Role, Tool, WorkSiteStatus, SatisfactionLevel, ToolName, WorkSiteRequest, Customer } from '../api/Model';
 import PopupEmergency from './PopupEmergency';
 import { useLocation } from 'react-router-dom';
 import MainApi from '../api/MainApi';
-import { getRoleWorksite, getStatusWorksite, getToolName } from '../common/utils/utils';
+import { getCivilityName, getRoleWorksite, getStatusWorksite, getToolName } from '../common/utils/utils';
+import WorkSiteRequestPopUp from '../components/WorkSiteRequestPopUp';
+import { CustomerJson, WorkSiteJson, WorkSiteRequestJson } from '../api/ModelJson';
 
 const WorkSiteDetailPage: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const location = useLocation();
 
-  const worksite = location.state ? (location.state as any).worksiteData as WorkSite : null;
-
+  const worksite = location.state ? (location.state as any).worksiteData as WorkSiteJson : null;
+console.log("true value",worksite)
   const [currentworkSiteChief, setWorkSiteChief] = useState<User | undefined>(undefined);
   const [currentusers, setWorkSiteUsers] = useState<User[] | undefined>(undefined);
+  const [currentstate, setWorksiteRequest] = useState<WorkSiteRequest| undefined>(undefined);
+  const [currentCustomer, setCustomer] = useState<Customer| undefined>(undefined);
+
+
 
   useEffect(() => {
     handleListWorksite();
@@ -30,6 +36,14 @@ const WorkSiteDetailPage: React.FC = () => {
   
   const handleUsers = async () => {
     const users = await MainApi.getInstance().getUsersByWorksiteId(String(worksite!.id)) as Array<User>;
+
+    const workSiteRequestId: number | undefined = worksite ? parseInt(worksite.workSiteRequest || "0", 10) : undefined;
+
+    
+    const workSiteRequest = await MainApi.getInstance().getWorksiteRequestbyId(workSiteRequestId!) as WorkSiteRequestJson;
+
+    const customerjson = await MainApi.getInstance().getCustomerbyId(String(workSiteRequest.customer)) as CustomerJson;
+
     const workSiteChiefFiltered = users.filter(user => getRoleWorksite(user.role) === Role.WorkSiteChief);
 
     const workSiteUsersFiltered = users.filter(user => getRoleWorksite(user.role) === Role.Employee);
@@ -40,16 +54,56 @@ const WorkSiteDetailPage: React.FC = () => {
     if (workSiteUsersFiltered.length > 0) {
       setWorkSiteUsers(workSiteUsersFiltered)
     }
+
+    const customer: Customer = {
+      id: customerjson.id,
+      firstName: customerjson.firstName,
+      lastName: customerjson.lastName,
+      civility: customerjson.civility ? getCivilityName(customerjson.civility) : undefined,
+      email: customerjson.email,
+      phoneNumber: customerjson.phoneNumber,
+      address: customerjson.address,
+      city: customerjson.city,
+      postalCode: customerjson.postalCode,
+      status: customerjson.status,
+      company: customerjson.company
+    }
+
+    const worksiterequestsend: WorkSiteRequest = {
+      id: workSiteRequest.id,
+      concierge: undefined,
+      siteChief: undefined,
+      customer: customer,
+      city: workSiteRequest.city,
+      serviceType: workSiteRequest.serviceType,
+      description: workSiteRequest.description,
+      emergency: workSiteRequest.emergency,
+      title: workSiteRequest.title,
+      category: workSiteRequest.category,
+      removal: workSiteRequest.removal,
+      delivery: workSiteRequest.delivery,
+      removalRecycling: workSiteRequest.removalRecycling,
+      chronoQuote: workSiteRequest.chronoQuote,
+      estimatedDate: workSiteRequest.estimatedDate ? new Date(workSiteRequest.estimatedDate) : undefined,
+      requestStatus: workSiteRequest.requestStatus,
+      weightEstimate: workSiteRequest.weightEstimate,
+      volumeEstimate: workSiteRequest.volumeEstimate,
+      provider: workSiteRequest.provider,
+      tezeaAffectation: workSiteRequest.tezeaAffectation
+  };
+  
+
+  setWorksiteRequest(worksiterequestsend);
   }
 
 //TODO
   const tools: Tool[] = [];
-  for (const key in worksite?.equipments) {
-      if (Object.prototype.hasOwnProperty.call(worksite?.equipments, key)) {
+  for (const key in worksite!.equipment) {
+      if (Object.prototype.hasOwnProperty.call(worksite?.equipment, key)) {
         const toolName: string = key; // Récupère le nom de l'outil à partir de la clé
           const tool: Tool = {
               name: getToolName(toolName),
-              quantity: worksite ? worksite!.equipments[key as keyof typeof worksite.equipments] as number : 0
+              quantity: worksite ? worksite!.equipment[key as keyof typeof worksite.equipment] as number : 0
           };
           tools.push(tool); 
       }
@@ -65,6 +119,8 @@ const WorkSiteDetailPage: React.FC = () => {
     setShowModal(false);
   };
 
+  const [modalShow, setModalShow] = useState(false);
+   
 
   return (
     <Container className='container-xxl'>
@@ -84,7 +140,7 @@ const WorkSiteDetailPage: React.FC = () => {
                   <Col>
                     <Form.Group>
                       <Form.Label>Statut:</Form.Label>
-                      <Form.Control type="text" value={getStatusWorksite(worksite!.status)} readOnly />
+                      <Form.Control type="text" value={worksite!.status} readOnly />
                     </Form.Group>
                   </Col>
                 </Row>
@@ -92,19 +148,19 @@ const WorkSiteDetailPage: React.FC = () => {
                   <Col>
                     <Form.Group>
                       <Form.Label>Date de début :</Form.Label>
-                      <Form.Control type="text" value={new Date(worksite!.begin).toLocaleString()} readOnly />
+                      <Form.Control type="text" value={worksite!.begin} readOnly />
                     </Form.Group>
                   </Col>
                   <Col>
                     <Form.Group>
                       <Form.Label>Date de fin :</Form.Label>
-                      <Form.Control type="text" value={new Date(worksite!.end).toLocaleString()} readOnly />
+                      <Form.Control type="text" value={worksite!.end} readOnly />
                     </Form.Group>
                   </Col>
                 </Row>
               </Card.Text>
-              <Button variant="primary" onClick={openModal}>Déclarer un incident</Button>{' '}
-              <Button variant="secondary">Voir la demande de chantiers</Button>
+              <Button variant="primary" onClick={() => setShowModal(true)}>Déclarer un incident</Button>{' '}
+              <Button variant="secondary" onClick={() => setModalShow(true)}>Voir la demande de chantiers</Button>{' '}
             </Card.Body>
 
           </Card>
@@ -176,6 +232,12 @@ const WorkSiteDetailPage: React.FC = () => {
         </Col>
       </Row>
       <PopupEmergency showModal={showModal} closeModal={closeModal} worksiteId={worksite!.id}/>
+<WorkSiteRequestPopUp
+  show={modalShow}
+  onHide={() => setModalShow(false)}
+  worksiteRequest={currentstate!}
+  showButtons={false}
+/>
     </Container>
   );
 }
