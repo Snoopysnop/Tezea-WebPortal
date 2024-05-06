@@ -264,6 +264,21 @@ function displayHours(dateString:String) {
 
             <Tab eventKey="date" title="Sélectionner une période" >
               <Row className="mb-3"></Row>
+
+              <Row className="mb-5">
+                <h2>Donner un titre pour le chantier :</h2>
+              </Row>
+              <Form.Group as={Col} controlId="formTitreChantier">
+                <Form.Control
+                  style={{ width: "35%" }}
+                  type="text"
+                  placeholder="Entrez un titre"
+                  value={title}
+                  onChange={e => setTitle(e.target.value)}
+                />
+              </Form.Group>
+              <Row className="mb-5"></Row>
+
               <Row className="mb-5">
                 <h2>Selectionner une période pour le chantier :</h2>
               </Row>
@@ -306,20 +321,6 @@ function displayHours(dateString:String) {
                   </Container>
                 </Col>
               </Row>
-
-              <Row className="mb-5">
-                <h2>Donner un titre pour le chantier :</h2>
-              </Row>
-              <Form.Group as={Col} controlId="formTitreChantier">
-                <Form.Control
-                  style={{ width: "35%" }}
-                  type="text"
-                  placeholder="Entrez un titre"
-                  value={title}
-                  onChange={e => setTitle(e.target.value)}
-                />
-              </Form.Group>
-              <Row className="mb-5"></Row>
             </Tab>
 
             {!isInitialSelection && (
@@ -447,13 +448,16 @@ function displayHours(dateString:String) {
                 <Row className="mb-5">
                   <h2>Selectionner les outils nécessaires au chantier :</h2>
                 </Row>
+                <div className="autocomplete-container" style={{ position:"relative", zIndex: 2 }}>
                 <ReactSearchAutocomplete
                   items={availableTools ? availableTools.map(tool => ({ id: tool.name, name: tool.name })) : []}
                   onSearch={handleOnSearch}
                   onSelect={handleOnSelect}
                   autoFocus
                   placeholder="Filtrer par nom d'outils"
+                  
                 />
+                </div>
                 <Row className="mb-5"></Row>
                 {selectedTools.length > 0 && (
                   <Container>
@@ -625,10 +629,6 @@ function displayHours(dateString:String) {
                           {selectedTools.map(toolName => (
                             <li key={toolName}>{toolName} - Quantité : {selectedQuantities[toolName]}</li>
                           ))}
-                          <li>Ponceuse - Quantité : 5</li>
-                          <li>Visseuse/Devisseuse - Quantité : 5</li>
-                          <li>Rateau - Quantité : 5</li>
-                          <li>Muselière - Quantité : 5</li>
                         </div>
 
                         <div style={{display:"flex", width:"5%"}}></div>
