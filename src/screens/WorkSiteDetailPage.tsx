@@ -19,8 +19,6 @@ console.log("true value",worksite)
   const [currentstate, setWorksiteRequest] = useState<WorkSiteRequest| undefined>(undefined);
   const [currentCustomer, setCustomer] = useState<Customer| undefined>(undefined);
 
-
-
   useEffect(() => {
     handleListWorksite();
     handleUsers();
@@ -54,6 +52,7 @@ console.log("true value",worksite)
     if (workSiteUsersFiltered.length > 0) {
       setWorkSiteUsers(workSiteUsersFiltered)
     }
+    
 
     const customer: Customer = {
       id: customerjson.id,
@@ -91,23 +90,26 @@ console.log("true value",worksite)
       provider: workSiteRequest.provider,
       tezeaAffectation: workSiteRequest.tezeaAffectation
   };
-  
+  console.log("Suui", worksiterequestsend)
 
   setWorksiteRequest(worksiterequestsend);
   }
 
 //TODO
+console.log(worksite!.equipments)
+
   const tools: Tool[] = [];
-  for (const key in worksite!.equipment) {
-      if (Object.prototype.hasOwnProperty.call(worksite?.equipment, key)) {
+  for (const key in worksite!.equipments) {
+      if (Object.prototype.hasOwnProperty.call(worksite?.equipments, key)) {
         const toolName: string = key; // Récupère le nom de l'outil à partir de la clé
           const tool: Tool = {
               name: getToolName(toolName),
-              quantity: worksite ? worksite!.equipment[key as keyof typeof worksite.equipment] as number : 0
+              quantity: worksite ? worksite!.equipments[key as keyof typeof worksite.equipments] as number : 0
           };
           tools.push(tool); 
       }
   }
+  console.log(tools)
 
   // Fonction pour ouvrir la modale
   const openModal = () => {
@@ -148,13 +150,13 @@ console.log("true value",worksite)
                   <Col>
                     <Form.Group>
                       <Form.Label>Date de début :</Form.Label>
-                      <Form.Control type="text" value={worksite!.begin} readOnly />
+                      <Form.Control type="text" value={new Date(worksite!.begin).toLocaleString()} readOnly />
                     </Form.Group>
                   </Col>
                   <Col>
                     <Form.Group>
                       <Form.Label>Date de fin :</Form.Label>
-                      <Form.Control type="text" value={worksite!.end} readOnly />
+                      <Form.Control type="text" value={new Date(worksite!.end).toLocaleString()} readOnly />
                     </Form.Group>
                   </Col>
                 </Row>
