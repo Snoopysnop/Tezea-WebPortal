@@ -10,21 +10,14 @@ import { useEffect, useState } from 'react';
 
 function App() {
 
-KeycloakApi.initInstance()
-const [isLoggedIn, setIsLoggedIn] = useState(KeycloakApi.isTokenValid());
-useEffect(() => {
-  console.log('here')
-  if(isLoggedIn && localStorage.getItem("access-token")) {
-    MainApi.initInstance(localStorage.getItem("access-token")!)
-  }
-}, [])
+
+MainApi.initInstance()
+
 
   return (
     <Router>
-        {isLoggedIn &&
           <SidebarComponent/>
-        }
-          <Navigation setIsLoggedIn={setIsLoggedIn}/>
+          <Navigation/>
 
 
     </Router>

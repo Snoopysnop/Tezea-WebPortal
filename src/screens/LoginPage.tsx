@@ -6,9 +6,8 @@ import { Link } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import KeycloakApi from '../api/KeycloakApi';
-import { LoginPageProps } from '../components/Navigation/Navigation';
 
-const LoginPage: React.FC<LoginPageProps> = ({setIsLoggedIn}) => {
+const LoginPage: React.FC = () => {
 
   const navigate = useNavigate();
 
@@ -30,7 +29,6 @@ const LoginPage: React.FC<LoginPageProps> = ({setIsLoggedIn}) => {
           try {
             setApiError(undefined)
             await KeycloakApi.getInstance().login(values.email, values.password)
-            setIsLoggedIn(true)
             navigate("/listeChantiers")
               
           } catch (err) {
