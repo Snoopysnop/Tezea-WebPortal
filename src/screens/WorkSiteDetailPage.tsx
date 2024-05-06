@@ -13,11 +13,9 @@ const WorkSiteDetailPage: React.FC = () => {
   const location = useLocation();
 
   const worksite = location.state ? (location.state as any).worksiteData as WorkSiteJson : null;
-console.log("true value",worksite)
   const [currentworkSiteChief, setWorkSiteChief] = useState<User | undefined>(undefined);
   const [currentusers, setWorkSiteUsers] = useState<User[] | undefined>(undefined);
   const [currentstate, setWorksiteRequest] = useState<WorkSiteRequest| undefined>(undefined);
-  const [currentCustomer, setCustomer] = useState<Customer| undefined>(undefined);
 
   useEffect(() => {
     handleUsers();
@@ -26,36 +24,28 @@ console.log("true value",worksite)
   
   const handleUsers = async () => {
     const users = await MainApi.getInstance().getUsersByWorksiteId(String(worksite!.id)) as Array<User>;
-
+  
     const workSiteRequestId: number | undefined = worksite ? parseInt(worksite.workSiteRequest || "0", 10) : undefined;
-
+  
     const workSiteRequest = await MainApi.getInstance().getWorksiteRequestbyId(workSiteRequestId!) as WorkSiteRequestJson;
-
-    const customerjson = await MainApi.getInstance().getCustomerbyId(String(workSiteRequest.customer)) as CustomerJson;
-
-    const workSiteChiefFiltered = users.filter(user => getRoleWorksite(user.role) === Role.WorkSiteChief);
-
-    const workSiteUsersFiltered = users.filter(user => getRoleWorksite(user.role) === Role.Employee);
-
-    if (workSiteChiefFiltered.length > 0) {
-      setWorkSiteChief(workSiteChiefFiltered[0])
-    }
-    if (workSiteUsersFiltered.length > 0) {
-      setWorkSiteUsers(workSiteUsersFiltered)
-    }
-
-    const customer: Customer = {
-      id: customerjson.id,
-      firstName: customerjson.firstName,
-      lastName: customerjson.lastName,
-      civility: customerjson.civility ? getCivilityName(customerjson.civility) : undefined,
-      email: customerjson.email,
-      phoneNumber: customerjson.phoneNumber,
-      address: customerjson.address,
-      city: customerjson.city,
-      postalCode: customerjson.postalCode,
-      status: customerjson.status ? getCustomerStatus(customerjson.status) : undefined,
-      company: customerjson.company
+    
+    let customer: Customer | undefined = undefined;
+  
+    if (workSiteRequest.customer) {
+      const customerjson = await MainApi.getInstance().getCustomerbyId(String(workSiteRequest.customer)) as CustomerJson;
+      customer = {
+        id: customerjson.id,
+        firstName: customerjson.firstName,
+        lastName: customerjson.lastName,
+        civility: customerjson.civility ? getCivilityName(customerjson.civility) : undefined,
+        email: customerjson.email,
+        phoneNumber: customerjson.phoneNumber,
+        address: customerjson.address,
+        city: customerjson.city,
+        postalCode: customerjson.postalCode,
+        status: customerjson.status ? getCustomerStatus(customerjson.status) : undefined,
+        company: customerjson.company
+      };
     }
 
     const worksiterequestsend: WorkSiteRequest = {
@@ -80,13 +70,9 @@ console.log("true value",worksite)
       provider: workSiteRequest.provider,
       tezeaAffectation: workSiteRequest.tezeaAffectation
   };
-  console.log("Suui", worksiterequestsend)
 
   setWorksiteRequest(worksiterequestsend);
   }
-
-//TODO
-console.log(worksite!.equipments)
 
   const tools: Tool[] = [];
   for (const key in worksite!.equipments) {
@@ -99,7 +85,6 @@ console.log(worksite!.equipments)
           tools.push(tool); 
       }
   }
-  console.log(tools)
 
   // Fonction pour ouvrir la modale
   const openModal = () => {
@@ -118,41 +103,46 @@ console.log(worksite!.equipments)
       <Row className='mt-4'>
         <Col lg={6}>
           <Card bg="white" text="dark" className="h-100">
-            <Card.Body>
-              <Card.Title><h2>Détails du chantier</h2></Card.Title>
-              <Card.Text>
-                <Row className="mb-3">
-                  <Col>
-                    <Form.Group>
-                      <Form.Label>Chef de chantier :</Form.Label>
-                      <Form.Control type="text" value={currentworkSiteChief?.firstName + " "+ currentworkSiteChief?.lastName} readOnly />
-                    </Form.Group>
-                  </Col>
-                  <Col>
-                    <Form.Group>
-                      <Form.Label>Statut:</Form.Label>
-                      <Form.Control type="text" value={getStatusName(worksite!.status!)} readOnly />
-                    </Form.Group>
-                  </Col>
-                </Row>
-                <Row className="mb-3">
-                  <Col>
-                    <Form.Group>
-                      <Form.Label>Date de début :</Form.Label>
-                      <Form.Control type="text" value={new Date(worksite!.begin).toLocaleString()} readOnly />
-                    </Form.Group>
-                  </Col>
-                  <Col>
-                    <Form.Group>
-                      <Form.Label>Date de fin :</Form.Label>
-                      <Form.Control type="text" value={new Date(worksite!.end).toLocaleString()} readOnly />
-                    </Form.Group>
-                  </Col>
-                </Row>
-              </Card.Text>
-              <Button variant="primary" onClick={() => setShowModal(true)}>Déclarer un incident</Button>{' '}
-              <Button variant="secondary" onClick={() => setModalShow(true)}>Voir la demande de chantiers</Button>{' '}
-            </Card.Body>
+          <Card.Body>
+  <Card.Title><h2>Détails du chantier</h2></Card.Title>
+  <Card.Text>
+    <Row className="mb-3">
+      <Col>
+        <Form.Group>
+          <Form.Label>Chef de chantier :</Form.Label>
+          <Form.Control 
+  type="text" 
+  value={(currentworkSiteChief ? currentworkSiteChief.firstName + " " + currentworkSiteChief.lastName : "")} 
+  readOnly 
+/>
+        </Form.Group>
+      </Col>
+      <Col>
+        <Form.Group>
+          <Form.Label>Statut:</Form.Label>
+          <Form.Control type="text" value={getStatusName(worksite!.status!)} readOnly />
+        </Form.Group>
+      </Col>
+    </Row>
+    <Row className="mb-3">
+      <Col>
+        <Form.Group>
+          <Form.Label>Date de début :</Form.Label>
+          <Form.Control type="text" value={new Date(worksite!.begin).toLocaleString()} readOnly />
+        </Form.Group>
+      </Col>
+      <Col>
+        <Form.Group>
+          <Form.Label>Date de fin :</Form.Label>
+          <Form.Control type="text" value={new Date(worksite!.end).toLocaleString()} readOnly />
+        </Form.Group>
+      </Col>
+    </Row>
+  </Card.Text>
+  <Button variant="primary" onClick={() => setShowModal(true)}>Déclarer un incident</Button>{' '}
+  <Button variant="secondary" onClick={() => setModalShow(true)} className="float-end">Voir la demande de chantiers</Button>{' '}
+</Card.Body>
+
 
           </Card>
         </Col>
