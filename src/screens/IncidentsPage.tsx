@@ -28,7 +28,7 @@ const IncidentsPage: React.FC = () => {
     const emergencyMapper: EmergencyDetails[] = responseEmergency.map(emergencyDetailsJson => ({
       description: emergencyDetailsJson.description,
       title: emergencyDetailsJson.title,
-      id: emergencyDetailsJson.id,
+      id: emergencyDetailsJson.id ? emergencyDetailsJson.id : '',
       level: emergencyDetailsJson ? getIncidentLevel(emergencyDetailsJson.level) : IncidentLevel.Minor,
       worksite: undefined
     }));
