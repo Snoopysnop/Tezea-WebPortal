@@ -1,19 +1,15 @@
-import axios, { AxiosInstance } from 'axios'
+import axios from 'axios'
 import axiosRetry from 'axios-retry'
 import AbstractApi from './AbstractApi'
 import { hashPassword } from '../common/utils/utils'
-import Keycloak from 'keycloak-js';
+import { isExpired } from "react-jwt";
+import MainApi from './MainApi';
+import { Role, User } from './Model';
 
 const standaloneInstance = axios.create({
     baseURL: process.env.REACT_APP_URL,
     timeout: 60000
 })
-
-const keycloak = new Keycloak({
-    url: '/auth',
-    realm: 'Tezea',
-    clientId: 'tezea-public',
-});
 
 axiosRetry(standaloneInstance, {
     retries: 3,
@@ -32,47 +28,84 @@ class KeycloakApi extends AbstractApi {
     }
 
     public static initInstance(token?: string): void {
-        KeycloakApi.instance = new KeycloakApi(process.env.REACT_APP_URL as any)
-
+        KeycloakApi.instance = new KeycloakApi(process.env.REACT_APP_URL as any, token)
     }
 
-    public async auth() {
+    public static isTokenValid(): boolean {
+        const token = localStorage.getItem("access-token")
+        console.log(isExpired(token!))
+        if (token && !isExpired(token)) {
+            return true
+        } else return false
+    }
+
+    public async getToken(): Promise<String> {
         try {
-            const authenticated = await keycloak.init({
-                onLoad: 'login-required'
+
+            const formData = new URLSearchParams();
+            formData.append('grant_type', 'client_credentials');
+            formData.append('client_id', process.env.REACT_APP_CLIENT_ID!);
+            formData.append('client_secret', process.env.REACT_APP_CLIENT_SECRET!);
+            const response = await this.service.post("/realms/Tezea/protocol/openid-connect/token", formData, {
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             });
-            console.log(`User is ${authenticated ? 'authenticated' : 'not authenticated'}`);
+
+            return response.data["access_token"]
+
         } catch (error) {
-            console.error('Failed to initialize adapter:', error);
+            console.error(error);
+            throw error;
         }
-    }
+    };
 
     public async login(username: string, password: string): Promise<void> {
         try {
-            //const hashedPassword: string = hashPassword(password);
+            const hashedPassword: string = hashPassword(password);
             const formData = new URLSearchParams();
-
             formData.append('username', username);
-            formData.append('password', password);
-            formData.append('grant_type', process.env.REACT_APP_GRANT_TYPE!);
+            formData.append('password', hashedPassword);
+            formData.append('grant_type', 'password');
             formData.append('client_id', process.env.REACT_APP_CLIENT_ID!);
             formData.append('client_secret', process.env.REACT_APP_CLIENT_SECRET!);
+
             const response = await this.service.post('/realms/Tezea/protocol/openid-connect/token', formData, {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             });
-            console.log(response)
-            if (response.status === 200) {
-                const token: string = JSON.parse(response.data)["access_token"].toString();
-            } else if (response.status === 401) {
-                throw new Error('Wrong username or password ...');
-            } else {
-                throw new Error(`Erreur : ${response.status}, Réponse : ${response.data}`);
-            }
+            localStorage.setItem("access-token", response.data["access_token"]);
+            MainApi.initInstance(response.data["access_token"])
+
         } catch (err) {
             throw AbstractApi.handleError(err)
         }
-
     }
+
+    public async createUser(email: string, firstname: string, lastname: string, phoneNumber: string, role: Role, password: string): Promise<void> {
+        try {
+            const hashedPassword = hashPassword(password);
+            const user: User = {
+                email: email, 
+                firstName: firstname, 
+                lastName: lastname, 
+                phoneNumber: phoneNumber, 
+                role: role
+            }
+            const formData = new FormData();
+            formData.append('user', new Blob([JSON.stringify(user)], { type: "application/json" }));
+            formData.append('password', hashedPassword);
+            const token = await this.getToken()
+            await this.service.post("/api/users/create", formData, {
+                headers: { 
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+            console.log('User created');
+
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    };
 }
 
 export default KeycloakApi

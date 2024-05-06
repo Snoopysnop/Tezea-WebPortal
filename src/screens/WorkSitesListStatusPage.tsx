@@ -13,8 +13,6 @@ import { WorkSiteJson } from '../api/ModelJson';
 
 
 
-
-
 const WorkSitesListStatusPage: React.FC = () => {
   const navigate = useNavigate();
 

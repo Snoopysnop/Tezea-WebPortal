@@ -11,14 +11,7 @@ module.exports = function(app) {
   app.use(
     '/realms/Tezea/protocol/openid-connect/token',
     createProxyMiddleware({
-      target: 'http://localhost:8080/realms/Tezea/protocol/openid-connect/token',
-      changeOrigin: true,
-    })
-  );
-  app.use(
-    '/auth',
-    createProxyMiddleware({
-      target: 'http://localhost:8080',
+      target: 'http://148.60.11.163:8080/realms/Tezea/protocol/openid-connect/token',
       changeOrigin: true,
     })
   );

@@ -3,14 +3,14 @@ import { SubErrorDetails } from "../../../api/Model"
 class ApiError extends Error {
 
     status: number
-    type: string
-    errors?: SubErrorDetails[]
+    description: string
+    error: String
 
-    constructor(status: number, type: string, message: string, errors?: SubErrorDetails[]) {
-        super(message)
+    constructor(status: number, error: string, description: string) {
+        super(description)
         this.status = status
-        this.type = type
-        this.errors = errors
+        this.error = error
+        this.description = description
         Object.setPrototypeOf(this, ApiError.prototype);
     }
 }

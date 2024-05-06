@@ -78,38 +78,41 @@ const SidebarComponent: React.FC = () => {
                 zIndex: 1000,
                 backgroundColor: "#fff"
             }}
-            id="sidebar" // Ajoutez un ID à la barre latérale
+            id="sidebar"
         >
             <Menu>
-                <MenuItem
+                <MenuItem  
                     icon={<MenuOutlinedIcon />}
                     onClick={handleCollapseSidebar}
-                    style={{ textAlign: "center" }}
                 >
                     <h2>{sidebarCollapsed ? null : ''}</h2>
                 </MenuItem>
                 <MenuItem icon={<LoginOutlined />} style={{ backgroundColor: 'white' }} component={<Link to="/login" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
                     {sidebarCollapsed ? null : 'Connexion'}
                 </MenuItem>
-                <MenuItem icon={<PeopleOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/listeStatus" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
-                    {sidebarCollapsed ? null : 'Liste des chantiers'}
-                </MenuItem>
-                <MenuItem icon={<RequestQuoteOutlined />} style={{ backgroundColor: 'white' }} component={<Link to="/listeDemandeChantiers" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
-                    {sidebarCollapsed ? null : 'Demandes de chantiers'}
-                </MenuItem>
-                <MenuItem icon={<ContactsOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/creerDemande" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
-                    {sidebarCollapsed ? null : 'Créer une demande'}
-                </MenuItem>
-                <MenuItem icon={<HelpOutlineOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/incidents" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
-                    {sidebarCollapsed ? null : 'Incidents'}
-                </MenuItem>
-                <MenuItem icon={<CalendarTodayOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/planning" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
-                    {sidebarCollapsed ? null : 'Planning'}
-                </MenuItem>
-                <MenuItem icon={<SettingsOutlined />} style={{ backgroundColor: 'white' }} onClick={handleSettingsItemClick}>
-                    {sidebarCollapsed ? null : 'Paramètres'}
-                </MenuItem>
-            </Menu>
+                
+                        <MenuItem icon={<PeopleOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/listeStatus" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
+                            {sidebarCollapsed ? null : 'Liste des chantiers'}
+                        </MenuItem>
+                        <MenuItem icon={<RequestQuoteOutlined />} style={{ backgroundColor: 'white' }} component={<Link to="/listeDemandeChantiers" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
+                            {sidebarCollapsed ? null : 'Demandes de chantiers'}
+                        </MenuItem>
+                        <MenuItem icon={<ContactsOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/creerDemande" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
+                            {sidebarCollapsed ? null : 'Créer une demande'}
+                        </MenuItem>
+                        <MenuItem icon={<ReceiptOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/detailChantier" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
+                            {sidebarCollapsed ? null : 'Détail d\'un chantier'}
+                        </MenuItem>
+                        <MenuItem icon={<HelpOutlineOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/incidents" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
+                            {sidebarCollapsed ? null : 'Incidents'}
+                        </MenuItem>
+                        <MenuItem icon={<CalendarTodayOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/planning" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
+                            {sidebarCollapsed ? null : 'Planning'}
+                        </MenuItem>
+                        <MenuItem icon={<SettingsOutlined />} style={{ backgroundColor: 'white' }} onClick={handleSettingsItemClick}>
+                            {sidebarCollapsed ? null : 'Paramètres'}
+                        </MenuItem>
+                    </Menu>
         </Sidebar >
     )
 }

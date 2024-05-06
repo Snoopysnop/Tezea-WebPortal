@@ -50,11 +50,11 @@ export enum Emergency {
 }
 
 export enum Role {
-    Concierge = "Concièrge",
-    SiteChief = "Chef de site",
+    Concierge = "Concierge",
+    SiteChief = "SiteChief",
     Commercial = "Commercial",
-    WorkSiteChief = "Chef de chantier",
-    Employee = "Employé"
+    WorkSiteChief = "WorkSiteChief",
+    Employee = "Employee"
 }
 
 export enum SatisfactionLevel {
@@ -155,7 +155,7 @@ export interface WorkSite {
 }
 
 export interface User {
-    id: string;
+    id?: string;
     firstName: string;
     lastName: string;
     role: Role;
