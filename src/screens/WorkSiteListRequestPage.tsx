@@ -25,6 +25,7 @@ const WorkSiteListRequestPage: React.FC = () => {
   const [checkboxes, setCheckboxes] = useState<{ [key in WorkSiteRequestStatus]?: boolean }>({});
 
   const handleStatusChange = (status: WorkSiteRequestStatus) => {
+    console.log("appel")
     const updatedCheckboxes = { ...checkboxes, [status]: !checkboxes[status] };
     setCheckboxes(updatedCheckboxes);
 
@@ -148,17 +149,16 @@ const WorkSiteListRequestPage: React.FC = () => {
                       Filtrer
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
-                      {Object.values(WorkSiteRequestStatus)
-                        .map((status, index) => (
-                          <Dropdown.Item key={index}>
-                            <Form.Check
-                              type="checkbox"
-                              label={status}
-                              checked={!!checkboxes[status]}
-                              onChange={() => handleStatusChange(status)}
-                            />
-                          </Dropdown.Item>
-                        ))}
+                      {Object.values(WorkSiteRequestStatus).map((status, index) => (
+                        <Dropdown.Item key={index} onClick={() => handleStatusChange(status)}>
+                          <Form.Check
+                            type="checkbox"
+                            label={status}
+                            checked={!!checkboxes[status]}
+                            onChange={() => { }}
+                          />
+                        </Dropdown.Item>
+                      ))}
                     </Dropdown.Menu>
                   </Dropdown>
                 </Col>
@@ -166,7 +166,7 @@ const WorkSiteListRequestPage: React.FC = () => {
             </Col>
           </Row>
           <Container className="container-xxl mt-4">
-            <Table responsive>
+            <Table>
               <thead>
                 <tr>
                   {selectedStatus.includes(WorkSiteRequestStatus.ToComplete) && <th className="col-lg-2">{WorkSiteRequestStatus.ToComplete}</th>}

@@ -3,6 +3,7 @@ import { Button, Card, Col, Container, Row, Table, Modal, Form } from 'react-boo
 import { WorkSite, User, Role, Tool, WorkSiteStatus, SatisfactionLevel, ToolName } from '../api/Model';
 import PopupEmergency from './PopupEmergency';
 import { useLocation } from 'react-router-dom';
+import { getRoleName } from '../common/utils/utils';
 
 
 
@@ -52,7 +53,7 @@ const SettingsPage: React.FC = () => {
     </Form.Group>
     <Form.Group className="mb-3">
       <Form.Label>Rôle:</Form.Label>
-      <Form.Control type="text" value={user!.role} readOnly />
+      <Form.Control type="text" value={getRoleName(user!.role)} readOnly />
     </Form.Group>
     <Form.Group className="mb-3">
       <Form.Label>Email:</Form.Label>

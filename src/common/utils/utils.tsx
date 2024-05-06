@@ -31,6 +31,21 @@ export function getStatusColor(status: WorkSiteStatus): string {
     }
 }
 
+export function getStatusName(status: string): string {
+    switch (status) {
+        case "Standby":
+            return 'En attente';
+        case "InProgress":
+            return 'En cours';
+        case "Archive":
+            return 'Archivé';
+        case "Done":
+            return 'Terminé';    
+        default:
+            return 'Aucun Statut';
+    }
+}
+
 export function getRequestStatusColor(status: WorkSiteRequestStatus): string {
     switch (status) {
         case WorkSiteRequestStatus.Standby:
@@ -56,6 +71,23 @@ export function getEmergencyIconColor(status: Emergency): string {
             return 'text-danger';
         default:
             return '#FFFFFF';
+    }
+}
+
+export function getRoleName(role: string): string {
+    switch (role) {
+        case "Concierge":
+            return "Concièrge";
+        case "SiteChief":
+            return "Chef de site";
+        case "Commercial":
+            return "Commercial";
+        case "WorkSiteChief":
+            return "Chef de chantier";
+        case "Employee":
+            return "Employé";
+        default:
+            return "Role ?";
     }
 }
 
@@ -187,14 +219,14 @@ export function getToolName(toolname: string) {
 }
 
 export function getCivilityName(civility: string) {
-switch(civility){
-    case "Mr":
-        return Civility.Mr;
-    case "Ms":
-        return Civility.Ms;
-    case "Other":
-        return Civility.Other;
-}       
+    switch (civility) {
+        case "Mr":
+            return Civility.Mr;
+        case "Ms":
+            return Civility.Ms;
+        case "Other":
+            return Civility.Other;
+    }
 }
 
 export function getRequestStatusIcon(status: WorkSiteRequestStatus) {

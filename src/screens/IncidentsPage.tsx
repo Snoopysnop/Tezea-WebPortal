@@ -114,12 +114,12 @@ const IncidentsPage: React.FC = () => {
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
                       {Object.values(Emergency).map((status, index) => (
-                        <Dropdown.Item key={index}>
+                        <Dropdown.Item key={index} onClick={() => handleStatusChange(status)}>
                           <Form.Check
                             type="checkbox"
                             label={status}
                             checked={!!checkboxes[status]}
-                            onChange={() => handleStatusChange(status)}
+                            onChange={() => {}}
                           />
                         </Dropdown.Item>
                       ))}
@@ -131,13 +131,14 @@ const IncidentsPage: React.FC = () => {
           </Row>
 
           <Container className="container-xxl mt-4">
-            <Table responsive>
+          <Col lg={12}> 
+          <Table>
               <thead>
                 <tr>
-                  <th className={`col-lg-2 ${!selectedStatus.includes(Emergency.Minor) && "d-none"}`}>{Emergency.Minor}</th>
-                  <th className={`col-lg-2 ${!selectedStatus.includes(Emergency.Medium) && "d-none"}`}>{Emergency.Medium}</th>
-                  <th className={`col-lg-2 ${!selectedStatus.includes(Emergency.Severe) && "d-none"}`}>{Emergency.Severe}</th>
-                  <th className={`col-lg-2 ${!selectedStatus.includes(Emergency.Blocking) && "d-none"}`}>{Emergency.Blocking}</th>
+                  <th className={`col-lg-3 ${!selectedStatus.includes(Emergency.Minor) && "d-none"}`}>{Emergency.Minor}</th>
+                  <th className={`col-lg-3 ${!selectedStatus.includes(Emergency.Medium) && "d-none"}`}>{Emergency.Medium}</th>
+                  <th className={`col-lg-3 ${!selectedStatus.includes(Emergency.Severe) && "d-none"}`}>{Emergency.Severe}</th>
+                  <th className={`col-lg-3 ${!selectedStatus.includes(Emergency.Blocking) && "d-none"}`}>{Emergency.Blocking}</th>
                 </tr>
               </thead>
               <tbody>
@@ -213,8 +214,8 @@ const IncidentsPage: React.FC = () => {
                 </tr>
               </tbody>
             </Table>
+            </Col>
           </Container>
-
         </Container>
       }
     </>
