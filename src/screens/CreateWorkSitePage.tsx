@@ -46,7 +46,7 @@ const CreateWorkSitePage: React.FC = () => {
 
 
   const handleCreateWorkSite = async () => {
-    if (!startTime || !endTime || !selectedStaff.length || !selectedTools.length || !title) {
+    if (!startTime || !endTime || !selectedWorksiteChief || !selectedStaff.length || !selectedTools.length || !title) {
       console.error('Veuillez remplir toutes les informations nécessaires.');
       setErrorCreation('Veuillez remplir toutes les informations nécessaires avant de créer le chantier.')
       return;
