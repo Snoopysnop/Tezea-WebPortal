@@ -4,7 +4,7 @@ import { WorkSite, User, Role, Tool, WorkSiteStatus, SatisfactionLevel, ToolName
 import PopupEmergency from './PopupEmergency';
 import { useLocation } from 'react-router-dom';
 import MainApi from '../api/MainApi';
-import { getRoleWorksite, getStatusWorksite } from '../common/utils/utils';
+import { getRoleWorksite, getStatusWorksite, getToolName } from '../common/utils/utils';
 
 const WorkSiteDetailPage: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -33,7 +33,6 @@ const WorkSiteDetailPage: React.FC = () => {
 
     const workSiteUsersFiltered = users.filter(user => getRoleWorksite(user.role) === Role.Employee);
 
-    console.log(workSiteChiefFiltered[0].firstName)
     if (workSiteChiefFiltered.length > 0) {
       setWorkSiteChief(workSiteChiefFiltered[0])
     }
@@ -42,23 +41,18 @@ const WorkSiteDetailPage: React.FC = () => {
     }
   }
 
-  console.log(currentusers);
-
 //TODO
   const tools: Tool[] = [];
   for (const key in worksite?.equipments) {
       if (Object.prototype.hasOwnProperty.call(worksite?.equipments, key)) {
+        const toolName: string = key; // Récupère le nom de l'outil à partir de la clé
           const tool: Tool = {
-              name: ToolName.Axe,
+              name: getToolName(toolName),
               quantity: worksite ? worksite!.equipments[key as keyof typeof worksite.equipments] as number : 0
           };
           tools.push(tool); 
       }
   }
-  console.log("jeveuxpasycroire", tools)
-
-
-
 
   // Fonction pour ouvrir la modale
   const openModal = () => {

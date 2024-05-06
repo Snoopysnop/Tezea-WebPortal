@@ -4,7 +4,7 @@ import {Tool,WorkSiteStatus,Emergency,Civility,CustomerStatus,Service,Category,W
 export interface EmergencyDetailsJson {
     description: string,
     id?: string ,
-    level: Emergency,
+    level: string,
     title: string,
     evidences? : any[],
     workSiteId? : string

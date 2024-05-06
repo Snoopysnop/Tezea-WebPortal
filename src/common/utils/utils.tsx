@@ -130,6 +130,20 @@ export function getStatusWorksiteRequest(status: string) {
     }
 }
 
+export function getEmergencyJsonFormat(civility: string) {
+    switch (civility) {
+        case "Faible":
+            return "Minor";
+        case "Moyen":
+            return "Medium";
+        case "Haut":
+            return "Severe";
+        case "Bloquant":
+            return "Blocking";
+    }
+
+}
+
 export function getEmergency(emergency: string) {
     switch (emergency) {
         case "Minor":
