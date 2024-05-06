@@ -24,6 +24,7 @@ console.log("true value",worksite)
   useEffect(() => {
     handleListWorksite();
     handleUsers();
+    worksite!.signature = "iVBORw0KGgoAAAANSUhEUgAAAJgAAABlCAYAAACxzirmAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFpSURBVHhe7dixbcMwEEBRbaLFjBQZxGkyhJEJAmgKFem0E+M6JgII0O9e8Rpe+3EguazrOqAiMFICIyUwUgIjJTBSAiMlMFLTwO7bMY5jG/fJDM5YPieHAuMqy/fkEK6y/LzPB3AFG4zUP3ewfXy9vc7gjOkr8vbYn4EdY3/cXmZwxvwf7GOzwbjEn8DuY3tuLnFxFT/5pARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERmgdvwEFpgF42yNjAAAAAElFTkSuQmCC"
   }, []); // Le tableau vide indique que cette fonction doit être appelée une seule fois lors du montage du composant
 
   const handleListWorksite = async () => {
@@ -32,7 +33,7 @@ console.log("true value",worksite)
       const users = await MainApi.getInstance().getUsersByWorksiteId(String(worksite!.id)) as Array<User>;
     };
   }
-
+  
   const handleUsers = async () => {
     const users = await MainApi.getInstance().getUsersByWorksiteId(String(worksite!.id)) as Array<User>;
 
@@ -133,7 +134,7 @@ console.log("true value",worksite)
                   <Col>
                     <Form.Group>
                       <Form.Label>Chef de chantier :</Form.Label>
-                      <Form.Control type="text" value={currentworkSiteChief?.firstName} readOnly />
+                      <Form.Control type="text" value={currentworkSiteChief?.firstName + " "+ currentworkSiteChief?.lastName} readOnly />
                     </Form.Group>
                   </Col>
                   <Col>
@@ -168,6 +169,9 @@ console.log("true value",worksite)
           <Card bg="white" text="dark" className="h-100">
             <Card.Body>
               <Card.Title><h2>Signature</h2></Card.Title>
+              <img 
+                src={`data:image/png;base64, ${worksite!.signature}`}
+                />
             </Card.Body>
           </Card>
         </Col>
