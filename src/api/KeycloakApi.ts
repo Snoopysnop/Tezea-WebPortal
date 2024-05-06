@@ -1,7 +1,7 @@
 import axios from 'axios'
 import axiosRetry from 'axios-retry'
 import AbstractApi from './AbstractApi'
-import { hashPassword } from '../common/utils/utils'
+import { getRole, hashPassword } from '../common/utils/utils'
 import { isExpired } from "react-jwt";
 import MainApi from './MainApi';
 import { Role, User } from './Model';
@@ -33,7 +33,6 @@ class KeycloakApi extends AbstractApi {
 
     public static isTokenValid(): boolean {
         const token = localStorage.getItem("access-token")
-        console.log(isExpired(token!))
         if (token && !isExpired(token)) {
             return true
         } else return false
@@ -71,8 +70,9 @@ class KeycloakApi extends AbstractApi {
             const response = await this.service.post('/realms/Tezea/protocol/openid-connect/token', formData, {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             });
-            localStorage.setItem("access-token", response.data["access_token"]);
-            MainApi.initInstance(response.data["access_token"])
+            const token = response.data["access_token"]
+            localStorage.setItem("access-token", token);
+            MainApi.initInstance(token)
 
         } catch (err) {
             throw AbstractApi.handleError(err)
@@ -87,7 +87,7 @@ class KeycloakApi extends AbstractApi {
                 firstName: firstname, 
                 lastName: lastname, 
                 phoneNumber: phoneNumber, 
-                role: role
+                role: getRole(role)
             }
             const formData = new FormData();
             formData.append('user', new Blob([JSON.stringify(user)], { type: "application/json" }));

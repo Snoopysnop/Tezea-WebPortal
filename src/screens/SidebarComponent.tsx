@@ -31,10 +31,6 @@ const SidebarComponent: React.FC = () => {
         setSidebarCollapsed(!sidebarCollapsed);
     };
 
-    MainApi.initInstance()
-    KeycloakApi.initInstance()
-
-
     const handleSettingsItemClick = async () => {
         setSidebarCollapsed(true);
         const responseUserInfo = await MainApi.getInstance().getUserbyId("2245b540-88c7-42dd-b469-70c82c6beb02") as User;

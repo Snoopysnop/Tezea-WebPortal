@@ -13,31 +13,32 @@ import RegisterPage from '../../screens/RegisterPage';
 import WorkSiteListRequestPage from '../../screens/WorkSiteListRequestPage';
 import { Col, Container, Row } from 'react-bootstrap';
 import ProtectedRoute from './ProtectedRoute';
+import { Role } from '../../api/Model';
 
 export interface LoginPageProps {
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Navigation: React.FC<LoginPageProps> = ({setIsLoggedIn}) => {
+const Navigation: React.FC<LoginPageProps> = ({ setIsLoggedIn }) => {
   return (
     <Container className='container-xxl'>
       <Row>
         <Col lg='1' className='ps-0 pe-0'></Col>
         <Col className='ps-0 pe-0'>
           <Routes>
-            <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn}/>} />
+            <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<WorkSiteListPage />} />
-            <Route path="/listeStatus" element={<WorkSitesListStatusPage />} />
-            <Route path="/creerDemande" element={<WorkSiteRequestPage />} />
-            <Route path="/incidents" element={<IncidentsPage />} />
-            <Route path="/parametres" element={<SettingsPage />} />
-            <Route path="/detailChantier" element={<WorkSiteDetailPage />} />
-            <Route path="/creerChantier" element={<CreateWorkSitePage />} />
-            <Route path="/listeChantiers" element={<WorkSiteListPage />} />
-            <Route path="/listeDemandeChantiers" element={<WorkSiteListRequestPage />} />
-            <Route path="/planning" element={<SchedulePage />} />
+            <Route element={<ProtectedRoute role={Role.WorkSiteChief}/>}>
+              <Route path="/" element={<WorkSiteListPage />} />
+              <Route path="/listeStatus" element={<WorkSitesListStatusPage />} />
+              <Route path="/creerDemande" element={<WorkSiteRequestPage />} />
+              <Route path="/incidents" element={<IncidentsPage />} />
+              <Route path="/parametres" element={<SettingsPage />} />
+              <Route path="/detailChantier" element={<WorkSiteDetailPage />} />
+              <Route path="/creerChantier" element={<CreateWorkSitePage />} />
+              <Route path="/listeChantiers" element={<WorkSiteListPage />} />
+              <Route path="/listeDemandeChantiers" element={<WorkSiteListRequestPage />} />
+              <Route path="/planning" element={<SchedulePage />} />
             </Route>
           </Routes>
         </Col>

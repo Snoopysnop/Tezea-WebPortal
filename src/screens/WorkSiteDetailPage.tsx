@@ -4,7 +4,7 @@ import { WorkSite, User, Role, Tool, WorkSiteStatus, SatisfactionLevel, ToolName
 import PopupEmergency from './PopupEmergency';
 import { useLocation } from 'react-router-dom';
 import MainApi from '../api/MainApi';
-import { getRoleWorksite, getStatusWorksite } from '../common/utils/utils';
+import { getRole, getStatusWorksite } from '../common/utils/utils';
 
 const WorkSiteDetailPage: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -29,9 +29,9 @@ const WorkSiteDetailPage: React.FC = () => {
 
   const handleUsers = async () => {
     const users = await MainApi.getInstance().getUsersByWorksiteId(String(worksite!.id)) as Array<User>;
-    const workSiteChiefFiltered = users.filter(user => getRoleWorksite(user.role) === Role.WorkSiteChief);
+    const workSiteChiefFiltered = users.filter(user => getRole(user.role) === Role.WorkSiteChief);
 
-    const workSiteUsersFiltered = users.filter(user => getRoleWorksite(user.role) === Role.Employee);
+    const workSiteUsersFiltered = users.filter(user => getRole(user.role) === Role.Employee);
 
     console.log(workSiteChiefFiltered[0].firstName)
     if (workSiteChiefFiltered.length > 0) {
@@ -166,7 +166,7 @@ const WorkSiteDetailPage: React.FC = () => {
                     <tr key={index}>
                       <td>{user.firstName}</td>
                       <td>{user.lastName}</td>
-                      <td>{getRoleWorksite(user.role)}</td>
+                      <td>{getRole(user.role)}</td>
                       <td>{user.email}</td>
                       <td>{user.phoneNumber}</td>
                     </tr>

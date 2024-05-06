@@ -107,12 +107,21 @@ export function getStatusWorksite(status: string) {
     }
 }
 
-export function getRoleWorksite(status: string) {
+export function getRole(status: string) {
     switch (status) {
         case "WorkSiteChief":
             return Role.WorkSiteChief;
         case "Employee":
             return Role.Employee;
+        case "Concièrge":
+            return Role.Concierge;
+        case "Chef de site":
+            return Role.WorkSiteChief;
+        case "Commercial":
+            return Role.Commercial;
+        default:
+            return Role.Employee;
+
     }
 }
 export function getStatusWorksiteRequest(status: string) {

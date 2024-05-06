@@ -24,6 +24,7 @@
     "express": "^4.19.2",
     "formik": "^2.4.6",
     "http-proxy-middleware": "^3.0.0",
+    "jwt-decode": "^4.0.0",
     "keycloak-js": "^24.0.3",
     "react": "^18.3.1",
     "react-autosuggest": "^10.1.0",
