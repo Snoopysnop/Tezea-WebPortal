@@ -4,7 +4,6 @@ import { WorkSiteRequest, User, Customer, Role, Emergency, Civility, CustomerSta
 import { ReactComponent as ModifyPencil } from 'bootstrap-icons/icons/pencil-square.svg';
 import { Link, useNavigate } from 'react-router-dom';
 
-const mockStaff: User = { id: '1', firstName: 'John', lastName: 'Doe', role: Role.Employee, email: 'john@example.com', phoneNumber: '123456789' };
 
 
 
@@ -12,10 +11,11 @@ interface ModalProps {
   show: boolean;
   onHide: () => void;
   worksiteRequest: WorkSiteRequest;
+  showButtons: boolean;
 }
 
 const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
-  const { show, onHide, worksiteRequest }: ModalProps = props;
+  const { show, onHide, worksiteRequest, showButtons }: ModalProps = props;
 
   const navigate = useNavigate();
 
@@ -37,6 +37,11 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
     console.log(worksiteRequest);
     navigate("/creerDemande", { state: {worksiteRequest}})
   }
+
+  function handleCreateWorksite() {
+    console.log(worksiteRequest);
+    navigate("/creerChantier", { state: {worksiteRequest}})
+  }
   return (
     <Modal
       show={show}
@@ -48,13 +53,15 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
       {/*TODO fix le css ici*/}
       <Modal.Header closeButton>
         <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-          <Modal.Title style={{ display: "flex", alignItems: "center", justifyContent: "center" }} id="contained-modal-title-vcenter">Recapitulatif demande n° {worksiteRequest?.id} - </Modal.Title>
+          <Modal.Title style={{ display: "flex", alignItems: "center", justifyContent: "center" }} id="contained-modal-title-vcenter">Recapitulatif demande n° {worksiteRequest?.id} </Modal.Title>
+          {showButtons && (
           <div>
             <Button onClick={() => handleEdit()} variant="link" style={{ gap: 3, margin: 5, color: '#008FE3', display: "flex", flexDirection: "row", alignItems: "center" }}>
               <ModifyPencil width='22px' height='100%' />
               <div>Editer</div>
             </Button>
           </div>
+          )}
         </div>
       </Modal.Header>
 
@@ -137,11 +144,11 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
             <Col></Col>
           </Row>
         </div>
+        {showButtons && (
         <div className="CreateWorkSitButton" style={{ display: 'flex', justifyContent: 'center' }}>
-          <Link to="/creerChantier">
-            <Button onClick={onHide}>Créer un chantier</Button>
-          </Link>
+            <Button onClick={() => { onHide(); handleCreateWorksite(); }}>Créer un chantier</Button>
         </div>
+)}
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={onHide}>Close</Button>

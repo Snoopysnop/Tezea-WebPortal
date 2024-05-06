@@ -18,10 +18,6 @@ import { WorkSiteJson } from '../api/ModelJson';
 const WorkSitesListStatusPage: React.FC = () => {
   const navigate = useNavigate();
 
-  const location = useLocation();
-
-  const WorksiteOrderedList = location.state ? (location.state as any).worksiteData as WorkSite[] : null;
-
   const [filterValue, setFilterValue] = useState<string>("");
 
   const allStatus: WorkSiteStatus[] = Object.values(WorkSiteStatus);

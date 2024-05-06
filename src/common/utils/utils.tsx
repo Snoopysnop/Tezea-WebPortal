@@ -1,4 +1,4 @@
-import { Category, Emergency, Role, WorkSiteRequestStatus, WorkSiteStatus } from "../../api/Model";
+import { Category, Emergency, ToolName, Role, WorkSiteRequestStatus, WorkSiteStatus } from "../../api/Model";
 import { ReactComponent as InProgressIcon } from 'bootstrap-icons/icons/hourglass-split.svg'
 import { ReactComponent as DoneIcon } from 'bootstrap-icons/icons/check-lg.svg'
 import { ReactComponent as StandByIcon } from 'bootstrap-icons/icons/pause.svg'
@@ -142,6 +142,33 @@ export function getEmergency(emergency: string) {
             return Emergency.Blocking;
         default:
             return Emergency.Minor;
+    }
+}
+
+export function getToolName(toolname: string) {
+    switch (toolname) {
+        case "Agrafeuse":
+            return ToolName.Stapler;
+        case "Bétonnière":
+            return ToolName.CementMixer;
+        case "Cisaille":
+            return ToolName.Shear;
+        case "Clé anglaise":
+            return ToolName.Wrench;
+        case "Échelle":
+            return ToolName.Ladder;
+        case "Hache":
+            return ToolName.Axe;
+        case "Palette":
+            return ToolName.Palette;
+        case "Râteau":
+            return ToolName.Rake;
+        case "Scie":
+            return ToolName.Saw;
+        case "Perceuse":
+            return ToolName.Drill;
+        case "Pelle":
+            return ToolName.Shovel;
     }
 }
 

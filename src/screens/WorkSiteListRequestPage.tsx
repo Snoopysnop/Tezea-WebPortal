@@ -67,10 +67,6 @@ const WorkSiteListRequestPage: React.FC = () => {
       tezeaAffectation: worksiteRequestJson.tezeaAffectation,
     }));
     setDataFetched(worksiteRequestMapper);
-    console.log("Reponse", responseWorksiteRequest);
-
-    console.log("mapper", worksiteRequestMapper);
-    console.log("data", worksiteRequestData);
 
   }
 
@@ -265,6 +261,7 @@ const WorkSiteListRequestPage: React.FC = () => {
             show={modalShow}
             onHide={() => setModalShow(false)}
             worksiteRequest={worksiteRequestData!}//todo checker le !
+            showButtons={true}
           />
         </Container>
       }
