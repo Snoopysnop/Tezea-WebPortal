@@ -3,7 +3,7 @@ import axiosRetry from 'axios-retry'
 import AbstractApi from './AbstractApi'
 import { Role, Customer, User, WorkSiteRequest, WorkSite, TimeLine, Tool } from './Model'
 import { hashPassword } from '../common/utils/utils'
-import { CustomerJson, UserJson, WorkSiteRequestJson, WorkSiteJson, EmergencyDetailsJson, EmergencyDetailsJsonToSend } from './ModelJson'
+import { CustomerJson, UserJson, WorkSiteRequestJson, WorkSiteJson, EmergencyDetailsJson, EmergencyDetailsJsonToSend, WorkSiteJsonChelou } from './ModelJson'
 import { stringify } from 'querystring'
 
 const standaloneInstance = axios.create({
@@ -147,16 +147,15 @@ class MainApi extends AbstractApi {
 
     //Worksite-------------------------------------------------------------------------------------------------------------
 
-    public async createWorkSite(workSiteRequestData: WorkSiteJson): Promise<WorkSiteJson> {
+    public async createWorkSite(workSiteRequestData: WorkSiteJsonChelou): Promise<WorkSiteJson> {
         try {
-            
             const config = {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             }
-
-            const response = await this.service.post<WorkSiteJson>(`/api/worksites/create`, workSiteRequestData, config);
+            const data = workSiteRequestData
+            const response = await this.service.post<WorkSiteJson>(`/api/worksites/create`, data, config);
             return response.data;
         } catch (err) {
             throw AbstractApi.handleError(err);

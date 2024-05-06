@@ -9,7 +9,7 @@ import MainApi from '../api/MainApi';
 import { getToolName } from '../common/utils/utils';
 import WorkSiteRequestPopUp from '../components/WorkSiteRequestPopUp';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { WorkSiteJson } from '../api/ModelJson';
+import { WorkSiteJson, WorkSiteJsonChelou } from '../api/ModelJson';
 
 const CreateWorkSitePage: React.FC = () => {
 
@@ -51,15 +51,21 @@ const CreateWorkSitePage: React.FC = () => {
       return;
     }
 
-    const workSite: WorkSiteJson = {
-      workSiteChief: selectedWorksiteChief ? selectedWorksiteChief.id : undefined,
-      staff: selectedStaff.map((user) => user.id!),
-      equipment: selectedTools.map(toolName => {
-        return {
+    const equipmentsMap: { [key: string]: number } = {};
+
+    selectedTools.map(toolName => {
+      return {
         name: toolName,
         quantity: selectedQuantities[toolName] || 1
-        } as Tool
-      }),
+      } as Tool
+    }).forEach(tool => {
+      equipmentsMap[tool.name!] = tool.quantity;
+    })
+
+    const workSite: WorkSiteJsonChelou = {
+      workSiteChief: selectedWorksiteChief ? selectedWorksiteChief.id : undefined,
+      staff: selectedStaff.map((user) => user.id!),
+      equipments: equipmentsMap,
       begin: startTime,
       end: endTime,
       status: WorkSiteStatus.InProgress,
@@ -68,8 +74,6 @@ const CreateWorkSitePage: React.FC = () => {
       signature: "",
       title: ''
     };
-
-    console.log(workSite)
 
     await MainApi.getInstance().createWorkSite(workSite)
     //todo brancher le POST
@@ -193,7 +197,7 @@ const CreateWorkSitePage: React.FC = () => {
     for (const key in responseTool) {
       if (Object.prototype.hasOwnProperty.call(responseTool, key)) {
         const tool: Tool = {
-          name: getToolName(key),
+          name: getToolName(key)!,
           quantity: responseTool[key],
         };
         tools.push(tool);
@@ -578,7 +582,7 @@ const CreateWorkSitePage: React.FC = () => {
         onHide={() => setModalShow(false)}
         worksiteRequest={worksiteRequestData!}//todo checker le !
         showButtonEditValidate={false}
-            showButtonCreate={false}
+        showButtonCreate={false}
       />
     </Container>
 

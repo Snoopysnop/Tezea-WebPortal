@@ -172,7 +172,7 @@ export interface User {
 }
 
 export interface Tool {
-    name?: ToolName;
+    name: ToolName;
     quantity: number;
 }
 

@@ -79,7 +79,7 @@ const WorkSiteDetailPage: React.FC = () => {
       if (Object.prototype.hasOwnProperty.call(worksite?.equipments, key)) {
         const toolName: string = key; // Récupère le nom de l'outil à partir de la clé
           const tool: Tool = {
-              name: getToolName(toolName),
+              name: getToolName(toolName)!,
               quantity: worksite ? worksite!.equipments[key as keyof typeof worksite.equipments] as number : 0
           };
           tools.push(tool); 

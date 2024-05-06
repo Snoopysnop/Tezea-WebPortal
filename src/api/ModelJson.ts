@@ -60,6 +60,21 @@ export interface WorkSiteRequestJson {
     tezeaAffectation?: string;
 }
 
+export interface WorkSiteJsonChelou {
+    id?: string;
+    workSiteChief?: string;
+    staff?: string[];
+    equipments?: { [key: string]: number };
+    begin: string;
+    end: string;
+    status?: WorkSiteStatus;
+    workSiteRequest?: number | undefined; 
+    satisfaction?: SatisfactionLevel;
+    signature?: String;
+    title?: string;
+    address?:string
+}
+
 export interface WorkSiteJson {
     id?: string;
     workSiteChief?: string;
