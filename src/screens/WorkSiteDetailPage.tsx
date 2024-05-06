@@ -11,7 +11,6 @@ const WorkSiteDetailPage: React.FC = () => {
   const location = useLocation();
 
   const worksite = location.state ? (location.state as any).worksiteData as WorkSite : null;
-  console.log(worksite)
 
   const [currentworkSiteChief, setWorkSiteChief] = useState<User | undefined>(undefined);
   const [currentusers, setWorkSiteUsers] = useState<User[] | undefined>(undefined);
@@ -23,14 +22,8 @@ const WorkSiteDetailPage: React.FC = () => {
 
   const handleListWorksite = async () => {
     if (worksite!.workSiteChief) {
-      console.log("chef !!!");
-      console.log(worksite!.workSiteChief)
       const worksiteChief = await MainApi.getInstance().getUserbyId(String(worksite!.workSiteChief)) as User;
-      console.log("test");
-      console.log(worksiteChief);
-      console.log("test");
       const users = await MainApi.getInstance().getUsersByWorksiteId(String(worksite!.id)) as Array<User>;
-      console.log(users)
     };
   }
 
@@ -48,9 +41,24 @@ const WorkSiteDetailPage: React.FC = () => {
       setWorkSiteUsers(workSiteUsersFiltered)
     }
   }
-  console.log("Triple quoicoubaka");
 
   console.log(currentusers);
+
+//TODO
+  const tools: Tool[] = [];
+  for (const key in worksite?.equipments) {
+      if (Object.prototype.hasOwnProperty.call(worksite?.equipments, key)) {
+          const tool: Tool = {
+              name: ToolName.Axe,
+              quantity: worksite ? worksite!.equipments[key as keyof typeof worksite.equipments] as number : 0
+          };
+          tools.push(tool); 
+      }
+  }
+  console.log("jeveuxpasycroire", tools)
+
+
+
 
   // Fonction pour ouvrir la modale
   const openModal = () => {
@@ -128,10 +136,10 @@ const WorkSiteDetailPage: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {worksite && worksite.equipments && Object.keys(worksite.equipments).map((toolName: string, qty: number) => (
-                    <tr key={toolName}>
-                      <td>{toolName}</td>
-                      <td>{qty}</td>
+                { tools.map((tool : Tool) => (
+                    <tr key={tool.name}>
+                      <td>{tool.name}</td>
+                      <td>{tool.quantity}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -169,7 +177,7 @@ const WorkSiteDetailPage: React.FC = () => {
           </Card>
         </Col>
       </Row>
-      <PopupEmergency showModal={showModal} closeModal={closeModal} />
+      <PopupEmergency showModal={showModal} closeModal={closeModal} worksiteId={worksite!.id}/>
     </Container>
   );
 }

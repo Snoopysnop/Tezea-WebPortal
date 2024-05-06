@@ -28,7 +28,7 @@ const IncidentsPage: React.FC = () => {
     const emergencyMapper: EmergencyDetails[] = responseEmergency.map(emergencyDetailsJson => ({
       description: emergencyDetailsJson.description,
       title: emergencyDetailsJson.title,
-      id: emergencyDetailsJson.id,
+      id: emergencyDetailsJson.id ? emergencyDetailsJson.id : "",
       level: emergencyDetailsJson ? getEmergency(emergencyDetailsJson.level) : Emergency.Minor,
       worksite: undefined
     }));
@@ -149,7 +149,7 @@ const IncidentsPage: React.FC = () => {
                         .map(task => (
                           <Col key={task.id} lg={12}>
                             <EmergencyComponent
-                              id={task.id}
+                              id={task.id} 
                               description={task.description}
                               emergency={Emergency.Minor}
                               category={Category.CreaPalette}
