@@ -278,7 +278,7 @@ const WorkSiteRequestPage: React.FC = () => {
         <Row className="mb-3" style={{ color: '#008FE3', fontSize: '18px' }}>
           <Form.Group as={Col} xs={6} controlId="formGridTitle">
             <Form.Label >Nom de la demande</Form.Label>
-            <Form.Control type="title" placeholder="Entrez le nom de la demande de chantier" value={worksiteRequestFormData.worksiteRequest.title} onChange={handleWorksiteRequestChange} name="title" />
+            <Form.Control type="title" placeholder="Entrez le nom de la demande de chantier" value={worksiteRequestFormData.worksiteRequest.title} onChange={handleWorksiteRequestChange} name="title" required/>
           </Form.Group>
           <Form.Group as={Col} xs={4} controlId="formGridCity">
             <Form.Label >Lieu (ville)</Form.Label>

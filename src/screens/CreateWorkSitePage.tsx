@@ -72,7 +72,7 @@ const CreateWorkSitePage: React.FC = () => {
       workSiteRequest: worksiteRequestData?.id,
       satisfaction: SatisfactionLevel.Perfect,
       signature: "",
-      title: ''
+      title: title
     };
 
     await MainApi.getInstance().createWorkSite(workSite)
