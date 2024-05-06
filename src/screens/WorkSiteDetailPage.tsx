@@ -13,12 +13,14 @@ const WorkSiteDetailPage: React.FC = () => {
   const location = useLocation();
 
   const worksite = location.state ? (location.state as any).worksiteData as WorkSiteJson : null;
+  console.log("aaaaaaaa",worksite);
   const [currentworkSiteChief, setWorkSiteChief] = useState<User | undefined>(undefined);
   const [currentusers, setWorkSiteUsers] = useState<User[] | undefined>(undefined);
   const [currentstate, setWorksiteRequest] = useState<WorkSiteRequest| undefined>(undefined);
 
   useEffect(() => {
     handleUsers();
+    handleUsersAndWorksiteChief();
     worksite!.signature = "iVBORw0KGgoAAAANSUhEUgAAAJgAAABlCAYAAACxzirmAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFpSURBVHhe7dixbcMwEEBRbaLFjBQZxGkyhJEJAmgKFem0E+M6JgII0O9e8Rpe+3EguazrOqAiMFICIyUwUgIjJTBSAiMlMFLTwO7bMY5jG/fJDM5YPieHAuMqy/fkEK6y/LzPB3AFG4zUP3ewfXy9vc7gjOkr8vbYn4EdY3/cXmZwxvwf7GOzwbjEn8DuY3tuLnFxFT/5pARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERmgdvwEFpgF42yNjAAAAAElFTkSuQmCC"
   }, []); // Le tableau vide indique que cette fonction doit être appelée une seule fois lors du montage du composant
   
@@ -73,6 +75,20 @@ const WorkSiteDetailPage: React.FC = () => {
 
   setWorksiteRequest(worksiterequestsend);
   }
+
+  const handleUsersAndWorksiteChief = async () => {
+    const users = await MainApi.getInstance().getUsersByWorksiteId(String(worksite!.id)) as Array<User>;
+    const workSiteChiefFiltered = users.filter(user => getRoleWorksite(user.role) === Role.WorkSiteChief);
+    const workSiteUsersFiltered = users.filter(user => getRoleWorksite(user.role) === Role.Employee);
+    console.log(workSiteChiefFiltered[0].firstName)
+    if (workSiteChiefFiltered.length > 0) {
+      setWorkSiteChief(workSiteChiefFiltered[0])
+    }
+    if (workSiteUsersFiltered.length > 0) {
+      setWorkSiteUsers(workSiteUsersFiltered)
+    }
+  }
+
 
   const tools: Tool[] = [];
   for (const key in worksite!.equipments) {
