@@ -334,7 +334,7 @@ const CreateWorkSitePage: React.FC = () => {
                               </Card.Text>
                             </Card.Body>
                             <Card.Body className="text-center">
-                              <Button variant="danger" style={{ height: '40px', width: '80' }} onClick={() => handleRemoveSelectedWorksiteChief(selectedWorksiteChief.id)}>
+                              <Button variant="danger" style={{ height: '40px', width: '80' }} onClick={() => handleRemoveSelectedWorksiteChief(selectedWorksiteChief.id!)}>
                                 Retirer
                               </Button>
                             </Card.Body>
@@ -397,7 +397,7 @@ const CreateWorkSitePage: React.FC = () => {
                                     </Card.Text>
                                   </Card.Body>
                                   <Card.Body className="text-center">
-                                    <Button variant="danger" style={{ height: '40px', width: '80' }} onClick={() => handleRemoveSelectedStaff(user.id)}>
+                                    <Button variant="danger" style={{ height: '40px', width: '80' }} onClick={() => handleRemoveSelectedStaff(user.id!)}>
                                       Retirer
                                     </Button>
                                   </Card.Body>

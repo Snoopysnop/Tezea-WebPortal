@@ -52,20 +52,6 @@ class MainApi extends AbstractApi {
         }
     }
 
-    public async createUser(user: User): Promise<User> {
-        try {
-            const config = {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            }
-            const response = await this.service.post(`/api/users/create`)
-            return response.data as User
-        } catch (err) {
-            throw AbstractApi.handleError(err)
-        }
-    }
-
     //WorksiteRequest-------------------------------------------------------------------------------------------------------------
 
     public async createWorkSiteRequest(workSiteRequestData: WorkSiteRequestJson): Promise<WorkSiteRequestJson> {
