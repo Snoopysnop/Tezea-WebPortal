@@ -11,7 +11,6 @@ const WorkSiteDetailPage: React.FC = () => {
   const location = useLocation();
 
   const worksite = location.state ? (location.state as any).worksiteData as WorkSite : null;
-  console.log(worksite)
 
   const [currentworkSiteChief, setWorkSiteChief] = useState<User | undefined>(undefined);
   const [currentusers, setWorkSiteUsers] = useState<User[] | undefined>(undefined);
@@ -23,14 +22,8 @@ const WorkSiteDetailPage: React.FC = () => {
 
   const handleListWorksite = async () => {
     if (worksite!.workSiteChief) {
-      console.log("chef !!!");
-      console.log(worksite!.workSiteChief)
       const worksiteChief = await MainApi.getInstance().getUserbyId(String(worksite!.workSiteChief)) as User;
-      console.log("test");
-      console.log(worksiteChief);
-      console.log("test");
       const users = await MainApi.getInstance().getUsersByWorksiteId(String(worksite!.id)) as Array<User>;
-      console.log(users)
     };
   }
 
