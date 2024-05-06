@@ -4,7 +4,7 @@ import { WorkSite, User, Role, Tool, WorkSiteStatus, SatisfactionLevel, ToolName
 import PopupEmergency from './PopupEmergency';
 import { useLocation } from 'react-router-dom';
 import MainApi from '../api/MainApi';
-import { getCivilityName, getRoleWorksite, getStatusName, getStatusWorksite, getToolName } from '../common/utils/utils';
+import { getCategorie, getCivilityName, getCustomerStatus, getEmergency, getRoleWorksite, getServiceType, getStatusName, getStatusWorksite, getStatusWorksiteRequest, getToolName } from '../common/utils/utils';
 import WorkSiteRequestPopUp from '../components/WorkSiteRequestPopUp';
 import { CustomerJson, WorkSiteJson, WorkSiteRequestJson } from '../api/ModelJson';
 
@@ -54,7 +54,7 @@ console.log("true value",worksite)
       address: customerjson.address,
       city: customerjson.city,
       postalCode: customerjson.postalCode,
-      status: customerjson.status,
+      status: customerjson.status ? getCustomerStatus(customerjson.status) : undefined,
       company: customerjson.company
     }
 
@@ -64,17 +64,17 @@ console.log("true value",worksite)
       siteChief: undefined,
       customer: customer,
       city: workSiteRequest.city,
-      serviceType: workSiteRequest.serviceType,
+      serviceType: workSiteRequest.serviceType ? getServiceType(workSiteRequest.serviceType) : undefined,
       description: workSiteRequest.description,
-      emergency: workSiteRequest.emergency,
+      emergency: workSiteRequest.emergency ? getEmergency(workSiteRequest.emergency) : undefined,
       title: workSiteRequest.title,
-      category: workSiteRequest.category,
+      category: workSiteRequest.category ? getCategorie(workSiteRequest.category) : undefined,
       removal: workSiteRequest.removal,
       delivery: workSiteRequest.delivery,
       removalRecycling: workSiteRequest.removalRecycling,
       chronoQuote: workSiteRequest.chronoQuote,
       estimatedDate: workSiteRequest.estimatedDate ? new Date(workSiteRequest.estimatedDate) : undefined,
-      requestStatus: workSiteRequest.requestStatus,
+      requestStatus: workSiteRequest.status ? getStatusWorksiteRequest(workSiteRequest.status) : undefined,
       weightEstimate: workSiteRequest.weightEstimate,
       volumeEstimate: workSiteRequest.volumeEstimate,
       provider: workSiteRequest.provider,
@@ -227,7 +227,8 @@ console.log(worksite!.equipments)
   show={modalShow}
   onHide={() => setModalShow(false)}
   worksiteRequest={currentstate!}
-  showButtons={false}
+  showButtonEditValidate={false}
+  showButtonCreate={false}
 />
     </Container>
   );

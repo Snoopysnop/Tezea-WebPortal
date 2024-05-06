@@ -1,4 +1,4 @@
-import {Tool,WorkSiteStatus,Emergency,Civility,CustomerStatus,Service,Category,WorkSiteRequestStatus,SatisfactionLevel,Role,ToolName} from './Model'
+import {Tool,WorkSiteStatus,IncidentLevel,Civility,CustomerStatus,Service,Category,WorkSiteRequestStatus,SatisfactionLevel,Role,ToolName} from './Model'
 
 
 export interface EmergencyDetailsJson {
@@ -12,7 +12,7 @@ export interface EmergencyDetailsJson {
 
 export interface EmergencyDetailsJsonToSend {
     description: string,
-    level: Emergency,
+    level: IncidentLevel,
     worksite: string,
     title: string
 }
@@ -27,13 +27,13 @@ export interface CustomerJson {
     id?: string;
     firstName?: string;
     lastName?: string;
-    civility?: Civility;
+    civility?: string;
     email?: string;
     phoneNumber?: string;
     address?: string;
     city?: string;
     postalCode?: number;
-    status?: CustomerStatus;
+    status?: string;
     company?: string;
 }
 
@@ -43,17 +43,17 @@ export interface WorkSiteRequestJson {
     siteChief?: string;
     customer?: string;
     city?: string;
-    serviceType?: Service;
+    serviceType?: string;
     description?: string;
-    emergency?: Emergency;
+    emergency?: string;
     title?: string;
-    category?: Category;
+    category?: string;
     removal?: boolean;
     delivery?: boolean;
     removalRecycling?: boolean;
     chronoQuote?: boolean;
     estimatedDate?: string;
-    requestStatus?: WorkSiteRequestStatus;
+    status?: string;
     weightEstimate?: number;
     volumeEstimate?: number;
     provider?: string;

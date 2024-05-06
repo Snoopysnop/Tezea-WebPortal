@@ -1,4 +1,4 @@
-import { Category, Emergency, ToolName, Role, WorkSiteRequestStatus, WorkSiteStatus, CustomerStatus, Civility } from "../../api/Model";
+import { Category, IncidentLevel, ToolName, Role, WorkSiteRequestStatus, WorkSiteStatus, Emergency, CustomerStatus, Civility, Service } from "../../api/Model";
 import { ReactComponent as InProgressIcon } from 'bootstrap-icons/icons/hourglass-split.svg'
 import { ReactComponent as DoneIcon } from 'bootstrap-icons/icons/check-lg.svg'
 import { ReactComponent as StandByIcon } from 'bootstrap-icons/icons/pause.svg'
@@ -61,13 +61,13 @@ export function getRequestStatusColor(status: WorkSiteRequestStatus): string {
     }
 }
 
-export function getEmergencyIconColor(status: Emergency): string {
+export function getIncidentLevelIconColor(status: IncidentLevel): string {
     switch (status) {
-        case Emergency.Minor:
+        case IncidentLevel.Minor:
             return 'text-success';
-        case Emergency.Medium:
+        case IncidentLevel.Medium:
             return 'text-warning';
-        case Emergency.Severe:
+        case IncidentLevel.Severe:
             return 'text-danger';
         default:
             return '#FFFFFF';
@@ -91,15 +91,15 @@ export function getRoleName(role: string): string {
     }
 }
 
-export function getEmergencyColor(status: Emergency): string {
+export function getIncidentLevelColor(status: IncidentLevel): string {
     switch (status) {
-        case Emergency.Minor:
+        case IncidentLevel.Minor:
             return '#008000';
-        case Emergency.Medium:
+        case IncidentLevel.Medium:
             return '#FFFF00';
-        case Emergency.Severe:
+        case IncidentLevel.Severe:
             return '#FF0000';
-        case Emergency.Blocking:
+        case IncidentLevel.Blocking:
             return '#000000';
         default:
             return '#FFFFFF';
@@ -121,6 +121,22 @@ export function getStatusIcon(status: WorkSiteStatus) {
             return <CanceledIcon className='secondary' width='8px' height='100%' />;
         default:
             return <NotFoundIcon className='secondary' width='10px' height='100%' />;
+    }
+}
+
+
+export function getEmergency(emergency: string) {
+    switch (emergency) {
+        case "Low":
+            return Emergency.Low;
+        case "Average":
+            return Emergency.Average;
+        case "Medium":
+            return Emergency.Medium;
+        case "High":
+            return Emergency.High;
+        case "VeryHigh":
+            return Emergency.VeryHigh;
     }
 }
 
@@ -157,39 +173,103 @@ export function getStatusWorksiteRequest(status: string) {
             return WorkSiteRequestStatus.Done;
         case "Archive":
             return WorkSiteRequestStatus.Archive;
-        default:
-            return WorkSiteRequestStatus.Standby;
     }
 }
 
-export function getEmergencyJsonFormat(civility: string) {
-    switch (civility) {
-        case "Faible":
-            return "Minor";
-        case "Moyen":
-            return "Medium";
-        case "Haut":
-            return "Severe";
-        case "Bloquant":
-            return "Blocking";
-    }
 
-}
 
-export function getEmergency(emergency: string) {
+
+export function getIncidentLevel(emergency: string) {
     switch (emergency) {
         case "Minor":
-            return Emergency.Minor;
+            return IncidentLevel.Minor;
         case "Medium":
-            return Emergency.Medium;
+            return IncidentLevel.Medium;
         case "Severe":
-            return Emergency.Severe;
+            return IncidentLevel.Severe;
         case "Blocking":
-            return Emergency.Blocking;
+            return IncidentLevel.Blocking;
         default:
-            return Emergency.Minor;
+            return IncidentLevel.Minor;
     }
 }
+
+export function getCustomerStatus(customerStatus: string) {
+    switch (customerStatus) {
+        case "Business":
+            return CustomerStatus.Business;
+        case "Community":
+            return CustomerStatus.Community;
+        case "Association":
+            return CustomerStatus.Association;
+        case "Particular":
+            return CustomerStatus.Particular;
+
+    }
+}
+
+export function getCivility(civility: string) {
+    switch (civility) {
+        case "Mr":
+            return Civility.Mr;
+        case "Ms":
+            return Civility.Ms;
+        case "Other":
+            return Civility.Other;
+
+    }
+}
+
+export function getCategorie(category: string) {
+    switch (category) {
+        case "Conciergerie":
+            return Category.Conciergerie;
+        case "Recyclerie":
+            return Category.Recyclerie;
+        case "PetitsTravaux":
+            return Category.PetitsTravaux;
+        case "NettoyageDeVehicule":
+            return Category.NettoyageDeVehicule;
+        case "EspacesVerts":
+            return Category.EspacesVerts;
+        case "LaverieBlanchisserie":
+            return Category.LaverieBlanchisserie;
+        case "CommerceAmbulant":
+            return Category.CommerceAmbulant;
+        case "PiquetsEnBois":
+            return Category.PiquetsEnBois;
+        case "BoisDeChauffage":
+            return Category.BoisDeChauffage;
+        case "CreaPalette":
+            return Category.CreaPalette;
+        case "LeBioAVotrePorte":
+            return Category.LeBioAVotrePorte;
+        case "DonDePlasmaEtDeSang":
+            return Category.DonDePlasmaEtDeSang;
+        case "RelaisColis":
+            return Category.RelaisColis;
+        case "LocationVelosElectriques":
+            return Category.LocationVelosElectriques;
+
+    }
+
+}
+export function getServiceType(serviceType: string) {
+    switch(serviceType){
+        case "Service":
+            return Service.Service;
+        case "Donation":
+            return Service.Donation;
+        case "ServiceAndDonation":
+            return Service.ServiceAndDonation;
+        case "Plasma":
+            return Service.Plasma;
+        case "Information":
+            return Service.Information;
+    }
+}
+
+
 
 export function getToolName(toolname: string) {
     switch (toolname) {
@@ -245,20 +325,114 @@ export function getRequestStatusIcon(status: WorkSiteRequestStatus) {
 }
 
 
-export function getEmergencyIcon(status: Emergency) {
+export function getIncidentLevelIcon(status: IncidentLevel) {
     switch (status) {
-        case Emergency.Minor:
+        case IncidentLevel.Minor:
             return <StandByIcon className='secondary' width='10px' height='100%' />;
-        case Emergency.Medium:
+        case IncidentLevel.Medium:
             return <StandByIcon className='secondary' width='10px' height='100%' />;
-        case Emergency.Severe:
+        case IncidentLevel.Severe:
             return <StandByIcon className='secondary' width='10px' height='100%' />;
-        case Emergency.Blocking:
+        case IncidentLevel.Blocking:
             return <StandByIcon className='secondary' width='10px' height='100%' />;
         default:
             return <StandByIcon className='secondary' width='10px' height='100%' />;
     }
 }
+export function getCivilityJsonFormat(civility: string) {
+    switch (civility) {
+        case "M":
+            return "Mr";
+        case "Mme":
+            return "Ms";
+        case "Autre":
+            return "Other";
+    }
+
+}
+
+export function getCustomerStatusJsonFormat(customerStatus: string) {
+    switch (customerStatus) {
+        case "Business":
+            return "Business";
+        case "Communauté":
+            return "Community";
+        case "Association":
+            return "Association";
+        case "Particulier":
+            return "Particular";
+    }
+
+}
+
+export function getServiceJsonFormat(service: string) {
+    switch (service) {
+        case "Service":
+            return "Service";
+        case "Donation":
+            return "Donation";
+        case "Service et Donation":
+            return "ServiceAndDonation";
+        case "Plasma":
+            return "Plasma";
+        case "Information":
+            return "Information";
+    }
+
+}
+
+export function getCategorieJsonFormat(category: string) {
+    switch (category) {
+        case "Conciergerie":
+            return "Conciergerie";
+        case "Recyclerie":
+            return "Recyclerie";
+        case "Petits Travaux":
+            return "PetitsTravaux";
+        case "Nettoyage De Vehicule":
+            return "NettoyageDeVehicule";
+        case "Espaces Verts":
+            return "EspacesVerts";
+        case "Laverie Blanchisserie":
+            return "LaverieBlanchisserie";
+        case "Commerce Ambulant":
+            return "CommerceAmbulant";
+        case "Piquets En Bois":
+            return "PiquetsEnBois";
+        case "Bois De Chauffage":
+            return "BoisDeChauffage";
+        case "Crea Palette":
+            return "CreaPalette";
+        case "Le Bio A Votre Porte":
+            return "LeBioAVotrePorte";
+        case "Don De Plasma Et De Sang":
+            return "DonDePlasmaEtDeSang";
+        case "Relais Colis":
+            return "RelaisColis";
+        case "Location Velos Electriques":
+            return "LocationVelosElectriques";
+
+    }
+
+}
+
+export function getEmergencyJsonFormat(emergency: string) {
+    switch (emergency) {
+        case "Très Faible":
+            return "Low";
+        case "Faible":
+            return "Average";
+        case "Moyen":
+            return "Medium";
+        case "Elevé":
+            return "High";
+        case "Très Elevé":
+            return "VeryHigh";
+    }
+
+}
+
+
 
 export function getCategoryIcon(status: Category) {
     switch (status) {

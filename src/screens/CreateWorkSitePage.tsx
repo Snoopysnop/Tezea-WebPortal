@@ -574,7 +574,8 @@ const CreateWorkSitePage: React.FC = () => {
             show={modalShow}
             onHide={() => setModalShow(false)}
             worksiteRequest={worksiteRequestData!}//todo checker le !
-            showButtons={false}
+            showButtonEditValidate={false}
+            showButtonCreate={false}
           />
     </Container>
 

@@ -1,8 +1,11 @@
 import React from 'react';
 import { Button, Modal, Row, Col } from 'react-bootstrap';
-import { WorkSiteRequest, User, Customer, Role, Emergency, Civility, CustomerStatus, Service, WorkSiteRequestStatus, Category } from '../api/Model';
+import { WorkSiteRequest, User, Customer, Role, Civility, CustomerStatus, Service, WorkSiteRequestStatus, Category } from '../api/Model';
 import { ReactComponent as ModifyPencil } from 'bootstrap-icons/icons/pencil-square.svg';
 import { Link, useNavigate } from 'react-router-dom';
+import { getCategorie, getCivility, getCustomerStatus, getEmergency, getServiceType, getStatusWorksiteRequest } from '../common/utils/utils';
+import MainApi from '../api/MainApi';
+import { WorkSiteRequestJson } from '../api/ModelJson';
 
 
 
@@ -11,12 +14,14 @@ interface ModalProps {
   show: boolean;
   onHide: () => void;
   worksiteRequest: WorkSiteRequest;
-  showButtons: boolean;
+  showButtonEditValidate: boolean;
+  showButtonCreate: boolean;
+
 }
 
 const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
-  const { show, onHide, worksiteRequest, showButtons }: ModalProps = props;
-//console.log("Customer", worksiteRequest.customer)
+  const { show, onHide, worksiteRequest, showButtonEditValidate, showButtonCreate }: ModalProps = props;
+
   const navigate = useNavigate();
 
   function formatBoolean(boolean: Boolean) {
@@ -24,6 +29,7 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
   }
   function formatDate(date: Date) {
 
+    console.log(worksiteRequest)
     const getDay = date.getDate();
     const getMonth = date.getMonth() + 1;
 
@@ -33,14 +39,44 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
     return day + "/" + month + "/" + year;
 
   }
+
+  async function handleValidate() {
+    const responseWorksite = await MainApi.getInstance().updateStatusWorksiteRequest(worksiteRequest.id ? worksiteRequest.id : 0,"Standby");
+   
+    const responseWorksiteRequest = await MainApi.getInstance().getWorkSiteRequests("creationDate") as WorkSiteRequestJson[];
+    const worksiteRequestMapper: WorkSiteRequest[] = responseWorksiteRequest.map(worksiteRequestJson => ({
+      id: worksiteRequestJson.id,
+      concierge: undefined,
+      siteChief: undefined,
+      customer: undefined,
+      city: worksiteRequestJson.city,
+      workSites: undefined,
+      serviceType: undefined,
+      description: worksiteRequestJson.description,
+      emergency: worksiteRequestJson.emergency ? getEmergency(worksiteRequestJson.emergency) : undefined,
+      title: worksiteRequestJson.title,
+      category: undefined,
+      removal: worksiteRequestJson.removal,
+      delivery: worksiteRequestJson.delivery,
+      removalRecycling: worksiteRequestJson.removalRecycling,
+      chronoQuote: worksiteRequestJson.chronoQuote,
+      estimatedDate: worksiteRequestJson.estimatedDate ? new Date(worksiteRequestJson.estimatedDate) : new Date(),
+      requestStatus: worksiteRequestJson.status ? getStatusWorksiteRequest(worksiteRequestJson.status) : WorkSiteRequestStatus.ToComplete,
+      weightEstimate: worksiteRequestJson.weightEstimate,
+      volumeEstimate: worksiteRequestJson.volumeEstimate,
+      provider: worksiteRequestJson.provider,
+      tezeaAffectation: worksiteRequestJson.tezeaAffectation,
+    }));
+
+    navigate("/listeDemandeChantiers", { state: { worksiteRequestMapper } })
+  }
+
   function handleEdit() {
-    console.log(worksiteRequest);
-    navigate("/creerDemande", { state: {worksiteRequest}})
+    navigate("/creerDemande", { state: { worksiteRequest } })
   }
 
   function handleCreateWorksite() {
-    console.log(worksiteRequest);
-    navigate("/creerChantier", { state: {worksiteRequest}})
+    navigate("/creerChantier", { state: { worksiteRequest } })
   }
   return (
     <Modal
@@ -54,14 +90,6 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
       <Modal.Header closeButton>
         <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
           <Modal.Title style={{ display: "flex", alignItems: "center", justifyContent: "center" }} id="contained-modal-title-vcenter">Recapitulatif demande n° {worksiteRequest?.id} </Modal.Title>
-          {showButtons && (
-          <div>
-            <Button onClick={() => handleEdit()} variant="link" style={{ gap: 3, margin: 5, color: '#008FE3', display: "flex", flexDirection: "row", alignItems: "center" }}>
-              <ModifyPencil width='22px' height='100%' />
-              <div>Editer</div>
-            </Button>
-          </div>
-          )}
         </div>
       </Modal.Header>
 
@@ -72,7 +100,7 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
           <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
             <Col>Nom : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.lastName : ''}</span></Col>
             <Col>Prénom : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.firstName : ''}</span></Col>
-            <Col>Civilité : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.civility : ''}</span></Col>
+            <Col>Civilité : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.civility ? getCivility(worksiteRequest.customer.civility) : ' ' : ''}</span></Col>
           </Row>
 
           <Row className="mb-3" style={{ color: '#008FE3', fontSize: '15px' }}>
@@ -88,7 +116,7 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
           </Row>
 
           <Row className="mb-3" style={{ color: '#008FE3', fontSize: '15px' }}>
-            <Col>Status : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.status : ''}</span></Col>
+            <Col>Status : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.status ? getCustomerStatus(worksiteRequest.customer.status) : '' : ''}</span></Col>
             <Col>Société : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.company : ''}</span></Col>
             <Col></Col>
           </Row>
@@ -98,14 +126,14 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
           <Row className="mb-5" style={{ color: '#008FE3', fontSize: '25px' }}>Informations sur la demande de chantier : </Row>
 
           <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
-            <Col>Nom de la demande : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.title:''}</span></Col>
-            <Col>Lieu (ville) : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.city:''}</span></Col>
+            <Col>Nom de la demande : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.title : ''}</span></Col>
+            <Col>Lieu (ville) : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.city : ''}</span></Col>
             <Col></Col>
           </Row>
 
           <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
-            <Col>Type de service : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.serviceType:''}</span></Col>
-            <Col>Catégorie : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.category:''}</span></Col>
+            <Col>Type de service : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.serviceType ? getServiceType(worksiteRequest.serviceType) : '' : ''}</span></Col>
+            <Col>Catégorie : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.category ? getCategorie(worksiteRequest.category) : ''}</span></Col>
             <Col>Date : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.estimatedDate ? formatDate(worksiteRequest.estimatedDate) : ''}</span></Col>
           </Row>
 
@@ -123,32 +151,41 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
 
 
           <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
-            <Col>Status de la commande : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.requestStatus:''}</span></Col>
-            <Col>Urgence : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.emergency:''}</span></Col>
+            <Col>Urgence : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.emergency ? getEmergency(worksiteRequest.emergency) : '' : ''}</span></Col>
             <Col></Col>
           </Row>
 
           <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
-            <Col>Détails de la livraison : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.description:''}</span></Col>
+            <Col>Détails de la livraison : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.description : ''}</span></Col>
           </Row>
 
           <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
-            <Col>Affectation Tezea : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.tezeaAffectation:''}</span></Col>
-            <Col>Prestataire : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.provider:''}</span></Col>
+            <Col>Affectation Tezea : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.tezeaAffectation : ''}</span></Col>
+            <Col>Prestataire : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.provider : ''}</span></Col>
             <Col></Col>
           </Row>
 
           <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
-            <Col>Estimation du poids : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.weightEstimate:''}</span></Col>
-            <Col>Estimation du volume : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.volumeEstimate:''}</span></Col>
+            <Col>Estimation du poids : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.weightEstimate : ''}</span></Col>
+            <Col>Estimation du volume : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.volumeEstimate : ''}</span></Col>
             <Col></Col>
           </Row>
+          <Row className="mb-5"></Row>
         </div>
-        {showButtons && (
-        <div className="CreateWorkSitButton" style={{ display: 'flex', justifyContent: 'center' }}>
+        {showButtonCreate && worksiteRequest && worksiteRequest.requestStatus && worksiteRequest.requestStatus === WorkSiteRequestStatus.Standby && (
+          <div className="CreateWorkSitButton" style={{ display: 'flex', justifyContent: 'center' }}>
             <Button onClick={() => { onHide(); handleCreateWorksite(); }}>Créer un chantier</Button>
-        </div>
-)}
+          </div>
+        )}
+        
+        {showButtonEditValidate && worksiteRequest && worksiteRequest.requestStatus && worksiteRequest.requestStatus === WorkSiteRequestStatus.ToComplete && (
+          <div className="Edit" style={{ display: 'flex', justifyContent: 'space-around' }}>
+            <Button onClick={() => { onHide(); handleEdit(); }}>Modifier la demande</Button>
+            <Button onClick={() => { onHide(); handleValidate(); }}>Valider la demande</Button>
+            
+          </div>
+        )}
+
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={onHide}>Close</Button>
