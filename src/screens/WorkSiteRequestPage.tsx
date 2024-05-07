@@ -274,7 +274,7 @@ const WorkSiteRequestPage: React.FC = () => {
         <Container className="bg-white mt-4" style={{ borderRadius: "20px" }}>
           <Row>
             <Col className='m-3'>
-              <Row className="mb-5" style={{ color: '#008FE3', fontSize: '32px' }}>
+              <Row className="mb-3" style={{ color: '#008FE3', fontSize: '32px' }}>
 
                 Informations sur la demande de chantiers :
               </Row>
