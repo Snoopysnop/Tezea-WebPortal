@@ -191,7 +191,7 @@ const WorkSiteRequestPage: React.FC = () => {
       <Container>
         <Row className='mt-4'></Row>
         <Col lg className='d-flex align-items-center' style={{ fontSize: '2rem' }}>
-          {updateWorksiteRequest ? `Modification de la demande de chantiers : ${updateWorksiteRequest.title}` : "Création d'une demande de chantiers"}
+          {updateWorksiteRequest ? `Modification de la demande de chantier : ${updateWorksiteRequest.title}` : "Création d'une demande de chantier"}
         </Col>
         <Container className="bg-white mt-4 " style={{ borderRadius: "20px" }}>
           <Row>
@@ -276,7 +276,7 @@ const WorkSiteRequestPage: React.FC = () => {
             <Col className='m-3'>
               <Row className="mb-3" style={{ color: '#008FE3', fontSize: '32px' }}>
 
-                Informations sur la demande de chantiers :
+                Informations sur la demande de chantier :
               </Row>
               <Row className="mb-3" style={{ color: '#008FE3', fontSize: '18px' }}>
                 <Form.Group as={Col} xs={6} controlId="formGridTitle">
