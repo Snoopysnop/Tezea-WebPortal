@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+
+  portal:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - VIRTUAL_HOST=148.60.11.163
+
+  loadbalancer-front:
+    image: jwilder/nginx-proxy 
+    ports:
+      - "3308:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock
