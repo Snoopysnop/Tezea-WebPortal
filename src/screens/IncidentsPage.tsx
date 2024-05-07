@@ -19,7 +19,7 @@ const IncidentsPage: React.FC = () => {
 
   const [filteredTasks, setFilteredTasks] = useState<EmergencyDetails[]>([]);
 
-  const [dataFetched, setDataFetched] = useState<EmergencyDetails[] | undefined>(undefined);
+  const [dataFetched, setDataFetched] = useState<EmergencyDetails[]>([]);
 
   const handleListEmergency = async () => {
     const responseEmergency = await MainApi.getInstance().getEmergencies() as EmergencyDetailsJson[];
@@ -47,7 +47,7 @@ const IncidentsPage: React.FC = () => {
 
       handleListIncident()
     }
-  }, [dataFetched,filterValue])
+  }, [dataFetched, filterValue])
 
   const [worksite_OneIncident, setWorksite_OneIncident] = useState<WorkSiteJson[]>([]);
 
@@ -109,119 +109,124 @@ const IncidentsPage: React.FC = () => {
   };
 
   return (
-    <>
-      {dataFetched &&
-        <Container>
-          <Row className='mt-4'>
-            <Col lg={6}>
-              <Row>
-                <Col>
-                  <ReactSearchAutocomplete
-                    styling={{ borderRadius: "10px" }}
-                    items={worksite_OneIncident.map(data => {
-                      return {id:data.id, name:data.title}
-                    })}
-                    onSearch={handleOnSearch}
-                    onSelect={handleOnSelect}
-                    autoFocus
-                    placeholder="Filtrer par nom de chantier..."
-                  />
-                </Col>
-                <Col lg className='d-flex align-items-center'>
-                  <Dropdown>
-                    <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-                      Filtrer
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      {Object.values(IncidentLevel).map((status, index) => (
-                        <Dropdown.Item key={index} onClick={() => handleStatusChange(status)}>
-                  
-                          <Form.Check
-                            type="checkbox"
-                            label={status}
-                            checked={!!checkboxes[status]}
-                            onChange={() => {}}
-                          />
-                        </Dropdown.Item>
-                      ))}
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </Col>
-              </Row>
+    <Container>
+      <Row className='mt-4'>
+        <Col lg={6}>
+          <Row>
+            <Col>
+              <ReactSearchAutocomplete
+                styling={{ borderRadius: "10px" }}
+                items={worksite_OneIncident.map(data => {
+                  return { id: data.id, name: data.title }
+                })}
+                onSearch={handleOnSearch}
+                onSelect={handleOnSelect}
+                autoFocus
+                placeholder="Filtrer par nom de chantier..."
+              />
+            </Col>
+            <Col lg className='d-flex align-items-center'>
+              <Dropdown>
+                <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                  Filtrer
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {Object.values(IncidentLevel).map((status, index) => (
+                    <Dropdown.Item key={index} onClick={() => handleStatusChange(status)}>
+
+                      <Form.Check
+                        type="checkbox"
+                        label={status}
+                        checked={!!checkboxes[status]}
+                        onChange={() => { }}
+                      />
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
             </Col>
           </Row>
+        </Col>
+      </Row>
 
-          <Container className="container-xxl bg-white mt-4" style={{borderRadius: "20px"}}>
-          <Table>
-              <thead>
-                <tr>
-                  <th className={`col-lg-3`}>{IncidentLevel.Minor}</th>
-                  <th className={`col-lg-3`}>{IncidentLevel.Medium}</th>
-                  <th className={`col-lg-3`}>{IncidentLevel.Severe}</th>
-                  <th className={`col-lg-3`}>{IncidentLevel.Blocking}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                      {filteredTasks
-                        .filter(task => task.level === IncidentLevel.Minor)
-                        .map(task => (
-                            <EmergencyComponent
-                              id={task.id} 
-                              description={task.description}
-                              emergency={IncidentLevel.Minor}
-                              category={Category.CreaPalette}
-                              title={task.title}
-                            />
-                        ))}
-                  </td>
-                  <td>
-                      {filteredTasks
-                        .filter(task => task.level === IncidentLevel.Medium)
-                        .map(task => (
-                            <EmergencyComponent
-                              id={task.id}
-                              description={task.description}
-                              emergency={IncidentLevel.Medium}
-                              category={Category.CreaPalette}
-                              title={task.title}
-                            />
-                        ))}
-                  </td>
-                  <td>
-                      {filteredTasks
-                        .filter(task => task.level === IncidentLevel.Severe)
-                        .map(task => (
-                            <EmergencyComponent
-                              id={task.id}
-                              description={task.description}
-                              emergency={IncidentLevel.Severe}
-                              category={Category.CreaPalette}
-                              title={task.title}
-                            />
-                        ))}
-                  </td>
-                  <td>
-                      {filteredTasks
-                        .filter(task => task.level === IncidentLevel.Blocking)
-                        .map(task => (
-                            <EmergencyComponent
-                              id={task.id}
-                              description={task.description}
-                              emergency={IncidentLevel.Blocking}
-                              category={Category.CreaPalette}
-                              title={task.title}
-                            />
-                        ))}
-                  </td>
-                </tr>
-              </tbody>
-            </Table>
-          </Container>
-        </Container>
-      }
-    </>
+      <Container className="bg-white mt-4" style={{ borderRadius: "20px" }}>
+        <Table>
+          <thead>
+            <tr>
+              {selectedStatus.includes(IncidentLevel.Minor) && <th className="col-lg-3">{IncidentLevel.Minor}</th>}
+              {selectedStatus.includes(IncidentLevel.Medium) && <th className="col-lg-3">{IncidentLevel.Medium}</th>}
+              {selectedStatus.includes(IncidentLevel.Severe) && <th className="col-lg-3">{IncidentLevel.Severe}</th>}
+              {selectedStatus.includes(IncidentLevel.Blocking) && <th className="col-lg-3">{IncidentLevel.Blocking}</th>}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              {selectedStatus.includes(IncidentLevel.Minor) &&
+                <td>
+                  {filteredTasks
+                    .filter(task => task.level === IncidentLevel.Minor)
+                    .map(task => (
+                      <EmergencyComponent
+                        id={task.id}
+                        description={task.description}
+                        emergency={IncidentLevel.Minor}
+                        category={Category.CreaPalette}
+                        title={task.title}
+                      />
+                    ))}
+                </td>
+              }
+              {selectedStatus.includes(IncidentLevel.Medium) &&
+                <td>
+                  {filteredTasks
+                    .filter(task => task.level === IncidentLevel.Medium)
+                    .map(task => (
+                      <EmergencyComponent
+                        id={task.id}
+                        description={task.description}
+                        emergency={IncidentLevel.Medium}
+                        category={Category.CreaPalette}
+                        title={task.title}
+                      />
+                    ))}
+                </td>
+              }
+              {selectedStatus.includes(IncidentLevel.Severe) &&
+                <td>
+                  {filteredTasks
+                    .filter(task => task.level === IncidentLevel.Severe)
+                    .map(task => (
+                      <EmergencyComponent
+                        id={task.id}
+                        description={task.description}
+                        emergency={IncidentLevel.Severe}
+                        category={Category.CreaPalette}
+                        title={task.title}
+                      />
+                    ))}
+                </td>
+              }
+              {selectedStatus.includes(IncidentLevel.Blocking) &&
+                <td>
+                  {filteredTasks
+                    .filter(task => task.level === IncidentLevel.Blocking)
+                    .map(task => (
+                      <EmergencyComponent
+                        id={task.id}
+                        description={task.description}
+                        emergency={IncidentLevel.Blocking}
+                        category={Category.CreaPalette}
+                        title={task.title}
+                      />
+                    ))}
+                </td>
+              }
+            </tr>
+          </tbody>
+        </Table>
+      </Container>
+    </Container>
+
   );
 };
 

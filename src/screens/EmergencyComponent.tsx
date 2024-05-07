@@ -47,7 +47,7 @@ const EmergencyComponent: React.FC<EmergencyProps> = ({ description, emergency, 
                     <Row>
                         <Col lg={1} className='pe-1' style={{minHeight: '40px', backgroundColor: getIncidentLevelColor(emergency)}}>
                         </Col>
-                        <Col lg={9} className='primary d-flex text-center align-items-center' style={{ fontSize: '12px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        <Col lg={10} className='primary d-flex justify-content-center align-items-center ps-3 pe-0' style={{ fontSize: '12px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                             {title}
                         </Col>
                     </Row>

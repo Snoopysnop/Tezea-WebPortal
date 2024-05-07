@@ -19,7 +19,7 @@ const LoginPage: React.FC = () => {
   });
 
   return (
-    <Container>
+    <Container >
       <Formik
         initialValues={{
           email: '',
@@ -49,7 +49,7 @@ const LoginPage: React.FC = () => {
         <Form onSubmit={handleSubmit}>
           <Row className="justify-content-center mt-5">
             <Col md={5} >
-            <Container className="border bg-white p-4" style={{borderRadius: '20px'}}>
+            <Container className="border bg-white p-4 mt-5" style={{borderRadius: '20px'}}>
 
               <h1 className="text-center mb-4">Connexion</h1>
                 <Form.Group className="mb-3">

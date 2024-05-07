@@ -36,46 +36,46 @@ const WorkSitesListStatusPage: React.FC = () => {
 
   const [filteredTasks, setFilteredTasks] = useState<WorkSite[]>([]);
 
-  const [dataFetched, setDataFetched] = useState<WorkSite[] | undefined>(undefined);
+  const [dataFetched, setDataFetched] = useState<WorkSite[]>([]);
 
 
   const handleListWorksite = async () => {
     const responseWorksite = await MainApi.getInstance().getWorkSites() as WorkSiteJson[];
 
     const worksiteMapper: WorkSite[] = responseWorksite.map(worksiteJson => ({
-        id: worksiteJson.id!,
-        workSiteChief: undefined,
-        staff: undefined,
-        equipment: undefined,
-        begin: worksiteJson.begin ? new Date(worksiteJson.begin) : new Date(),
-        end: worksiteJson.end ? new Date(worksiteJson.end) : new Date(),
-        status: worksiteJson.status ? getStatusWorksite(worksiteJson.status) : WorkSiteStatus.Standby,
-        request: undefined,
-        satisfaction: worksiteJson.satisfaction,
-        signature: worksiteJson.signature,
-        title: worksiteJson.title ? worksiteJson.title : '',
-        address: worksiteJson.address ? worksiteJson.address : ''
+      id: worksiteJson.id!,
+      workSiteChief: undefined,
+      staff: undefined,
+      equipment: undefined,
+      begin: worksiteJson.begin ? new Date(worksiteJson.begin) : new Date(),
+      end: worksiteJson.end ? new Date(worksiteJson.end) : new Date(),
+      status: worksiteJson.status ? getStatusWorksite(worksiteJson.status) : WorkSiteStatus.Standby,
+      request: undefined,
+      satisfaction: worksiteJson.satisfaction,
+      signature: worksiteJson.signature,
+      title: worksiteJson.title ? worksiteJson.title : '',
+      address: worksiteJson.address ? worksiteJson.address : ''
     }));
     setDataFetched(worksiteMapper);
-}
-
-useEffect(() => {
-  handleListWorksite()
-}, [])
-
-useEffect(() => {
-  if (dataFetched) {
-    setFilteredTasks(dataFetched.filter(task => task.title.toLowerCase().includes(filterValue.toLowerCase())))
   }
-}, [dataFetched,filterValue])
+
+  useEffect(() => {
+    handleListWorksite()
+  }, [])
+
+  useEffect(() => {
+    if (dataFetched) {
+      setFilteredTasks(dataFetched.filter(task => task.title.toLowerCase().includes(filterValue.toLowerCase())))
+    }
+  }, [dataFetched, filterValue])
 
 
 
   // Fonction pour gérer le clic sur un élément
-  const handleTaskClick = async (task:any) => {
+  const handleTaskClick = async (task: any) => {
 
     const worksiteData = await MainApi.getInstance().getWorksitebyId(task.id) as WorkSiteJson;
-    navigate("/detailChantier", { state: { worksiteData } })
+    navigate("/worksiteDetails", { state: { worksiteData } })
 
 
     setModalShow(true);
@@ -109,18 +109,15 @@ useEffect(() => {
   };
 
   return (
-    <>
-      {dataFetched &&
     <Container>
       <Row className='mt-4'>
-        {/* Utiliser ReactSearchAutocomplete */}
         <Col lg={6}>
           <Row>
             <Col>
               <ReactSearchAutocomplete
                 styling={{ borderRadius: "10px" }}
                 items={dataFetched.map(data => {
-                  return {id:data.id, name:data.title}
+                  return { id: data.id, name: data.title }
                 })}
                 onSearch={handleOnSearch}
                 onSelect={handleOnSelect}
@@ -141,7 +138,7 @@ useEffect(() => {
                           type="checkbox"
                           label={status}
                           checked={!!checkboxes[status]}
-                          onChange={() => {}}
+                          onChange={() => { }}
                         />
                       </Dropdown.Item>
                     ))}
@@ -151,7 +148,7 @@ useEffect(() => {
           </Row>
         </Col>
       </Row>
-      <Container className="container-xxl bg-white mt-4" style={{borderRadius: "20px"}}>
+      <Container className="bg-white mt-4" style={{ borderRadius: "20px" }}>
         <Table>
           <thead>
             <tr>
@@ -162,76 +159,82 @@ useEffect(() => {
             </tr>
           </thead>
           <tbody>
-            <td >
+            {selectedStatus.includes(WorkSiteStatus.Standby) &&
+              <td >
                 {filteredTasks
                   .filter(task => task.status === WorkSiteStatus.Standby)
                   .map(task => (
-                      <WorkSiteComponent
-                        id={task.id}
-                        name={task.title}
-                        date={task.begin.toLocaleString()}
-                        startHours={task.begin.toLocaleString()}
-                        endHour={task.end.toLocaleString()}
-                        status={task.status}
-                        category={Category.CreaPalette}
-                        onClick={() => handleTaskClick(task)}
-                      />
+                    <WorkSiteComponent
+                      id={task.id}
+                      name={task.title}
+                      date={task.begin.toLocaleString()}
+                      startHours={task.begin.toLocaleString()}
+                      endHour={task.end.toLocaleString()}
+                      status={task.status}
+                      category={Category.CreaPalette}
+                      onClick={() => handleTaskClick(task)}
+                    />
                   ))}
-            </td>
-            <td >
+              </td>
+            }
+            {selectedStatus.includes(WorkSiteStatus.InProgress) &&
+              <td >
                 {filteredTasks
                   .filter(task => task.status === WorkSiteStatus.InProgress)
                   .map(task => (
-                      <WorkSiteComponent
-                        id={task.id}
-                        name={task.title}
-                        date={task.begin.toLocaleString()}
-                        startHours={task.begin.toLocaleString()}
-                        endHour={task.end.toLocaleString()}
-                        status={task.status}
-                        category={Category.CreaPalette}
-                        onClick={() => handleTaskClick(task)}
-                      />
+                    <WorkSiteComponent
+                      id={task.id}
+                      name={task.title}
+                      date={task.begin.toLocaleString()}
+                      startHours={task.begin.toLocaleString()}
+                      endHour={task.end.toLocaleString()}
+                      status={task.status}
+                      category={Category.CreaPalette}
+                      onClick={() => handleTaskClick(task)}
+                    />
                   ))}
-            </td>
-            <td>
+              </td>
+            }
+            {selectedStatus.includes(WorkSiteStatus.Done) &&
+              <td>
                 {filteredTasks
                   .filter(task => task.status === WorkSiteStatus.Done)
                   .map(task => (
-                      <WorkSiteComponent
-                        id={task.id}
-                        name={task.title}
-                        date={task.begin.toLocaleString()}
-                        startHours={task.begin.toLocaleString()}
-                        endHour={task.end.toLocaleString()}
-                        status={task.status}
-                        category={Category.CreaPalette}
-                        onClick={() => handleTaskClick(task)}
-                      />
+                    <WorkSiteComponent
+                      id={task.id}
+                      name={task.title}
+                      date={task.begin.toLocaleString()}
+                      startHours={task.begin.toLocaleString()}
+                      endHour={task.end.toLocaleString()}
+                      status={task.status}
+                      category={Category.CreaPalette}
+                      onClick={() => handleTaskClick(task)}
+                    />
                   ))}
-            </td>
-            <td>
+              </td>
+            }
+            {selectedStatus.includes(WorkSiteStatus.Archive) &&
+              <td>
                 {filteredTasks
                   .filter(task => task.status === WorkSiteStatus.Archive)
                   .map(task => (
-                      <WorkSiteComponent
-                        id={task.id}
-                        name={task.title}
-                        date={task.begin.toLocaleString()}
-                        startHours={task.begin.toLocaleString()}
-                        endHour={task.end.toLocaleString()}
-                        status={task.status}
-                        category={Category.CreaPalette}
-                        onClick={() => handleTaskClick(task)}
-                      />
+                    <WorkSiteComponent
+                      id={task.id}
+                      name={task.title}
+                      date={task.begin.toLocaleString()}
+                      startHours={task.begin.toLocaleString()}
+                      endHour={task.end.toLocaleString()}
+                      status={task.status}
+                      category={Category.CreaPalette}
+                      onClick={() => handleTaskClick(task)}
+                    />
                   ))}
-            </td>
+              </td>
+            }
           </tbody>
         </Table>
       </Container>
     </Container>
-    }
-    </>
   );
 };
 

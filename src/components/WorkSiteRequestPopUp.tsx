@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Modal, Row, Col } from 'react-bootstrap';
+import { Button, Modal, Row, Col, Container } from 'react-bootstrap';
 import { WorkSiteRequest, User, Customer, Role, Civility, CustomerStatus, Service, WorkSiteRequestStatus, Category } from '../api/Model';
 import { ReactComponent as ModifyPencil } from 'bootstrap-icons/icons/pencil-square.svg';
 import { Link, useNavigate } from 'react-router-dom';
@@ -40,8 +40,8 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
   }
 
   async function handleValidate() {
-    const responseWorksite = await MainApi.getInstance().updateStatusWorksiteRequest(worksiteRequest.id ? worksiteRequest.id : 0,"Standby");
-   
+    const responseWorksite = await MainApi.getInstance().updateStatusWorksiteRequest(worksiteRequest.id ? worksiteRequest.id : 0, "Standby");
+
     const responseWorksiteRequest = await MainApi.getInstance().getWorkSiteRequests("creationDate") as WorkSiteRequestJson[];
     const worksiteRequestMapper: WorkSiteRequest[] = responseWorksiteRequest.map(worksiteRequestJson => ({
       id: worksiteRequestJson.id,
@@ -67,15 +67,15 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
       tezeaAffectation: worksiteRequestJson.tezeaAffectation,
     }));
 
-    navigate("/listeDemandeChantiers", { state: { worksiteRequestMapper } })
+    navigate("/worksiteRequestList", { state: { worksiteRequestMapper } })
   }
 
   function handleEdit() {
-    navigate("/creerDemande", { state: { worksiteRequest } })
+    navigate("/worksiteRequestCreate", { state: { worksiteRequest } })
   }
 
   function handleCreateWorksite() {
-    navigate("/creerChantier", { state: { worksiteRequest } })
+    navigate("/worksiteCreate", { state: { worksiteRequest } })
   }
   
   return (
@@ -94,89 +94,96 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
       </Modal.Header>
 
       <Modal.Body>
-        <div className="CustomerInfo" style={{ marginLeft: '5px' }}>
-          <Row className="mb-4" style={{ color: '#008FE3', fontSize: '25px' }}>Informations du client : </Row>
+        <Container className=" mt-2" style={{ borderColor: '#f3f3f3', borderStyle: 'solid', borderWidth: '2px', borderRadius: '20px' }}>
+          <Row>
+            <Col className='m-3'>
+              <Row className="mb-4" style={{ color: '#008FE3', fontSize: '25px' }}>Informations du client : </Row>
 
-          <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
-            <Col>Nom : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.lastName : ''}</span></Col>
-            <Col>Prénom : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.firstName : ''}</span></Col>
-            <Col>Civilité : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.civility ? getCivility(worksiteRequest.customer.civility) : ' ' : ''}</span></Col>
+              <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
+                <Col>Nom : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.lastName : ''}</span></Col>
+                <Col>Prénom : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.firstName : ''}</span></Col>
+                <Col>Civilité : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.civility ? getCivility(worksiteRequest.customer.civility) : ' ' : ''}</span></Col>
+              </Row>
+
+              <Row className="mb-3" style={{ color: '#008FE3', fontSize: '15px' }}>
+                <Col>Téléphone : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.phoneNumber : ''}</span></Col>
+                <Col>Email : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.email : ''}</span></Col>
+                <Col></Col>
+              </Row>
+
+              <Row className="mb-3" style={{ color: '#008FE3', fontSize: '15px' }}>
+                <Col>Adresse : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.address : ''}</span></Col>
+                <Col>Code postal : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.postalCode : ''}</span></Col>
+                <Col>Ville : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.city : ''}</span></Col>
+              </Row>
+
+              <Row className="mb-3" style={{ color: '#008FE3', fontSize: '15px' }}>
+                <Col>Status : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.status ? getCustomerStatus(worksiteRequest.customer.status) : '' : ''}</span></Col>
+                <Col>Société : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.company : ''}</span></Col>
+                <Col></Col>
+              </Row>
+            </Col>
           </Row>
+        </Container>
 
-          <Row className="mb-3" style={{ color: '#008FE3', fontSize: '15px' }}>
-            <Col>Téléphone : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.phoneNumber : ''}</span></Col>
-            <Col>Email : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.email : ''}</span></Col>
-            <Col></Col>
+        <Container className=" mt-4" style={{ borderColor: '#f3f3f3', borderStyle: 'solid', borderWidth: '2px', borderRadius: '20px' }}>
+          <Row>
+            <Col className='m-3'>          <Row className="mb-5" style={{ color: '#008FE3', fontSize: '25px' }}>Informations sur la demande de chantier : </Row>
+
+              <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
+                <Col>Nom de la demande : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.title : ''}</span></Col>
+                <Col>Lieu (ville) : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.city : ''}</span></Col>
+              </Row>
+
+              <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
+                <Col>Type de service : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.serviceType ? getServiceType(worksiteRequest.serviceType) : '' : ''}</span></Col>
+                <Col>Date : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.estimatedDate ? formatDate(worksiteRequest.estimatedDate) : ''}</span></Col>
+              </Row>
+
+              <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
+                <Col>Enlèvement : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.removal ? formatBoolean(worksiteRequest.removal) : 'non'}</span></Col>
+                <Col>Livraison : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.delivery ? formatBoolean(worksiteRequest.delivery) : 'non'}</span></Col>
+              </Row>
+
+              <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
+                <Col>Enlèvement déchetterie : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.removalRecycling ? formatBoolean(worksiteRequest.removalRecycling) : 'non'}</span></Col>
+                <Col>Chrono pour devis : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.chronoQuote ? formatBoolean(worksiteRequest.chronoQuote) : 'non'}</span></Col>
+              </Row>
+
+
+              <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
+                <Col>Urgence : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.emergency ? getEmergency(worksiteRequest.emergency) : '' : ''}</span></Col>
+                <Col>Catégorie : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.category ? getCategorie(worksiteRequest.category) : ''}</span></Col>
+              </Row>
+
+              <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
+                <Col>Détails de la livraison : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.description : ''}</span></Col>
+              </Row>
+
+              <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
+                <Col>Affectation Tezea : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.tezeaAffectation : ''}</span></Col>
+                <Col>Prestataire : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.provider : ''}</span></Col>
+              </Row>
+
+              <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
+                <Col>Estimation du poids : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.weightEstimate : ''}</span></Col>
+                <Col>Estimation du volume : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.volumeEstimate : ''}</span></Col>
+              </Row>
+            </Col>
           </Row>
+        </Container>
 
-          <Row className="mb-3" style={{ color: '#008FE3', fontSize: '15px' }}>
-            <Col>Adresse : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.address : ''}</span></Col>
-            <Col>Code postal : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.postalCode : ''}</span></Col>
-            <Col>Ville : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.city : ''}</span></Col>
-          </Row>
-
-          <Row className="mb-3" style={{ color: '#008FE3', fontSize: '15px' }}>
-            <Col>Status : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.status ? getCustomerStatus(worksiteRequest.customer.status) : '' : ''}</span></Col>
-            <Col>Société : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.company : ''}</span></Col>
-            <Col></Col>
-          </Row>
-        </div>
-
-        <div className="WorkSiteInfo" style={{ marginLeft: '5px' }}>
-          <Row className="mb-5" style={{ color: '#008FE3', fontSize: '25px' }}>Informations sur la demande de chantier : </Row>
-
-          <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
-            <Col>Nom de la demande : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.title : ''}</span></Col>
-            <Col>Lieu (ville) : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.city : ''}</span></Col>
-          </Row>
-
-          <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
-            <Col>Type de service : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.serviceType ? getServiceType(worksiteRequest.serviceType) : '' : ''}</span></Col>
-            <Col>Date : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.estimatedDate ? formatDate(worksiteRequest.estimatedDate) : ''}</span></Col>
-          </Row>
-
-          <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
-            <Col>Enlèvement : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.removal ? formatBoolean(worksiteRequest.removal) : 'non'}</span></Col>
-            <Col>Livraison : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.delivery ? formatBoolean(worksiteRequest.delivery) : 'non'}</span></Col>
-          </Row>
-
-          <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
-            <Col>Enlèvement déchetterie : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.removalRecycling ? formatBoolean(worksiteRequest.removalRecycling) : 'non'}</span></Col>
-            <Col>Chrono pour devis : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.chronoQuote ? formatBoolean(worksiteRequest.chronoQuote) : 'non'}</span></Col>
-          </Row>
-
-
-          <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
-            <Col>Urgence : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.emergency ? getEmergency(worksiteRequest.emergency) : '' : ''}</span></Col>
-            <Col>Catégorie : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.category ? getCategorie(worksiteRequest.category) : ''}</span></Col>
-          </Row>
-
-          <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
-            <Col>Détails de la livraison : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.description : ''}</span></Col>
-          </Row>
-
-          <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
-            <Col>Affectation Tezea : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.tezeaAffectation : ''}</span></Col>
-            <Col>Prestataire : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.provider : ''}</span></Col>
-          </Row>
-
-          <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
-            <Col>Estimation du poids : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.weightEstimate : ''}</span></Col>
-            <Col>Estimation du volume : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.volumeEstimate : ''}</span></Col>
-          </Row>
-          <Row className="mb-5"></Row>
-        </div>
         {showButtonCreate && worksiteRequest && worksiteRequest.requestStatus && worksiteRequest.requestStatus === WorkSiteRequestStatus.Standby && (
-          <div className="CreateWorkSitButton" style={{ display: 'flex', justifyContent: 'center' }}>
+          <div className="CreateWorkSitButton mt-3" style={{ display: 'flex', justifyContent: 'center' }}>
             <Button onClick={() => { onHide(); handleCreateWorksite(); }}>Créer un chantier</Button>
           </div>
         )}
-        
+
         {showButtonEditValidate && worksiteRequest && worksiteRequest.requestStatus && worksiteRequest.requestStatus === WorkSiteRequestStatus.ToComplete && (
           <div className="Edit" style={{ display: 'flex', justifyContent: 'space-around' }}>
             <Button onClick={() => { onHide(); handleEdit(); }}>Modifier la demande</Button>
             <Button onClick={() => { onHide(); handleValidate(); }}>Valider la demande</Button>
-            
+
           </div>
         )}
 

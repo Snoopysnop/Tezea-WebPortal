@@ -77,7 +77,7 @@ const CreateWorkSitePage: React.FC = () => {
 
     await MainApi.getInstance().createWorkSite(workSite)
     //todo brancher le POST
-    navigate("/listeStatus")
+    navigate("/worksiteList")
 
   };
 
@@ -162,7 +162,7 @@ const CreateWorkSitePage: React.FC = () => {
     setModalShow(true);
   }
 
-  
+
   const handleSearchDispo = async () => {
 
     if (new Date(startTime) > new Date(endTime)) {
@@ -213,7 +213,7 @@ const CreateWorkSitePage: React.FC = () => {
   }, [availableStaff, availableWorksiteChief, availableTools])
 
 
-  function displayDay(dateString:String) {
+  function displayDay(dateString: String) {
     const parts = dateString.split('T')[0].split('-');
     const year = parseInt(parts[0]);
     const month = parseInt(parts[1]);
@@ -221,440 +221,439 @@ const CreateWorkSitePage: React.FC = () => {
     const formattedDay = day < 10 ? `0${day}` : day;
     const formattedMonth = month < 10 ? `0${month}` : month;
     return `${formattedDay}/${formattedMonth}/${year}`;
-}
+  }
 
-function displayHours(dateString:String) {
+  function displayHours(dateString: String) {
     const parts = dateString.split('T')[1].split(':');
     const hours = parseInt(parts[0]);
     const minutes = parseInt(parts[1]);
     const formattedHours = hours < 10 ? `0${hours}` : hours;
     const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
     return `${formattedHours}H${formattedMinutes}`;
-}
+  }
 
   return (
 
-    <Container>
+    <Container className='mb-5'>
       <Row className="mb-5"></Row>
       <Row>
-      <Col xs={9}></Col>
-      <Col xs={3}>
-        <Button onClick={handlePopUp} style={{ fontSize: '20px'}}>
-        Consulter la demande
-        </Button> 
-      </Col>
+        <Col xs={9}></Col>
+        <Col xs={3}>
+          <Button onClick={handlePopUp} style={{ fontSize: '20px' }}>
+            Consulter la demande
+          </Button>
+        </Col>
       </Row>
       <Container className='p-4 mt-4' style={{ backgroundColor: "#ffffff", borderRadius: "20px" }}>
-      <Row>
-        <Col xs={12} >
-          <Tabs
-            activeKey={activeTab}
-            onSelect={(k) => setActiveTab(k || 'date')}
-            id="controlled-tab-example"
-            className="mb-3 flex-grow-1"
-            style={{ width: '100%' }}
-          >
+        <Row>
+          <Col xs={12} >
+            <Tabs
+              activeKey={activeTab}
+              onSelect={(k) => setActiveTab(k || 'date')}
+              id="controlled-tab-example"
+              className="mb-3 flex-grow-1"
+              style={{ width: '100%' }}
+            >
 
-            <Tab eventKey="date" title="Sélectionner une période" >
-              <Row className="mb-3"></Row>
+              <Tab eventKey="date" title="Sélectionner une période" >
+                <Row className="mb-3"></Row>
 
-              <Row className="mb-5">
-                <h2>Donner un titre pour le chantier :</h2>
-              </Row>
-              <Form.Group as={Col} controlId="formTitreChantier">
-                <Form.Control
-                  style={{ width: "35%" }}
-                  type="text"
-                  placeholder="Entrez un titre"
-                  value={title}
-                  onChange={e => setTitle(e.target.value)}
-                />
-              </Form.Group>
-              <Row className="mb-5"></Row>
+                <Row className="mb-5">
+                  <h2>Donner un titre pour le chantier :</h2>
+                </Row>
+                <Form.Group as={Col} controlId="formTitreChantier">
+                  <Form.Control
+                    style={{ width: "35%" }}
+                    type="text"
+                    placeholder="Entrez un titre"
+                    value={title}
+                    onChange={e => setTitle(e.target.value)}
+                  />
+                </Form.Group>
+                <Row className="mb-5"></Row>
 
-              <Row className="mb-5">
-                <h2>Selectionner une période pour le chantier :</h2>
-              </Row>
-              <Row className="justify-content-md-center">
-                <Col md="auto">
-                  <Container>
-                    <Row>
-                      <Col>
-                        <Form.Group controlId="startTime">
-                          <Form.Label>Début du chantier</Form.Label>
-                          <Form.Control
-                            type="datetime-local"
-                            value={startTime}
-                            onChange={e => setStartTime(e.target.value)}
-                            style={{ height: '50px', width: '500px', fontSize: '20px', cursor: 'pointer' }}
-                            min={new Date().toISOString().split('.')[0]}
+                <Row className="mb-5">
+                  <h2>Selectionner une période pour le chantier :</h2>
+                </Row>
+                <Row className="justify-content-md-center">
+                  <Col md="auto">
+                    <Container>
+                      <Row>
+                        <Col>
+                          <Form.Group controlId="startTime">
+                            <Form.Label>Début du chantier</Form.Label>
+                            <Form.Control
+                              type="datetime-local"
+                              value={startTime}
+                              onChange={e => setStartTime(e.target.value)}
+                              style={{ height: '50px', width: '500px', fontSize: '20px', cursor: 'pointer' }}
+                              min={new Date().toISOString().split('.')[0]}
                           />
-                        </Form.Group>
-                      </Col>
-                      <Col>
-                        <Form.Group controlId="endTime">
-                          <Form.Label>Fin du chantier</Form.Label>
-                          <Form.Control
-                            type="datetime-local"
-                            value={endTime}
-                            onChange={e => setEndTime(e.target.value)}
-                            style={{ height: '50px', width: '500px', fontSize: '20px', cursor: 'pointer' }}
-                            min={new Date().toISOString().split('.')[0]}
+                          </Form.Group>
+                        </Col>
+                        <Col>
+                          <Form.Group controlId="endTime">
+                            <Form.Label>Fin du chantier</Form.Label>
+                            <Form.Control
+                              type="datetime-local"
+                              value={endTime}
+                              onChange={e => setEndTime(e.target.value)}
+                              style={{ height: '50px', width: '500px', fontSize: '20px', cursor: 'pointer' }}
+                              min={new Date().toISOString().split('.')[0]}
                           />
-                        </Form.Group>
+                          </Form.Group>
+                        </Col>
+                      </Row>
+                      <Row className="mb-5"></Row>
+                      <Row className="mb-5" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <Button onClick={async () => await handleSearchDispo()} variant="primary" style={{ height: '50px', width: '300px', fontSize: '20px' }}>
+                          {isInitialSelection ? 'Sélectionner' : 'Modifier'}
+                        </Button>
+                      </Row>
+                      <Row className="text-center">
+                        {error && <Alert variant="danger">{error}</Alert>}
+                      </Row>
+                    </Container>
+                  </Col>
+                </Row>
+              </Tab>
+
+              {!isInitialSelection && (
+
+                <Tab eventKey="personnel" title={'Sélectionner le personnel'} style={{ width: '100%' }}>
+                  <Row className="mb-3"></Row>
+                  <Row className="mb-5">
+                    <h2>Selectionner le personnel nécessaire au chantier :</h2>
+                  </Row>
+                  <Container style={{ height: '300px' }}>
+                    <Row className="mt-3">
+                      <Col xs={5}>
+                        <h4>Liste des chefs de chantier disponibles :</h4>
+                        <Form.Select onChange={handleSelectWorksiteChief}>
+                          <option value="">Sélectionner un chef de chantier</option>
+                          {availableWorksiteChief.map(user => (
+                            <option key={user.id} value={user.id}>{user.firstName} {user.lastName}</option>
+                          ))}
+                        </Form.Select>
                       </Col>
-                    </Row>
-                    <Row className="mb-5"></Row>
-                    <Row className="mb-5" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                      <Button onClick={async () => await handleSearchDispo()} variant="primary" style={{ height: '50px', width: '300px', fontSize: '20px' }}>
-                        {isInitialSelection ? 'Sélectionner' : 'Modifier'}
-                      </Button>
-                    </Row>
-                    <Row className="text-center">
-                      {error && <Alert variant="danger">{error}</Alert>}
+                      <Col xs={1}></Col>
+                      {selectedWorksiteChief && (
+                        <Col key={selectedWorksiteChief.id} xs={4} className="mb-3">
+                          <Card style={{ border: "2px solid", borderRadius: "7px", borderColor: "#0D6EFD" }}>
+                            <Container style={{ backgroundColor: '#bedaec', borderTopLeftRadius: "5px", borderTopRightRadius: "5px" }}>
+                              <Card.Body className="text-center" style={{ color: '#0D6EFD' }}>
+                                <Card.Title>{selectedWorksiteChief.firstName} {selectedWorksiteChief.lastName}</Card.Title>
+                                <Card.Text>
+                                  {selectedWorksiteChief.role}
+                                </Card.Text>
+                              </Card.Body>
+                            </Container>
+                            <hr className="m-0" />
+                            <Container style={{ backgroundColor: '#FFFFFF', borderBottomLeftRadius: "15px", borderBottomRightRadius: "15px" }}>
+                              <Card.Body>
+                                <Card.Text style={{ color: '#0D6EFD' }}>
+                                  <Envelope /> : {selectedWorksiteChief.email}
+                                  <br />
+                                  <Telephone /> : {selectedWorksiteChief.phoneNumber}
+                                </Card.Text>
+                              </Card.Body>
+                              <Card.Body className="text-center">
+                                <Button variant="danger" style={{ height: '40px', width: '80' }} onClick={() => handleRemoveSelectedWorksiteChief(selectedWorksiteChief.id!)}>
+                                  Retirer
+                                </Button>
+                              </Card.Body>
+                            </Container>
+                          </Card>
+                        </Col>
+                      )}
                     </Row>
                   </Container>
-                </Col>
-              </Row>
-            </Tab>
-
-            {!isInitialSelection && (
-
-              <Tab eventKey="personnel" title={'Sélectionner le personnel'} style={{ width: '100%' }}>
-                <Row className="mb-3"></Row>
-                <Row className="mb-5">
-                  <h2>Selectionner le personnel nécessaire au chantier :</h2>
-                </Row>
-                <Container style={{ height: '300px' }}>
-                  <Row className="mt-3">
-                    <Col xs={5}>
-                      <h4>Liste des chefs de chantier disponibles :</h4>
-                      <Form.Select onChange={handleSelectWorksiteChief}>
-                        <option value="">Sélectionner un chef de chantier</option>
-                        {availableWorksiteChief.map(user => (
-                          <option key={user.id} value={user.id}>{user.firstName} {user.lastName}</option>
-                        ))}
-                      </Form.Select>
-                    </Col>
-                    <Col xs={1}></Col>
-                    {selectedWorksiteChief && (
-                      <Col key={selectedWorksiteChief.id} xs={4} className="mb-3">
-                        <Card style={{border:"2px solid", borderRadius:"7px", borderColor:"#0D6EFD"}}>
-                          <Container style={{  backgroundColor: '#bedaec', borderTopLeftRadius:"5px", borderTopRightRadius:"5px"}}>
-                            <Card.Body className="text-center" style={{color: '#0D6EFD' }}>
-                              <Card.Title>{selectedWorksiteChief.firstName} {selectedWorksiteChief.lastName}</Card.Title>
-                              <Card.Text>
-                                {selectedWorksiteChief.role}
-                              </Card.Text>
-                            </Card.Body>
-                          </Container>
-                          <hr className="m-0" />
-                          <Container style={{ backgroundColor: '#FFFFFF', borderBottomLeftRadius:"15px", borderBottomRightRadius:"15px" }}>
-                            <Card.Body>
-                              <Card.Text style={{color: '#0D6EFD' }}>
-                                <Envelope /> : {selectedWorksiteChief.email}
-                                <br />
-                                <Telephone /> : {selectedWorksiteChief.phoneNumber}
-                              </Card.Text>
-                            </Card.Body>
-                            <Card.Body className="text-center">
-                              <Button variant="danger" style={{ height: '40px', width: '80' }} onClick={() => handleRemoveSelectedWorksiteChief(selectedWorksiteChief.id!)}>
-                                Retirer
-                              </Button>
-                            </Card.Body>
-                          </Container>
-                        </Card>
+                  <Container>
+                    <Row className="mt-3">
+                      <Col xs={5}>
+                        <h4>Liste des employés disponibles :</h4>
+                        <Form.Select onChange={handleSelectStaff}>
+                          <option value="">Sélectionner un employé</option>
+                          {availableStaff.map(user => (
+                            <option key={user.id} value={user.id}>{user.firstName} {user.lastName}</option>
+                          ))}
+                        </Form.Select>
                       </Col>
-                    )}
-                  </Row>
-                </Container>
-                <Container style={{ height: '300px' }}>
-                  <Row className="mt-3">
-                    <Col xs={5}>
-                      <h4>Liste des employés disponibles :</h4>
-                      <Form.Select onChange={handleSelectStaff}>
-                        <option value="">Sélectionner un employé</option>
-                        {availableStaff.map(user => (
-                          <option key={user.id} value={user.id}>{user.firstName} {user.lastName}</option>
-                        ))}
-                      </Form.Select>
-                    </Col>
-                    <Col xs={1}></Col>
-                    <Col xs={3} className="d-flex justify-content-between align-items-end">
-                      <div>
-                        <h4>Sélection aléatoire :</h4>
-                        <Form.Group controlId="numRandomStaff" style={{ width: '200px' }}>
-                          <Form.Control
-                            type="number"
-                            min={1}
-                            value={numRandomStaff}
-                            onChange={(e) => setNumRandomStaff(parseInt(e.target.value))}
-                          />
-                        </Form.Group>
-                      </div>
-                      <Button variant="primary" onClick={handleRandomStaffSelection}><Search /></Button>
-                    </Col>
-                    <Row className="mb-5"></Row>
-                    <Row className="mb-5"></Row>
+                      <Col xs={1}></Col>
+                      <Col xs={3} className="d-flex justify-content-between align-items-end">
+                        <div>
+                          <h4>Sélection aléatoire :</h4>
+                          <Form.Group controlId="numRandomStaff" style={{ width: '200px' }}>
+                            <Form.Control
+                              type="number"
+                              min={1}
+                              value={numRandomStaff}
+                              onChange={(e) => setNumRandomStaff(parseInt(e.target.value))}
+                            />
+                          </Form.Group>
+                        </div>
+                        <Button variant="primary" onClick={handleRandomStaffSelection}><Search /></Button>
+                      </Col>
+                      <Row className="mb-5"></Row>
 
-                    {selectedStaff.length > 0 && (
-                      <Container>
-                        <Row>
-                          {selectedStaff.map((user) => (
-                            <Col key={user.id} xs={4} className="mb-3">
-                              <Card style={{border:"2px solid", borderRadius:"7px", borderColor:"#0D6EFD"}}>
-                                <Container style={{  backgroundColor: '#bedaec', borderTopLeftRadius:"5px", borderTopRightRadius:"5px"}}>
-                                  <Card.Body className="text-center" style={{color: '#0D6EFD' }}>
-                                    <Card.Title>{user.firstName} {user.lastName}</Card.Title>
-                                    <Card.Text>
-                                      {user.role}
-                                    </Card.Text>
+                      {selectedStaff.length > 0 && (
+                        <Container>
+                          <Row>
+                            {selectedStaff.map((user) => (
+                              <Col key={user.id} xs={4} className="mb-3">
+                                <Card style={{ border: "2px solid", borderRadius: "7px", borderColor: "#0D6EFD" }}>
+                                  <Container style={{ backgroundColor: '#bedaec', borderTopLeftRadius: "5px", borderTopRightRadius: "5px" }}>
+                                    <Card.Body className="text-center" style={{ color: '#0D6EFD' }}>
+                                      <Card.Title>{user.firstName} {user.lastName}</Card.Title>
+                                      <Card.Text>
+                                        {user.role}
+                                      </Card.Text>
+                                    </Card.Body>
+                                  </Container>
+                                  <hr className="m-0" />
+                                  <Container style={{ backgroundColor: '#FFFFFF', borderBottomLeftRadius: "15px", borderBottomRightRadius: "15px" }}>
+                                    <Card.Body>
+                                      <Card.Text style={{ color: '#0D6EFD' }}>
+                                        <Envelope /> : {user.email}
+                                        <br />
+                                        <Telephone /> : {user.phoneNumber}
+                                      </Card.Text>
+                                    </Card.Body>
+                                    <Card.Body className="text-center">
+                                      <Button variant="danger" style={{ height: '40px', width: '80' }} onClick={() => handleRemoveSelectedStaff(user.id!)}>
+                                        Retirer
+                                      </Button>
+                                    </Card.Body>
+                                  </Container>
+                                </Card>
+                              </Col>
+                            ))}
+                          </Row>
+                        </Container>
+                      )}
+                      <Row className="mb-5"></Row>
+                    </Row>
+                  </Container>
+                </Tab>
+              )}
+              {!isInitialSelection && (
+                <Tab eventKey="outilage" title={'Sélectionner l\'outillage'} style={{ width: '100%' }}>
+                  <Row className="mb-3"></Row>
+                  <Row className="mb-5">
+                    <h2>Selectionner les outils nécessaires au chantier :</h2>
+                  </Row>
+                  <div className="autocomplete-container" style={{ position: "relative", zIndex: 2 }}>
+                    <ReactSearchAutocomplete
+                      items={availableTools ? availableTools.map(tool => ({ id: tool.name, name: tool.name })) : []}
+                      onSearch={handleOnSearch}
+                      onSelect={handleOnSelect}
+                      autoFocus
+                      placeholder="Filtrer par nom d'outils"
+                    />
+                  </div>
+                  <Row className="mb-5"></Row>
+                  {selectedTools.length > 0 && (
+                    <Container>
+                      <Row className="mb-3">
+                        <h4>Outils sélectionnés :</h4>
+                      </Row>
+                      <Row>
+                        {selectedTools.map((toolName, index) => {
+                          const selectedTool = availableTools.find(tool => tool.name === toolName);
+                          return (
+                            <Col key={index} xs={4} className="mb-3">
+                              <Card style={{ border: "2px solid", borderRadius: "7px", borderColor: "#0D6EFD" }}>
+                                <Container style={{ backgroundColor: '#bedaec', borderTopLeftRadius: "5px", borderTopRightRadius: "5px" }}>
+                                  <Card.Body className="text-center" style={{ color: '#0D6EFD' }}>
+                                    <Card.Title>{toolName}</Card.Title>
+                                    {selectedTool && (
+                                      <Card.Text>
+                                        Quantité disponible : {selectedTool.quantity}
+                                      </Card.Text>
+                                    )}
                                   </Card.Body>
                                 </Container>
-                                <hr className="m-0" />
-                                <Container style={{ backgroundColor: '#FFFFFF', borderBottomLeftRadius:"15px", borderBottomRightRadius:"15px" }}>
-                                  <Card.Body>
-                                    <Card.Text style={{color: '#0D6EFD' }}>
-                                      <Envelope /> : {user.email}
-                                      <br />
-                                      <Telephone /> : {user.phoneNumber}
-                                    </Card.Text>
+                                <Container style={{ backgroundColor: '#FFFFFF', borderBottomLeftRadius: "15px", borderBottomRightRadius: "15px" }}>
+                                  <Card.Body className="text-center" style={{ color: '#0D6EFD' }}>
+                                    Quantité sélectionnée : {selectedQuantities[toolName]}
                                   </Card.Body>
+                                  <Card.Body>
+                                    {selectedTool && (
+                                      <Row className="align-items-center" >
+
+                                        <Col style={{ width: "10%", display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                          <Button variant="secondary" onClick={() => handleDecreaseQuantity(toolName)} style={{ width: '30px', height: '30px', display: 'flex', justifyContent: 'center', alignItems: 'center', paddingBottom: 9 }}>-</Button>
+                                        </Col>
+                                        <Col style={{ display: 'flex', alignItems: 'center', width: "80%" }}>
+
+                                          <Slider
+                                            axis="x"
+                                            x={selectedQuantities[toolName] || 1} // Utiliser la quantité sélectionnée pour l'outil spécifique
+                                            xmin={1}
+                                            xmax={selectedTool.quantity}
+                                            onChange={(pos) => handleQuantityChange(toolName, pos.x)} // Passer le nom de l'outil pour identifier quelle quantité changer
+                                          />
+
+                                        </Col>
+                                        <Col style={{ width: "10%", display: 'flex', flexDirection: "row", justifyContent: 'center', alignItems: 'center', textAlign: "center" }}>
+                                          <Button variant="secondary" onClick={() => handleIncreaseQuantity(toolName, selectedTool.quantity)} style={{ width: '30px', height: '30px', display: 'flex', justifyContent: 'center', alignItems: 'center', paddingBottom: 9 }}>+</Button>
+                                        </Col>
+
+                                      </Row>
+                                    )}
+                                  </Card.Body>
+
                                   <Card.Body className="text-center">
-                                    <Button variant="danger" style={{ height: '40px', width: '80' }} onClick={() => handleRemoveSelectedStaff(user.id!)}>
+                                    <Button variant="danger" style={{ height: '40px', width: '80' }} onClick={() => handleRemoveSelectedTool(toolName)}>
                                       Retirer
                                     </Button>
                                   </Card.Body>
                                 </Container>
                               </Card>
                             </Col>
-                          ))}
-                        </Row>
-                      </Container>
-                    )}
-                    <Row className="mb-5"></Row>
-                  </Row>
-                </Container>
-              </Tab>
-            )}
-            {!isInitialSelection && (
-              <Tab eventKey="outilage" title={'Sélectionner l\'outillage'} style={{ width: '100%' }}>
-                <Row className="mb-3"></Row>
-                <Row className="mb-5">
-                  <h2>Selectionner les outils nécessaires au chantier :</h2>
-                </Row>
-                <div className="autocomplete-container" style={{ position:"relative", zIndex: 2 }}>
-                <ReactSearchAutocomplete
-                  items={availableTools ? availableTools.map(tool => ({ id: tool.name, name: tool.name })) : []}
-                  onSearch={handleOnSearch}
-                  onSelect={handleOnSelect}
-                  autoFocus
-                  placeholder="Filtrer par nom d'outils"
-                />
-                </div>
-                <Row className="mb-5"></Row>
-                {selectedTools.length > 0 && (
-                  <Container>
-                    <Row className="mb-3">
-                      <h4>Outils sélectionnés :</h4>
-                    </Row>
-                    <Row>
-                      {selectedTools.map((toolName, index) => {
-                        const selectedTool = availableTools.find(tool => tool.name === toolName);
-                        return (
-                          <Col key={index} xs={4} className="mb-3">
-                            <Card style={{border:"2px solid", borderRadius:"7px", borderColor:"#0D6EFD"}}>
-                              <Container style={{  backgroundColor: '#bedaec', borderTopLeftRadius:"5px", borderTopRightRadius:"5px"}}>
-                                <Card.Body className="text-center" style={{color: '#0D6EFD' }}>
-                                  <Card.Title>{toolName}</Card.Title>
-                                  {selectedTool && (
-                                    <Card.Text>
-                                      Quantité disponible : {selectedTool.quantity}
-                                    </Card.Text>
-                                  )}
-                                </Card.Body>
-                              </Container>
-                              <Container style={{ backgroundColor: '#FFFFFF', borderBottomLeftRadius:"15px", borderBottomRightRadius:"15px" }}>
-                                <Card.Body className="text-center" style={{color: '#0D6EFD' }}>
-                                  Quantité sélectionnée : {selectedQuantities[toolName]}
-                                </Card.Body>
-                                <Card.Body>
-                                  {selectedTool && (
-                                    <Row className="align-items-center" >
+                          );
+                        })}
+                      </Row>
+                    </Container>
+                  )}
+                </Tab>
+              )}
+              {!isInitialSelection && (
+                <Tab eventKey="creation" title="Récapitulatif" style={{ width: '100%' }}>
+                  <Container className="MainContainer">
 
-                                      <Col style={{ width: "10%", display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                        <Button variant="secondary" onClick={() => handleDecreaseQuantity(toolName)} style={{ width: '30px', height: '30px', display: 'flex', justifyContent: 'center', alignItems: 'center', paddingBottom: 9 }}>-</Button>
-                                      </Col>
-                                      <Col style={{ display: 'flex', alignItems: 'center', width: "80%" }}>
+                    <Container className="TitlePartContainer">
+                      <Row className="mb-3"></Row>
+                      <Row className="mb-5">
+                        <h2>Récapitulatif de la création de chantier</h2>
+                      </Row>
+                    </Container>
 
-                                        <Slider
-                                          axis="x"
-                                          x={selectedQuantities[toolName] || 1} // Utiliser la quantité sélectionnée pour l'outil spécifique
-                                          xmin={1}
-                                          xmax={selectedTool.quantity}
-                                          onChange={(pos) => handleQuantityChange(toolName, pos.x)} // Passer le nom de l'outil pour identifier quelle quantité changer
-                                        />
+                    <Container className="BodyPartContainer" style={{ display: "flex", flexDirection: "row" }}>
 
-                                      </Col>
-                                      <Col style={{ width: "10%", display: 'flex', flexDirection: "row", justifyContent: 'center', alignItems: 'center', textAlign: "center" }}>
-                                        <Button variant="secondary" onClick={() => handleIncreaseQuantity(toolName, selectedTool.quantity)} style={{ width: '30px', height: '30px', display: 'flex', justifyContent: 'center', alignItems: 'center', paddingBottom: 9 }}>+</Button>
-                                      </Col>
+                      <Container className="EmptyContainer" style={{ display: "flex", width: "4%" }}></Container>
 
-                                    </Row>
-                                  )}
-                                </Card.Body>
+                      <Container className="container_Title&SiteChief" style={{ display: "flex", width: "28%", flexDirection: "column", paddingTop: "20px", backgroundColor: "#bedaec", borderRadius: 7 }}>
 
-                                <Card.Body className="text-center">
-                                  <Button variant="danger" style={{ height: '40px', width: '80' }} onClick={() => handleRemoveSelectedTool(toolName)}>
-                                    Retirer
-                                  </Button>
-                                </Card.Body>
-                              </Container>
-                            </Card>
-                          </Col>
-                        );
-                      })}
-                    </Row>
-                  </Container>
-                )}
-              </Tab>
-            )}
-            {!isInitialSelection && (
-              <Tab eventKey="creation" title="Récapitulatif" style={{ width: '100%' }}>
-                <Container className="MainContainer">
-
-                  <Container className="TitlePartContainer">
-                    <Row className="mb-3"></Row>
-                    <Row className="mb-5">
-                      <h2>Récapitulatif de la création de chantier</h2>
-                    </Row>
-                  </Container>
-
-                  <Container className="BodyPartContainer" style={{ display: "flex", flexDirection: "row" }}>
-                  
-                    <Container className="EmptyContainer" style={{ display: "flex", width: "4%" }}></Container>
-
-                    <Container className="container_Title&SiteChief" style={{ display: "flex", width: "28%", flexDirection: "column" , paddingTop:"20px",  backgroundColor:"#bedaec",borderRadius:7}}>
-
-                        <div style={{ display:"flex",alignItems: "center", justifyContent: "center", marginBottom:"5px" }}>
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "5px" }}>
                           <div style={{ fontSize: 20, fontWeight: "bold" }}>Informations générales</div>
                         </div>
-                        
-                        <div className="lineUnderTitle" style={{display:"flex", marginBottom:"15px"}}>
-                          <div style={{display:"flex", width: "10%"}}></div>
-                          <div style={{ display:"flex", width: "80%", height:"1px", backgroundColor:"black"}}></div>
-                          <div style={{display:"flex", width: "10%"}}></div>
+
+                        <div className="lineUnderTitle" style={{ display: "flex", marginBottom: "15px" }}>
+                          <div style={{ display: "flex", width: "10%" }}></div>
+                          <div style={{ display: "flex", width: "80%", height: "1px", backgroundColor: "black" }}></div>
+                          <div style={{ display: "flex", width: "10%" }}></div>
                         </div>
-                        <div>  
-                          
-                          <div style={{display:"flex"}}>
-                            <div style={{display:"flex", width:"20%"}}></div>
-                            
-                            <div className="infoWorksite" style={{display:"flex", flexDirection:"column", width:"60%"}}>
-                              <div className="titreDiv" style={{marginBottom:"20px"}} >
-                                <div style={{ fontSize: 18, fontWeight: "bold"}}>Titre du chantier :</div>
-                                <div style={{ fontSize: 16, marginLeft:7}}>{title ? `${title}` : 'Aucun'}</div>
+                        <div>
+
+                          <div style={{ display: "flex" }}>
+                            <div style={{ display: "flex", width: "20%" }}></div>
+
+                            <div className="infoWorksite" style={{ display: "flex", flexDirection: "column", width: "60%" }}>
+                              <div className="titreDiv" style={{ marginBottom: "20px" }} >
+                                <div style={{ fontSize: 18, fontWeight: "bold" }}>Titre du chantier :</div>
+                                <div style={{ fontSize: 16, marginLeft: 7 }}>{title ? `${title}` : 'Aucun'}</div>
                               </div>
 
-                              <div className="dateDiv" style={{marginBottom:"20px"}}>
-                                <div style={{ fontSize: 18, fontWeight: "bold"}}>Dates du chantier :</div>
-                                <div style={{ fontSize: 16, marginLeft:7}}>Du : { startTime? displayDay(startTime) : ''}, { startTime? displayHours(startTime) : ''}</div>
-                                <div style={{ fontSize: 16, marginLeft:7}}>Au : { endTime? displayDay(endTime) : ''}, { endTime? displayHours(endTime) : ''}</div>
+                              <div className="dateDiv" style={{ marginBottom: "20px" }}>
+                                <div style={{ fontSize: 18, fontWeight: "bold" }}>Dates du chantier :</div>
+                                <div style={{ fontSize: 16, marginLeft: 7 }}>Du : {startTime ? displayDay(startTime) : ''}, {startTime ? displayHours(startTime) : ''}</div>
+                                <div style={{ fontSize: 16, marginLeft: 7 }}>Au : {endTime ? displayDay(endTime) : ''}, {endTime ? displayHours(endTime) : ''}</div>
                               </div>
-                    
-                              <div className="siteChiefDiv" style={{marginBottom:"25px"}}>
-                                <div style={{ fontSize: 18, fontWeight: "bold"}}>Chef de chantier : </div>
-                                <div style={{ fontSize: 16, marginLeft:7}}>{selectedWorksiteChief ? `${selectedWorksiteChief.firstName} ${selectedWorksiteChief.lastName}` : 'Aucun'}</div>
+
+                              <div className="siteChiefDiv" style={{ marginBottom: "25px" }}>
+                                <div style={{ fontSize: 18, fontWeight: "bold" }}>Chef de chantier : </div>
+                                <div style={{ fontSize: 16, marginLeft: 7 }}>{selectedWorksiteChief ? `${selectedWorksiteChief.firstName} ${selectedWorksiteChief.lastName}` : 'Aucun'}</div>
                               </div>
 
                             </div>
-                            
-                            <div style={{display:"flex", width:"20%"}}></div>                  
+
+                            <div style={{ display: "flex", width: "20%" }}></div>
                           </div>
                         </div>
 
-                    </Container>
-                    
-                    <Container className="EmptyContainer" style={{ display: "flex", width: "4%" }}></Container>
-                    
-                    
-                    <Container className="container_Employees" style={{ display: "flex", flexDirection: "column", width: "28%", paddingTop:"20px", backgroundColor:"#bedaec", borderRadius:7}}>
+                      </Container>
 
-                      <div style={{ display:"flex",alignItems: "center", justifyContent: "center", marginBottom:"5px" }}>
-                        <div style={{ fontSize: 20, fontWeight: "bold" }}>Employés sélectionnés</div>
-                      </div>
+                      <Container className="EmptyContainer" style={{ display: "flex", width: "4%" }}></Container>
 
-                      <div className="lineUnderTitle" style={{display:"flex", marginBottom:"20px"}}>
-                        <div style={{display:"flex", width: "10%"}}></div>
-                        <div style={{ display:"flex", width: "80%", height:"1px", backgroundColor:"black"}}></div>
-                        <div style={{display:"flex", width: "10%"}}></div>
-                      </div>
-                      
-                      <div className="listOfEmployees" style={{ display:"flex", flexDirection:"row", marginBottom:"25px"}}>
-                        <div style={{display:"flex", width:"21%"}}></div>
-                        <div style={{display:"flex", width:"74%", flexDirection:"column", justifyContent:"space-around"}}>
-                          {selectedStaff.map(user => (
-                            <li key={user.id}>{user.firstName} {user.lastName}</li>
-                          ))}
-                        </div>
-                        <div style={{display:"flex", width:"5%"}}></div>
-                      </div>
 
-                    </Container>
+                      <Container className="container_Employees" style={{ display: "flex", flexDirection: "column", width: "28%", paddingTop: "20px", backgroundColor: "#bedaec", borderRadius: 7 }}>
 
-                    <Container className="EmptyContainer" style={{ display: "flex", width: "4%" }}></Container>
-
-                    <Container className="container_Tools" style={{ display: "flex", flexDirection: "column", width: "28%", paddingTop:"20px", backgroundColor:"#bedaec",borderRadius:7}}>
-
-                      <div style={{ display:"flex", alignItems: "center", justifyContent: "center", marginBottom:"5px" }}>
-                        <div style={{ fontSize: 20, fontWeight: "bold" }}>Outils sélectionnés</div>
-                      </div>
-
-                      <div className="lineUnderTitle" style={{display:"flex", marginBottom:"20px"}}>
-                        <div style={{display:"flex", width: "10%"}}></div>
-                        <div style={{ display:"flex", width: "80%", height:"1px", backgroundColor:"black"}}></div>
-                        <div style={{display:"flex", width: "10%"}}></div>
-                      </div>
-
-                      <div className="listOfTools" style={{ display:"flex", flexDirection:"row", marginBottom:"25px"}}>
-                        <div style={{display:"flex", width:"21%"}}></div>
-                        
-                        <div style={{display:"flex", width:"74%", flexDirection:"column", justifyContent:"space-around"}}>
-                          {selectedTools.map(toolName => (
-                            <li key={toolName}>{toolName} - Quantité : {selectedQuantities[toolName]}</li>
-                          ))}
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "5px" }}>
+                          <div style={{ fontSize: 20, fontWeight: "bold" }}>Employés sélectionnés</div>
                         </div>
 
-                        <div style={{display:"flex", width:"5%"}}></div>
-                      </div>
+                        <div className="lineUnderTitle" style={{ display: "flex", marginBottom: "20px" }}>
+                          <div style={{ display: "flex", width: "10%" }}></div>
+                          <div style={{ display: "flex", width: "80%", height: "1px", backgroundColor: "black" }}></div>
+                          <div style={{ display: "flex", width: "10%" }}></div>
+                        </div>
+
+                        <div className="listOfEmployees" style={{ display: "flex", flexDirection: "row", marginBottom: "25px" }}>
+                          <div style={{ display: "flex", width: "21%" }}></div>
+                          <div style={{ display: "flex", width: "74%", flexDirection: "column", justifyContent: "space-around" }}>
+                            {selectedStaff.map(user => (
+                              <li key={user.id}>{user.firstName} {user.lastName}</li>
+                            ))}
+                          </div>
+                          <div style={{ display: "flex", width: "5%" }}></div>
+                        </div>
+
+                      </Container>
+
+                      <Container className="EmptyContainer" style={{ display: "flex", width: "4%" }}></Container>
+
+                      <Container className="container_Tools" style={{ display: "flex", flexDirection: "column", width: "28%", paddingTop: "20px", backgroundColor: "#bedaec", borderRadius: 7 }}>
+
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "5px" }}>
+                          <div style={{ fontSize: 20, fontWeight: "bold" }}>Outils sélectionnés</div>
+                        </div>
+
+                        <div className="lineUnderTitle" style={{ display: "flex", marginBottom: "20px" }}>
+                          <div style={{ display: "flex", width: "10%" }}></div>
+                          <div style={{ display: "flex", width: "80%", height: "1px", backgroundColor: "black" }}></div>
+                          <div style={{ display: "flex", width: "10%" }}></div>
+                        </div>
+
+                        <div className="listOfTools" style={{ display: "flex", flexDirection: "row", marginBottom: "25px" }}>
+                          <div style={{ display: "flex", width: "21%" }}></div>
+
+                          <div style={{ display: "flex", width: "74%", flexDirection: "column", justifyContent: "space-around" }}>
+                            {selectedTools.map(toolName => (
+                              <li key={toolName}>{toolName} - Quantité : {selectedQuantities[toolName]}</li>
+                            ))}
+                          </div>
+
+                          <div style={{ display: "flex", width: "5%" }}></div>
+                        </div>
+                      </Container>
+
+
+                      <Container className="EmptyContainer" style={{ display: "flex", width: "4%" }}></Container>
+
                     </Container>
-                   
 
-                    <Container className="EmptyContainer" style={{ display: "flex", width: "4%" }}></Container>
-
+                    <Container className="FooterPartContainer">
+                      <Row className="mb-5"></Row>
+                      <Row className="mb-5"></Row>
+                      <Row>
+                        <Col className="text-center mt-3">
+                          <Button variant="success" onClick={handleCreateWorkSite} style={{ fontSize: '20px' }}>
+                            Créer le chantier
+                          </Button>
+                          <Row className="mb-3"></Row>
+                          {errorCreation && <Alert variant="danger">{errorCreation}</Alert>}
+                        </Col>
+                      </Row>
+                    </Container>
                   </Container>
+                </Tab>
 
-                  <Container className="FooterPartContainer">
-                    <Row className="mb-5"></Row>
-                    <Row className="mb-5"></Row>
-                    <Row>
-                      <Col className="text-center mt-3">
-                        <Button variant="success" onClick={handleCreateWorkSite} style={{ fontSize: '20px' }}>
-                          Créer le chantier
-                        </Button>
-                        <Row className="mb-3"></Row>
-                        {errorCreation && <Alert variant="danger">{errorCreation}</Alert>}
-                      </Col>
-                    </Row>
-                  </Container>
-                </Container>
-              </Tab>
+              )}
+            </Tabs>
+          </Col>
 
-            )}
-          </Tabs>
-        </Col>
-
-      </Row>
+        </Row>
       </Container>
 
       <WorkSiteRequestPopUp

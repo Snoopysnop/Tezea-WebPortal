@@ -126,7 +126,7 @@ const WorkSiteDetailPage: React.FC = () => {
   const [modalShow, setModalShow] = useState(false);
   { console.log(`data:image/png;base64, ${worksite!.signature}`) }
   return (
-    <Container className='container-xxl'>
+    <Container>
       <Row className='mt-4'>
         <Col lg={6}>
           <Card bg="white" text="dark" className="h-100">
@@ -169,6 +169,8 @@ const WorkSiteDetailPage: React.FC = () => {
               <Button variant="primary" onClick={() => setShowModal(true)}>Déclarer un incident</Button>{' '}
               <Button variant="secondary" onClick={() => setModalShow(true)} className="float-end">Voir la demande de chantiers</Button>{' '}
             </Card.Body>
+
+
           </Card>
         </Col>
         <Col lg={6}>
