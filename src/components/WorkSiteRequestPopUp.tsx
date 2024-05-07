@@ -190,7 +190,7 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
 
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="danger" onClick={onHide}>Close</Button>
+        <Button variant="danger" onClick={onHide}>Fermer</Button>
       </Modal.Footer>
     </Modal>
   );

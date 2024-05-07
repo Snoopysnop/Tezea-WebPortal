@@ -76,7 +76,7 @@ const PopupEmergency: React.FC<PopupEmergencyProps> = ({ showModal, closeModal, 
   </Form.Group>
 
   <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between' }}>
-    <Button variant="secondary" onClick={closeModal}>
+    <Button variant="danger" onClick={closeModal}>
       Fermer
     </Button>
     <Button variant="primary" type="submit" >
