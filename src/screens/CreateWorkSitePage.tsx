@@ -287,6 +287,7 @@ function displayHours(dateString:String) {
                             value={startTime}
                             onChange={e => setStartTime(e.target.value)}
                             style={{ height: '50px', width: '500px', fontSize: '20px', cursor: 'pointer' }}
+                            min={new Date().toISOString().split('.')[0]}
                           />
                         </Form.Group>
                       </Col>
@@ -298,6 +299,7 @@ function displayHours(dateString:String) {
                             value={endTime}
                             onChange={e => setEndTime(e.target.value)}
                             style={{ height: '50px', width: '500px', fontSize: '20px', cursor: 'pointer' }}
+                            min={new Date().toISOString().split('.')[0]}
                           />
                         </Form.Group>
                       </Col>

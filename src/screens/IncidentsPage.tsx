@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Table, InputGroup, Button, Form, Dropdown } from 'react-bootstrap';
-import { Category, IncidentLevel, EmergencyDetails, WorkSiteStatus } from '../api/Model';
+import { Category, IncidentLevel, EmergencyDetails, WorkSiteStatus, WorkSite } from '../api/Model';
 import '../App.css'
 import EmergencyComponent from './EmergencyComponent';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete';
-import { EmergencyDetailsJson } from '../api/ModelJson';
+import { EmergencyDetailsJson, WorkSiteJson } from '../api/ModelJson';
 import MainApi from '../api/MainApi';
 import { getIncidentLevel } from '../common/utils/utils';
 
@@ -44,10 +44,18 @@ const IncidentsPage: React.FC = () => {
   useEffect(() => {
     if (dataFetched) {
       setFilteredTasks(dataFetched.filter(task => task.title.toLowerCase().includes(filterValue.toLowerCase())))
+
+      handleListIncident()
     }
   }, [dataFetched,filterValue])
 
-  
+  const [worksite_OneIncident, setWorksite_OneIncident] = useState<WorkSiteJson[]>([]);
+
+
+  const handleListIncident = async () => {
+    setWorksite_OneIncident(await MainApi.getInstance().getWorksiteWithAtLeastOneIncident()) 
+
+  }
 
   const handleStatusChange = (status: IncidentLevel) => {
     const updatedCheckboxes = { ...checkboxes, [status]: !checkboxes[status] };
@@ -77,11 +85,27 @@ const IncidentsPage: React.FC = () => {
 
 
   const handleOnSearch = (string: any, results: any) => {
+    console.log("OnSearch",string,results)
     setFilterValue(string);
   };
 
-  const handleOnSelect = (item: any) => {
-    setFilterValue(item.name);
+  const handleOnSelect = async (item: any) => {
+    console.log("OnSelect",item)
+
+    const response = await MainApi.getInstance().getIncidentByWorksitesId(item.id);
+    console.log("OnSelectRES",response)
+
+    const transformedData: EmergencyDetails[] = response.map((emergencyDetailsJson: EmergencyDetailsJson) => ({
+      description: emergencyDetailsJson.description,
+      title: emergencyDetailsJson.title,
+      id: emergencyDetailsJson.id || '', 
+      level: getIncidentLevel(emergencyDetailsJson.level),
+      worksite: undefined
+    }));
+    // Mise à jour de l'état avec les données transformées
+    setFilteredTasks(transformedData);   
+    console.log("Filter",filteredTasks)
+ 
   };
 
   return (
@@ -94,7 +118,7 @@ const IncidentsPage: React.FC = () => {
                 <Col>
                   <ReactSearchAutocomplete
                     styling={{ borderRadius: "10px" }}
-                    items={dataFetched.map(data => {
+                    items={worksite_OneIncident.map(data => {
                       return {id:data.id, name:data.title}
                     })}
                     onSearch={handleOnSearch}

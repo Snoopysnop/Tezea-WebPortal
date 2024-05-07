@@ -202,11 +202,30 @@ class MainApi extends AbstractApi {
             throw AbstractApi.handleError(err)
         }
     }
+
+    public async getWorksiteWithAtLeastOneIncident() : Promise<WorkSiteJson[]> {
+        try {
+            const response = await this.service.get(`/api/worksites/hasIncidents`)
+            return response.data as WorkSiteJson[]
+        } catch(err) {
+            throw AbstractApi.handleError(err)
+        }
+    
+    }
     //Incidents-------------------------------------------------------------------------------------------------------------
 
     public async getEmergencies(): Promise<Array<EmergencyDetailsJson>> {
         try {
             const response = await this.service.get('/api/worksites/incidents')
+            return response.data as Array<EmergencyDetailsJson>
+        } catch (err) {
+            throw AbstractApi.handleError(err)
+        }
+    }
+
+    public async getIncidentByWorksitesId(id: string): Promise<Array<EmergencyDetailsJson>> {
+        try {
+            const response = await this.service.get(`/api/worksites/${id}/incidents`)
             return response.data as Array<EmergencyDetailsJson>
         } catch (err) {
             throw AbstractApi.handleError(err)

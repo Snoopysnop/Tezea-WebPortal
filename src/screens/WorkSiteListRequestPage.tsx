@@ -205,7 +205,7 @@ const WorkSiteListRequestPage: React.FC = () => {
                     onSearch={handleOnSearch}
                     onSelect={handleOnSelect}
                     autoFocus
-                    placeholder="Filtrer par nom de chantier..."
+                    placeholder="Filtrer par nom de demande..."
                   />
                 </Col>
                 <Col lg className='d-flex align-items-center'>
