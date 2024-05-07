@@ -238,10 +238,10 @@ const WorkSiteListRequestPage: React.FC = () => {
             <Table>
               <thead>
                 <tr>
-                  {selectedStatus.includes(WorkSiteRequestStatus.ToComplete) && <th className="col-lg-2">{WorkSiteRequestStatus.ToComplete}</th>}
-                  {selectedStatus.includes(WorkSiteRequestStatus.Standby) && <th className="col-lg-2">{WorkSiteRequestStatus.Standby}</th>}
-                  {selectedStatus.includes(WorkSiteRequestStatus.Done) && <th className="col-lg-2">{WorkSiteRequestStatus.Done}</th>}
-                  {selectedStatus.includes(WorkSiteRequestStatus.Archive) && <th className="col-lg-2">{WorkSiteRequestStatus.Archive}</th>}
+                  {selectedStatus.includes(WorkSiteRequestStatus.ToComplete) && <th className="col-lg-3">{WorkSiteRequestStatus.ToComplete}</th>}
+                  {selectedStatus.includes(WorkSiteRequestStatus.Standby) && <th className="col-lg-3">{WorkSiteRequestStatus.Standby}</th>}
+                  {selectedStatus.includes(WorkSiteRequestStatus.Done) && <th className="col-lg-3">{WorkSiteRequestStatus.Done}</th>}
+                  {selectedStatus.includes(WorkSiteRequestStatus.Archive) && <th className="col-lg-3">{WorkSiteRequestStatus.Archive}</th>}
                 </tr>
               </thead>
               <tbody>
