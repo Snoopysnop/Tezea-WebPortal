@@ -98,7 +98,6 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
       <Modal.Body>
         <Container className=" mt-2" style={{ borderColor: '#f3f3f3', borderStyle: 'solid', borderWidth: '2px', borderRadius: '20px' }}>
           <Row>
-            {JSON.stringify(worksiteRequest)}
             <Col className='m-3'>
               <Row className="mb-4" style={{ color: '#008FE3', fontSize: '25px' }}>Informations du client : </Row>
 

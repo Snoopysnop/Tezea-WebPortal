@@ -52,7 +52,6 @@ const RegisterPage: React.FC = () => {
 
                 }) => (
                     <Form onSubmit={handleSubmit}>
-                        {JSON.stringify(values)}
                         <Row className="justify-content-center mt-5">
                             <Col md={5} >
                                 <Container className="border bg-white p-4" style={{ borderRadius: '20px' }}>
