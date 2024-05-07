@@ -180,7 +180,7 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
         )}
 
         {showButtonEditValidate && worksiteRequest && worksiteRequest.requestStatus && worksiteRequest.requestStatus === WorkSiteRequestStatus.ToComplete && (
-          <div className="Edit" style={{ display: 'flex', justifyContent: 'space-around' }}>
+          <div className="Edit mt-3" style={{ display: 'flex', justifyContent: 'space-around' }}>
             <Button onClick={() => { onHide(); handleEdit(); }}>Modifier la demande</Button>
             <Button onClick={() => { onHide(); handleValidate(); }}>Valider la demande</Button>
 

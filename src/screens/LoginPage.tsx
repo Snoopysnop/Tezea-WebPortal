@@ -27,9 +27,10 @@ const LoginPage: React.FC = () => {
         }}
         onSubmit={async (values) => {
           try {
+            navigate("/worksiteList")
             setApiError(undefined)
-            await KeycloakApi.getInstance().login(values.email, values.password)
-            navigate("/listeChantiers")
+            //await KeycloakApi.getInstance().login(values.email, values.password)
+            
               
           } catch (err) {
             console.log(err)
@@ -56,7 +57,7 @@ const LoginPage: React.FC = () => {
                   <Form.Label>Email</Form.Label>
                   <InputGroup>
                     <Form.Control
-                      isInvalid={touched.email && !!errors.email}
+                      /* TODO remettre pour keycloak isInvalid={touched.email && !!errors.email}*/
                       type="input"
                       name='email'
                       placeholder="Entrez votre email"
@@ -71,7 +72,7 @@ const LoginPage: React.FC = () => {
                   <Form.Label>Mot de passe</Form.Label>
                   <InputGroup>
                     <Form.Control
-                      isInvalid={touched.password && !!errors.password}
+                      /* TODO remettre pour keycloak isInvalid={touched.password && !!errors.password}*/
                       type="password"
                       name='password'
                       placeholder="Entrez votre mot de passe"
@@ -90,7 +91,7 @@ const LoginPage: React.FC = () => {
                 <Row className="justify-content-center">
                   <Col md={4}>
                     <div className="d-grid gap-2">
-                      <Button variant="primary" type="submit" className="mt-3">
+                      <Button variant="primary" onClick={() => {navigate("/worksiteList")}} type="submit" className="mt-3">
                         Se connecter
                       </Button>
                     </div>
