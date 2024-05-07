@@ -3,7 +3,7 @@ import { Button, Modal, Form } from 'react-bootstrap';
 import { IncidentLevel } from '../api/Model';
 import { EmergencyDetailsJson, EmergencyDetailsJsonToSend } from '../api/ModelJson';
 import MainApi from '../api/MainApi';
-import { getEmergencyJsonFormat } from '../common/utils/utils';
+import {getIncidentLevelFrToEng } from '../common/utils/utils';
 
 interface PopupEmergencyProps {
   showModal: boolean;
@@ -38,7 +38,7 @@ const PopupEmergency: React.FC<PopupEmergencyProps> = ({ showModal, closeModal, 
     const incident:EmergencyDetailsJson = {
       title: emergencyName,
       description: description,
-      level:  emergencyLevel ? getEmergencyJsonFormat(emergencyLevel)! : "",
+      level:  emergencyLevel ? getIncidentLevelFrToEng(emergencyLevel)! : "",
       workSiteId:worksiteId,
       evidences:[]
     };
@@ -91,3 +91,7 @@ const PopupEmergency: React.FC<PopupEmergencyProps> = ({ showModal, closeModal, 
 }
 
 export default PopupEmergency;
+function getIncidentJsonFormat(emergencyLevel: string): string {
+  throw new Error('Function not implemented.');
+}
+

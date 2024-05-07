@@ -168,7 +168,7 @@ const WorkSiteDetailPage: React.FC = () => {
               <Card.Title><h2>Signature</h2></Card.Title>
               <img 
                 src={`data:image/png;base64, ${worksite!.signature}`}
-                />
+              />
             </Card.Body>
           </Card>
         </Col>
