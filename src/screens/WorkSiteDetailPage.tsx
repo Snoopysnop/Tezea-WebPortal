@@ -166,8 +166,8 @@ const WorkSiteDetailPage: React.FC = () => {
                   </Col>
                 </Row>
               </Card.Text>
-              <Button variant="primary" onClick={() => setShowModal(true)}>Déclarer un incident</Button>{' '}
-              <Button variant="secondary" onClick={() => setModalShow(true)} className="float-end">Voir la demande de chantiers</Button>{' '}
+              <Button variant="danger" onClick={() => setShowModal(true)}>Déclarer un incident</Button>{' '}
+              <Button variant="primary" onClick={() => setModalShow(true)} className="float-end">Voir la demande de chantiers</Button>{' '}
             </Card.Body>
 
 

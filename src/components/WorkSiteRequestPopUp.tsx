@@ -181,15 +181,15 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
 
         {showButtonEditValidate && worksiteRequest && worksiteRequest.requestStatus && worksiteRequest.requestStatus === WorkSiteRequestStatus.ToComplete && (
           <div className="Edit mt-3" style={{ display: 'flex', justifyContent: 'space-around' }}>
-            <Button onClick={() => { onHide(); handleEdit(); }}>Modifier la demande</Button>
-            <Button onClick={() => { onHide(); handleValidate(); }}>Valider la demande</Button>
+            <Button variant="primary" onClick={() => { onHide(); handleEdit(); }}>Modifier la demande</Button>
+            <Button variant="success" onClick={() => { onHide(); handleValidate(); }}>Valider la demande</Button>
 
           </div>
         )}
 
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={onHide}>Close</Button>
+        <Button variant="danger" onClick={onHide}>Close</Button>
       </Modal.Footer>
     </Modal>
   );

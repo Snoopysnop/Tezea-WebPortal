@@ -79,7 +79,7 @@ export function getIncidentLevelIconColor(status: IncidentLevel): string {
 export function getRoleName(role: string): string {
     switch (role) {
         case "Concierge":
-            return "Concièrge";
+            return "Concierge";
         case "SiteChief":
             return "Chef de site";
         case "Commercial":
@@ -169,7 +169,7 @@ export function getRole(status: string) {
             return Role.WorkSiteChief;
         case "Employee":
             return Role.Employee;
-        case "Concièrge":
+        case "Concierge":
             return Role.Concierge;
         case "Chef de site":
             return Role.WorkSiteChief;

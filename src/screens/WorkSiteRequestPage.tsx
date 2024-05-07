@@ -381,8 +381,8 @@ const WorkSiteRequestPage: React.FC = () => {
         </Container>
         <Row className="mb-5"></Row>
         <Row className="mb-5" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <Button variant="primary" type="submit" style={{ alignItems: 'center' }}>
-            Soumettre
+          <Button variant="success" type="submit" style={{ width: '600px', alignItems: 'center' }}>
+            Soumettre la demande
           </Button>
         </Row>
       </Container>
