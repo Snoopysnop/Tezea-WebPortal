@@ -128,31 +128,27 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
           <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
             <Col>Nom de la demande : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.title : ''}</span></Col>
             <Col>Lieu (ville) : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.city : ''}</span></Col>
-            <Col></Col>
           </Row>
 
           <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
             <Col>Type de service : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.serviceType ? getServiceType(worksiteRequest.serviceType) : '' : ''}</span></Col>
-            <Col>Catégorie : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.category ? getCategorie(worksiteRequest.category) : ''}</span></Col>
             <Col>Date : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.estimatedDate ? formatDate(worksiteRequest.estimatedDate) : ''}</span></Col>
           </Row>
 
           <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
             <Col>Enlèvement : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.removal ? formatBoolean(worksiteRequest.removal) : 'non'}</span></Col>
             <Col>Livraison : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.delivery ? formatBoolean(worksiteRequest.delivery) : 'non'}</span></Col>
-            <Col></Col>
           </Row>
 
           <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
             <Col>Enlèvement déchetterie : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.removalRecycling ? formatBoolean(worksiteRequest.removalRecycling) : 'non'}</span></Col>
             <Col>Chrono pour devis : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.chronoQuote ? formatBoolean(worksiteRequest.chronoQuote) : 'non'}</span></Col>
-            <Col></Col>
           </Row>
 
 
           <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
             <Col>Urgence : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.emergency ? getEmergency(worksiteRequest.emergency) : '' : ''}</span></Col>
-            <Col></Col>
+            <Col>Catégorie : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.category ? getCategorie(worksiteRequest.category) : ''}</span></Col>
           </Row>
 
           <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
@@ -162,13 +158,11 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
           <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
             <Col>Affectation Tezea : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.tezeaAffectation : ''}</span></Col>
             <Col>Prestataire : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.provider : ''}</span></Col>
-            <Col></Col>
           </Row>
 
           <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
             <Col>Estimation du poids : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.weightEstimate : ''}</span></Col>
             <Col>Estimation du volume : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.volumeEstimate : ''}</span></Col>
-            <Col></Col>
           </Row>
           <Row className="mb-5"></Row>
         </div>

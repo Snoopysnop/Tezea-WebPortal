@@ -203,6 +203,19 @@ export function getIncidentLevel(emergency: string) {
     }
 }
 
+export function getIncidentLevelFrToEng(emergency: string) {
+    switch (emergency) {
+        case "Faible":
+            return "Minor";
+        case "Moyen":
+            return "Medium";
+        case "Haut":
+            return "Severe";
+        case "Bloquant":
+            return "Blocking";
+    }
+}
+
 export function getCustomerStatus(customerStatus: string) {
     switch (customerStatus) {
         case "Business":
