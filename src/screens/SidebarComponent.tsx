@@ -80,7 +80,7 @@ const SidebarComponent: React.FC<{sidebarCollapsed: any, setSidebarCollapsed: an
                     {sidebarCollapsed ? null : 'Liste des chantiers'}
                 </MenuItem>
                 <MenuItem icon={<RequestQuoteOutlined />} style={{ backgroundColor: 'white' }} component={<Link to="/worksiteRequestList" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
-                    {sidebarCollapsed ? null : 'Demandes de chantiers'}
+                    {sidebarCollapsed ? null : 'Demandes de chantier'}
                 </MenuItem>
                 <MenuItem icon={<ContactsOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/worksiteRequestCreate" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
                     {sidebarCollapsed ? null : 'Créer une demande'}

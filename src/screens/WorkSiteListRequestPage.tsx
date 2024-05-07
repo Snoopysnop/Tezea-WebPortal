@@ -195,7 +195,7 @@ const WorkSiteListRequestPage: React.FC = () => {
         <Container>
           <Row className='mt-4'></Row>
       <Col lg className='d-flex align-items-center' style={{fontSize: '2rem'}}>
-              Liste des demandes de chantiers
+              Liste des demandes de chantier
             </Col>
           <Row className='mt-4'>
             <Col lg={6}>
