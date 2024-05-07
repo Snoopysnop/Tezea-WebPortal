@@ -23,7 +23,6 @@ const IncidentsPage: React.FC = () => {
 
   const handleListEmergency = async () => {
     const responseEmergency = await MainApi.getInstance().getEmergencies() as EmergencyDetailsJson[];
-    console.log("Reponse", responseEmergency);
 
     const emergencyMapper: EmergencyDetails[] = responseEmergency.map(emergencyDetailsJson => ({
       description: emergencyDetailsJson.description,
@@ -44,7 +43,6 @@ const IncidentsPage: React.FC = () => {
 
   useEffect(() => {
     if (dataFetched) {
-      console.log(dataFetched)
       setFilteredTasks(dataFetched.filter(task => task.title.toLowerCase().includes(filterValue.toLowerCase())))
     }
   }, [dataFetched,filterValue])
@@ -80,18 +78,16 @@ const IncidentsPage: React.FC = () => {
 
   const handleOnSearch = (string: any, results: any) => {
     setFilterValue(string);
-    console.log(string, results);
   };
 
   const handleOnSelect = (item: any) => {
-    console.log(item);
     setFilterValue(item.name);
   };
 
   return (
     <>
       {dataFetched &&
-        <Container className='container-xxl'>
+        <Container>
           <Row className='mt-4'>
             <Col lg={6}>
               <Row>
@@ -131,25 +127,22 @@ const IncidentsPage: React.FC = () => {
             </Col>
           </Row>
 
-          <Container className="container-xxl mt-4">
-          <Col lg={12}> 
+          <Container className="container-xxl bg-white mt-4" style={{borderRadius: "20px"}}>
           <Table>
               <thead>
                 <tr>
-                  <th className={`col-lg-2 ${!selectedStatus.includes(IncidentLevel.Minor) && "d-none"}`}>{IncidentLevel.Minor}</th>
-                  <th className={`col-lg-2 ${!selectedStatus.includes(IncidentLevel.Medium) && "d-none"}`}>{IncidentLevel.Medium}</th>
-                  <th className={`col-lg-2 ${!selectedStatus.includes(IncidentLevel.Severe) && "d-none"}`}>{IncidentLevel.Severe}</th>
-                  <th className={`col-lg-2 ${!selectedStatus.includes(IncidentLevel.Blocking) && "d-none"}`}>{IncidentLevel.Blocking}</th>
+                  <th className={`col-lg-3`}>{IncidentLevel.Minor}</th>
+                  <th className={`col-lg-3`}>{IncidentLevel.Medium}</th>
+                  <th className={`col-lg-3`}>{IncidentLevel.Severe}</th>
+                  <th className={`col-lg-3`}>{IncidentLevel.Blocking}</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td className={`col-lg-2 ${!selectedStatus.includes(IncidentLevel.Minor) && "d-none"}`}>
-                    <Row>
+                  <td>
                       {filteredTasks
                         .filter(task => task.level === IncidentLevel.Minor)
                         .map(task => (
-                          <Col key={task.id} lg={12}>
                             <EmergencyComponent
                               id={task.id} 
                               description={task.description}
@@ -157,16 +150,12 @@ const IncidentsPage: React.FC = () => {
                               category={Category.CreaPalette}
                               title={task.title}
                             />
-                          </Col>
                         ))}
-                    </Row>
                   </td>
-                  <td className={`col-lg-2 ${!selectedStatus.includes(IncidentLevel.Medium) && "d-none"}`}>
-                    <Row>
+                  <td>
                       {filteredTasks
                         .filter(task => task.level === IncidentLevel.Medium)
                         .map(task => (
-                          <Col key={task.id} lg={12}>
                             <EmergencyComponent
                               id={task.id}
                               description={task.description}
@@ -174,16 +163,12 @@ const IncidentsPage: React.FC = () => {
                               category={Category.CreaPalette}
                               title={task.title}
                             />
-                          </Col>
                         ))}
-                    </Row>
                   </td>
-                  <td className={`col-lg-2 ${!selectedStatus.includes(IncidentLevel.Severe) && "d-none"}`}>
-                    <Row>
+                  <td>
                       {filteredTasks
                         .filter(task => task.level === IncidentLevel.Severe)
                         .map(task => (
-                          <Col key={task.id} lg={12}>
                             <EmergencyComponent
                               id={task.id}
                               description={task.description}
@@ -191,16 +176,12 @@ const IncidentsPage: React.FC = () => {
                               category={Category.CreaPalette}
                               title={task.title}
                             />
-                          </Col>
                         ))}
-                    </Row>
                   </td>
-                  <td className={`col-lg-2 ${!selectedStatus.includes(IncidentLevel.Blocking) && "d-none"}`}>
-                    <Row>
+                  <td>
                       {filteredTasks
                         .filter(task => task.level === IncidentLevel.Blocking)
                         .map(task => (
-                          <Col key={task.id} lg={12}>
                             <EmergencyComponent
                               id={task.id}
                               description={task.description}
@@ -208,14 +189,11 @@ const IncidentsPage: React.FC = () => {
                               category={Category.CreaPalette}
                               title={task.title}
                             />
-                          </Col>
                         ))}
-                    </Row>
                   </td>
                 </tr>
               </tbody>
             </Table>
-            </Col>
           </Container>
         </Container>
       }

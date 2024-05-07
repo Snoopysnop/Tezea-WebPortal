@@ -29,7 +29,6 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
   }
   function formatDate(date: Date) {
 
-    console.log(worksiteRequest)
     const getDay = date.getDate();
     const getMonth = date.getMonth() + 1;
 

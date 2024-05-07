@@ -28,7 +28,6 @@ class MainApi extends AbstractApi {
     }
 
     public static initInstance(token?: string) : void {
-        console.log(token)
         MainApi.instance = new MainApi(process.env.REACT_APP_URL as any, token)
     }
 

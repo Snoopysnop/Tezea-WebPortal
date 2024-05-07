@@ -13,7 +13,6 @@ const WorkSiteDetailPage: React.FC = () => {
   const location = useLocation();
 
   const worksite = location.state ? (location.state as any).worksiteData as WorkSiteJson : null;
-  console.log("aaaaaaaa",worksite);
   const [currentworkSiteChief, setWorkSiteChief] = useState<User | undefined>(undefined);
   const [currentusers, setWorkSiteUsers] = useState<User[] | undefined>(undefined);
   const [currentstate, setWorksiteRequest] = useState<WorkSiteRequest| undefined>(undefined);
@@ -80,7 +79,6 @@ const WorkSiteDetailPage: React.FC = () => {
     const users = await MainApi.getInstance().getUsersByWorksiteId(String(worksite!.id)) as Array<User>;
     const workSiteChiefFiltered = users.filter(user => getRole(user.role) === Role.WorkSiteChief);
     const workSiteUsersFiltered = users.filter(user => getRole(user.role) === Role.Employee);
-    console.log(workSiteChiefFiltered[0].firstName)
     if (workSiteChiefFiltered.length > 0) {
       setWorkSiteChief(workSiteChiefFiltered[0])
     }

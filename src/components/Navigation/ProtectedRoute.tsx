@@ -4,23 +4,13 @@ import { Role } from '../../api/Model'
 import { jwtDecode } from "jwt-decode";
 import { decodeToken } from 'react-jwt';
 import { Container } from 'react-bootstrap';
+import { hasRequieredRole } from '../../common/utils/utils';
 
 interface ProtectedRouteProps {
     role: Role
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ role }) => {
-
-    function hasRequieredRole(role: Role): boolean {
-
-        const token = localStorage.getItem("access-token")
-        const decodedToken: any = token ? decodeToken(token) : undefined
-        const realmAccess = decodedToken ? decodedToken.realm_access : undefined
-        const roles: string[] = realmAccess ? realmAccess.roles : []
-        console.log(roles)
-        console.log(role)
-        return KeycloakApi.isTokenValid() && roles.includes(role.toUpperCase())
-    }
 
     return(
         hasRequieredRole(role) ? <Outlet/> : 

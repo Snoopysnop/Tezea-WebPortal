@@ -16,16 +16,10 @@ import { getIncidentLevel, getStatusWorksite, getStatusWorksiteRequest } from ".
 
 
 
-const SidebarComponent: React.FC = () => {
+const SidebarComponent: React.FC<{sidebarCollapsed: any, setSidebarCollapsed: any}> = ({sidebarCollapsed, setSidebarCollapsed}) => {
 
     const navigate = useNavigate();
 
-    const [worksiteData, setWorksiteData] = useState<WorkSite[]>();
-    const [worksiteRequestData, setWorksiteRequestData] = useState<WorkSiteRequest[]>();
-    const [emergencyData, setEmergencyData] = useState<EmergencyDetails[]>();
-
-
-    const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
 
     const handleCollapseSidebar = () => {
         setSidebarCollapsed(!sidebarCollapsed);
@@ -34,7 +28,6 @@ const SidebarComponent: React.FC = () => {
     const handleSettingsItemClick = async () => {
         setSidebarCollapsed(true);
         const responseUserInfo = await MainApi.getInstance().getRandomConcierge() as User;
-        console.log(responseUserInfo);
         navigate("/parametres", { state: { responseUserInfo } })
 
     }

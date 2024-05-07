@@ -34,7 +34,6 @@ const WorkSiteListRequestPage: React.FC = () => {
   const [checkboxes, setCheckboxes] = useState<{ [key in WorkSiteRequestStatus]?: boolean }>({});
 
   const handleStatusChange = (status: WorkSiteRequestStatus) => {
-    console.log("appel")
     const updatedCheckboxes = { ...checkboxes, [status]: !checkboxes[status] };
     setCheckboxes(updatedCheckboxes);
 
@@ -109,7 +108,6 @@ const WorkSiteListRequestPage: React.FC = () => {
             const inProgressCount = value.InProgress || 0;
 
             if ((archiveCount > 0 || doneCount > 0) && standbyCount === 0 && inProgressCount === 0) {
-                console.log("test")
                 const responseUpdateStatusWorksiteRequest = await MainApi.getInstance().updateStatusWorksiteRequest(Number(key), "Done");
             }
         }
@@ -194,7 +192,7 @@ const WorkSiteListRequestPage: React.FC = () => {
   return (
     <>
       {dataFetched &&
-        <Container className='container-xxl'>
+        <Container>
           <Row className='mt-4'>
             <Col lg={6}>
               <Row>
@@ -232,7 +230,7 @@ const WorkSiteListRequestPage: React.FC = () => {
               </Row>
             </Col>
           </Row>
-          <Container className="container-xxl mt-4">
+          <Container className="container-xxl bg-white mt-4" style={{borderRadius: "20px"}}>
             <Table>
               <thead>
                 <tr>
@@ -244,11 +242,10 @@ const WorkSiteListRequestPage: React.FC = () => {
               </thead>
               <tbody>
                 <td className={`col-lg-2 ${!selectedStatus.includes(WorkSiteRequestStatus.ToComplete) && "d-none"}`}>
-                  <Row>
                     {filteredTasks
                       .filter(task => task.requestStatus === WorkSiteRequestStatus.ToComplete)
                       .map(task => (
-                        <Col key={task.id} lg={12}>
+                        <Col key={task.id}>
                           <WorkSiteRequestComponent
                             id={task.id ?? -1}
                             name={task.title ?? ''}
@@ -260,14 +257,12 @@ const WorkSiteListRequestPage: React.FC = () => {
                           />
                         </Col>
                       ))}
-                  </Row>
                 </td>
                 <td className={`col-lg-2 ${!selectedStatus.includes(WorkSiteRequestStatus.Standby) && "d-none"}`}>
-                  <Row>
                     {filteredTasks
                       .filter(task => task.requestStatus === WorkSiteRequestStatus.Standby)
                       .map(task => (
-                        <Col key={task.id} lg={12}>
+                        <Col key={task.id}>
                           <WorkSiteRequestComponent
                             id={task.id ?? -1}
                             name={task.title ?? ''}
@@ -279,14 +274,12 @@ const WorkSiteListRequestPage: React.FC = () => {
                           />
                         </Col>
                       ))}
-                  </Row>
                 </td>
                 <td className={`col-lg-2 ${!selectedStatus.includes(WorkSiteRequestStatus.Done) && "d-none"}`}>
-                  <Row>
                     {filteredTasks
                       .filter(task => task.requestStatus === WorkSiteRequestStatus.Done)
                       .map(task => (
-                        <Col key={task.id} lg={12}>
+                        <Col key={task.id}>
                           <WorkSiteRequestComponent
                             id={task.id ?? -1}
                             name={task.title ?? ''}
@@ -298,14 +291,12 @@ const WorkSiteListRequestPage: React.FC = () => {
                           />
                         </Col>
                       ))}
-                  </Row>
                 </td>
                 <td className={`col-lg-2 ${!selectedStatus.includes(WorkSiteRequestStatus.Archive) && "d-none"}`}>
-                  <Row>
                     {filteredTasks
                       .filter(task => task.requestStatus === WorkSiteRequestStatus.Archive)
                       .map(task => (
-                        <Col key={task.id} lg={12}>
+                        <Col key={task.id}>
                           <WorkSiteRequestComponent
                             id={task.id ?? -1}
                             name={task.title ?? ''}
@@ -317,7 +308,6 @@ const WorkSiteListRequestPage: React.FC = () => {
                           />
                         </Col>
                       ))}
-                  </Row>
                 </td>
               </tbody>
             </Table>

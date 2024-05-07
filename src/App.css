@@ -3,8 +3,16 @@
   --primary: #6a6a6a; /* Rouge */
   --secondary: #8d8d8d;
   --light-grey: #b1b1b1;
+  background-color: #f3f3f3;
 }
 
+.bg {
+  background-color: #f3f3f3;
+}
+
+.bg-white {
+  background-color: #f3f3f3;
+}
 
 .App-logo {
   height: 40vmin;
@@ -95,6 +103,7 @@
 
 .container-xxl {
   max-width: 1920px !important;
+
 }
 
 .primary {

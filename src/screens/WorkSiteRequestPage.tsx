@@ -125,9 +125,7 @@ const WorkSiteRequestPage: React.FC = () => {
 
     const responseConcierge = await MainApi.getInstance().getRandomConcierge() as User; //todo si on a l'info du user connecté
 
-    console.log("VALUE:",updateWorksiteRequest)
     if(updateWorksiteRequest) {
-      console.log("UPDATE")
       if (updateWorksiteRequest.id && updateWorksiteRequest.customer && updateWorksiteRequest.customer.id !== undefined) {
         const responseCustomer = await MainApi.getInstance().updateCustomer(updateWorksiteRequest.customer.id, customerJson) as CustomerJson;
 
@@ -153,12 +151,10 @@ const WorkSiteRequestPage: React.FC = () => {
           provider: worksiteRequestFormData.worksiteRequest.provider,
           tezeaAffectation: worksiteRequestFormData.worksiteRequest.tezeaAffectation
         };
-        console.log(updateWorksiteRequest.id)
         const responseWorksiteRequest = await MainApi.getInstance().updateWorksiteRequest(updateWorksiteRequest.id,worksiteRequestJson) as WorkSiteRequestJson;
 
       }
     } else {
-      console.log("CREATE")
 
       const responseCustomer = await MainApi.getInstance().createCustomer(customerJson) as CustomerJson;
 

@@ -15,6 +15,8 @@ import { ReactComponent as SmallWorkIcon } from 'bootstrap-icons/icons/tools.svg
 import { ReactComponent as BicycleIcon } from 'bootstrap-icons/icons/bicycle.svg'
 import { ReactComponent as FireWoodIcon } from 'bootstrap-icons/icons/fire.svg'
 import CryptoJS from 'crypto-js';
+import KeycloakApi from "../../api/KeycloakApi";
+import { decodeToken } from "react-jwt";
 
 export function getStatusColor(status: WorkSiteStatus): string {
     switch (status) {
@@ -106,8 +108,14 @@ export function getIncidentLevelColor(status: IncidentLevel): string {
     }
 }
 
+export function hasRequieredRole(role: Role): boolean {
 
-
+    const token = localStorage.getItem("access-token")
+    const decodedToken: any = token ? decodeToken(token) : undefined
+    const realmAccess = decodedToken ? decodedToken.realm_access : undefined
+    const roles: string[] = realmAccess ? realmAccess.roles : []
+    return KeycloakApi.isTokenValid() && roles.includes(role.toUpperCase())
+}
 
 export function getStatusIcon(status: WorkSiteStatus) {
     switch (status) {

@@ -65,7 +65,6 @@ useEffect(() => {
 
 useEffect(() => {
   if (dataFetched) {
-    console.log(dataFetched)
     setFilteredTasks(dataFetched.filter(task => task.title.toLowerCase().includes(filterValue.toLowerCase())))
   }
 }, [dataFetched,filterValue])
@@ -74,8 +73,6 @@ useEffect(() => {
 
   // Fonction pour gérer le clic sur un élément
   const handleTaskClick = async (task:any) => {
-    console.log("task:",task)
-    console.log(task.id)
 
     const worksiteData = await MainApi.getInstance().getWorksitebyId(task.id) as WorkSiteJson;
     navigate("/detailChantier", { state: { worksiteData } })
@@ -105,20 +102,16 @@ useEffect(() => {
 
   const handleOnSearch = (string: any, results: any) => {
     setFilterValue(string);
-    console.log(string, results);
   };
 
   const handleOnSelect = (item: any) => {
-    console.log(item);
     setFilterValue(item.name);
   };
 
   return (
     <>
       {dataFetched &&
-    <>
-      {dataFetched &&
-    <Container className='container-xxl'>
+    <Container>
       <Row className='mt-4'>
         {/* Utiliser ReactSearchAutocomplete */}
         <Col lg={6}>
@@ -158,23 +151,21 @@ useEffect(() => {
           </Row>
         </Col>
       </Row>
-      <Container className="container-xxl mt-4">
+      <Container className="container-xxl bg-white mt-4" style={{borderRadius: "20px"}}>
         <Table>
           <thead>
             <tr>
-              {selectedStatus.includes(WorkSiteStatus.Standby) && <th className="col-lg-2">{WorkSiteStatus.Standby}</th>}
-              {selectedStatus.includes(WorkSiteStatus.InProgress) && <th className="col-lg-2">{WorkSiteStatus.InProgress}</th>}
-              {selectedStatus.includes(WorkSiteStatus.Done) && <th className="col-lg-2">{WorkSiteStatus.Done}</th>}
-              {selectedStatus.includes(WorkSiteStatus.Archive) && <th className="col-lg-2">{WorkSiteStatus.Archive}</th>}
+              {selectedStatus.includes(WorkSiteStatus.Standby) && <th className="col-lg-3">{WorkSiteStatus.Standby}</th>}
+              {selectedStatus.includes(WorkSiteStatus.InProgress) && <th className="col-lg-3">{WorkSiteStatus.InProgress}</th>}
+              {selectedStatus.includes(WorkSiteStatus.Done) && <th className="col-lg-3">{WorkSiteStatus.Done}</th>}
+              {selectedStatus.includes(WorkSiteStatus.Archive) && <th className="col-lg-3">{WorkSiteStatus.Archive}</th>}
             </tr>
           </thead>
           <tbody>
-            <td className={`col-lg-2 ${!selectedStatus.includes(WorkSiteStatus.Standby) && "d-none"}`}>
-              <Row>
+            <td >
                 {filteredTasks
                   .filter(task => task.status === WorkSiteStatus.Standby)
                   .map(task => (
-                    <Col key={task.id} lg={12}>
                       <WorkSiteComponent
                         id={task.id}
                         name={task.title}
@@ -185,16 +176,12 @@ useEffect(() => {
                         category={Category.CreaPalette}
                         onClick={() => handleTaskClick(task)}
                       />
-                    </Col>
                   ))}
-              </Row>
             </td>
-            <td className={`col-lg-2 ${!selectedStatus.includes(WorkSiteStatus.InProgress) && "d-none"}`}>
-              <Row>
+            <td >
                 {filteredTasks
                   .filter(task => task.status === WorkSiteStatus.InProgress)
                   .map(task => (
-                    <Col key={task.id} lg={12}>
                       <WorkSiteComponent
                         id={task.id}
                         name={task.title}
@@ -205,16 +192,12 @@ useEffect(() => {
                         category={Category.CreaPalette}
                         onClick={() => handleTaskClick(task)}
                       />
-                    </Col>
                   ))}
-              </Row>
             </td>
-            <td className={`col-lg-2 ${!selectedStatus.includes(WorkSiteStatus.Done) && "d-none"}`}>
-              <Row>
+            <td>
                 {filteredTasks
                   .filter(task => task.status === WorkSiteStatus.Done)
                   .map(task => (
-                    <Col key={task.id} lg={12}>
                       <WorkSiteComponent
                         id={task.id}
                         name={task.title}
@@ -225,16 +208,12 @@ useEffect(() => {
                         category={Category.CreaPalette}
                         onClick={() => handleTaskClick(task)}
                       />
-                    </Col>
                   ))}
-              </Row>
             </td>
-            <td className={`col-lg-2 ${!selectedStatus.includes(WorkSiteStatus.Archive) && "d-none"}`}>
-              <Row>
+            <td>
                 {filteredTasks
                   .filter(task => task.status === WorkSiteStatus.Archive)
                   .map(task => (
-                    <Col key={task.id} lg={12}>
                       <WorkSiteComponent
                         id={task.id}
                         name={task.title}
@@ -245,16 +224,12 @@ useEffect(() => {
                         category={Category.CreaPalette}
                         onClick={() => handleTaskClick(task)}
                       />
-                    </Col>
                   ))}
-              </Row>
             </td>
           </tbody>
         </Table>
       </Container>
     </Container>
-    }
-    </>
     }
     </>
   );

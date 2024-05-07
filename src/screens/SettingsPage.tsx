@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
-import { Button, Card, Col, Container, Row, Table, Modal, Form } from 'react-bootstrap';
-import { WorkSite, User, Role, Tool, WorkSiteStatus, SatisfactionLevel, ToolName } from '../api/Model';
-import PopupEmergency from './PopupEmergency';
+import { Card, Col, Container, Row, Form } from 'react-bootstrap';
+import { User, Role } from '../api/Model';
 import { useLocation } from 'react-router-dom';
 import { getRoleName } from '../common/utils/utils';
-
-
 
 const SettingsPage: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -14,7 +11,6 @@ const SettingsPage: React.FC = () => {
 
   const user = location.state ? (location.state as any).responseUserInfo as User : null;
 
-  console.log(user);
   // Fonction pour ouvrir la modale
   const openModal = () => {
     setShowModal(true);

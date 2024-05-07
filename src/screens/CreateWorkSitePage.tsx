@@ -125,7 +125,6 @@ const CreateWorkSitePage: React.FC = () => {
 
   const handleOnSearch = (string: any, results: any) => {
     setFilterValue(string);
-    console.log(string, results);
   };
 
   const handleOnSelect = (item: any) => {
@@ -204,27 +203,13 @@ const CreateWorkSitePage: React.FC = () => {
       }
     }
 
-
-    console.log("azfzafzfsqwfdsg", tools)
-
-
-    console.log("responseStaff", responseStaff)
-    console.log("responseWorksiteChief", responseWorksiteChief)
-    console.log("responseTool", responseTool)
-
     setAvailableStaff(responseStaff);
     setAvailableWorksiteChief(responseWorksiteChief);
     setAvailableTools(tools);
-
-
-
     setIsInitialSelection(false);
   }
 
   useEffect(() => {
-    console.log("responseStaff", availableStaff)
-    console.log("responseWorksiteChief", availableWorksiteChief)
-    console.log("responseTool", availableTools)
   }, [availableStaff, availableWorksiteChief, availableTools])
 
 
@@ -259,6 +244,7 @@ function displayHours(dateString:String) {
         </Button> 
       </Col>
       </Row>
+      <Container className='p-4 mt-4' style={{ backgroundColor: "#ffffff", borderRadius: "20px" }}>
       <Row>
         <Col xs={12} >
           <Tabs
@@ -665,12 +651,9 @@ function displayHours(dateString:String) {
             )}
           </Tabs>
         </Col>
-        <Col xs={1}>
-          <Button onClick={handlePopUp} style={{ fontSize: '20px' }}>
-            Consulter Demande de chantier
-          </Button>
-        </Col>
+
       </Row>
+      </Container>
 
       <WorkSiteRequestPopUp
         show={modalShow}

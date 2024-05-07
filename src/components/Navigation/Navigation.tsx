@@ -17,10 +17,8 @@ import { Role } from '../../api/Model';
 
 const Navigation: React.FC = () => {
   return (
-    <Container className='container-xxl'>
-      <Row>
-        <Col lg='1' className='ps-0 pe-0'></Col>
-        <Col className='ps-0 pe-0'>
+    <Container className='container-xxl bg'>
+
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
@@ -35,8 +33,6 @@ const Navigation: React.FC = () => {
               <Route path="/listeDemandeChantiers" element={<WorkSiteListRequestPage />} />
               <Route path="/planning" element={<SchedulePage />} />
           </Routes>
-        </Col>
-      </Row>
 
     </Container>
   );
