@@ -77,6 +77,7 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
   function handleCreateWorksite() {
     navigate("/creerChantier", { state: { worksiteRequest } })
   }
+  
   return (
     <Modal
       show={show}

@@ -15,23 +15,23 @@ const WorkSiteDetailPage: React.FC = () => {
   const worksite = location.state ? (location.state as any).worksiteData as WorkSiteJson : null;
   const [currentworkSiteChief, setWorkSiteChief] = useState<User | undefined>(undefined);
   const [currentusers, setWorkSiteUsers] = useState<User[] | undefined>(undefined);
-  const [currentstate, setWorksiteRequest] = useState<WorkSiteRequest| undefined>(undefined);
+  const [currentstate, setWorksiteRequest] = useState<WorkSiteRequest | undefined>(undefined);
+
 
   useEffect(() => {
     handleUsers();
     handleUsersAndWorksiteChief();
-    worksite!.signature = "iVBORw0KGgoAAAANSUhEUgAAAJgAAABlCAYAAACxzirmAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFpSURBVHhe7dixbcMwEEBRbaLFjBQZxGkyhJEJAmgKFem0E+M6JgII0O9e8Rpe+3EguazrOqAiMFICIyUwUgIjJTBSAiMlMFLTwO7bMY5jG/fJDM5YPieHAuMqy/fkEK6y/LzPB3AFG4zUP3ewfXy9vc7gjOkr8vbYn4EdY3/cXmZwxvwf7GOzwbjEn8DuY3tuLnFxFT/5pARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERkpgpARGSmCkBEZKYKQERmgdvwEFpgF42yNjAAAAAElFTkSuQmCC"
   }, []); // Le tableau vide indique que cette fonction doit être appelée une seule fois lors du montage du composant
-  
+
   const handleUsers = async () => {
     const users = await MainApi.getInstance().getUsersByWorksiteId(String(worksite!.id)) as Array<User>;
-  
+
     const workSiteRequestId: number | undefined = worksite ? worksite.workSiteRequest : undefined;
-  
+
     const workSiteRequest = await MainApi.getInstance().getWorksiteRequestbyId(workSiteRequestId!) as WorkSiteRequestJson;
-    
+
     let customer: Customer | undefined = undefined;
-  
+
     if (workSiteRequest.customer) {
       const customerjson = await MainApi.getInstance().getCustomerbyId(String(workSiteRequest.customer)) as CustomerJson;
       customer = {
@@ -70,9 +70,9 @@ const WorkSiteDetailPage: React.FC = () => {
       volumeEstimate: workSiteRequest.volumeEstimate,
       provider: workSiteRequest.provider,
       tezeaAffectation: workSiteRequest.tezeaAffectation
-  };
+    };
 
-  setWorksiteRequest(worksiterequestsend);
+    setWorksiteRequest(worksiterequestsend);
   }
 
   const handleUsersAndWorksiteChief = async () => {
@@ -90,14 +90,14 @@ const WorkSiteDetailPage: React.FC = () => {
 
   const tools: Tool[] = [];
   for (const key in worksite!.equipments) {
-      if (Object.prototype.hasOwnProperty.call(worksite?.equipments, key)) {
-        const toolName: string = key; // Récupère le nom de l'outil à partir de la clé
-          const tool: Tool = {
-              name: getToolName(toolName)!,
-              quantity: worksite ? worksite!.equipments[key as keyof typeof worksite.equipments] as number : 0
-          };
-          tools.push(tool); 
-      }
+    if (Object.prototype.hasOwnProperty.call(worksite?.equipments, key)) {
+      const toolName: string = key; // Récupère le nom de l'outil à partir de la clé
+      const tool: Tool = {
+        name: getToolName(toolName)!,
+        quantity: worksite ? worksite!.equipments[key as keyof typeof worksite.equipments] as number : 0
+      };
+      tools.push(tool);
+    }
   }
 
   // Fonction pour ouvrir la modale
@@ -110,63 +110,72 @@ const WorkSiteDetailPage: React.FC = () => {
     setShowModal(false);
   };
 
+  const DisplaySignature = () => {
+    if (worksite!.signature !== null) {
+      return (
+        <img
+          src={`data:image/jpeg;charset=utf-8;base64,${worksite!.signature}`}
+          width={400}
+          height={250}
+        />
+      );
+    } 
+    return null;
+  }
+  
   const [modalShow, setModalShow] = useState(false);
-
+  { console.log(`data:image/png;base64, ${worksite!.signature}`) }
   return (
     <Container className='container-xxl'>
       <Row className='mt-4'>
         <Col lg={6}>
           <Card bg="white" text="dark" className="h-100">
-          <Card.Body>
-  <Card.Title><h2>Détails du chantier</h2></Card.Title>
-  <Card.Text>
-    <Row className="mb-3">
-      <Col>
-        <Form.Group>
-          <Form.Label>Chef de chantier :</Form.Label>
-          <Form.Control 
-  type="text" 
-  value={(currentworkSiteChief ? currentworkSiteChief.firstName + " " + currentworkSiteChief.lastName : "")} 
-  readOnly 
-/>
-        </Form.Group>
-      </Col>
-      <Col>
-        <Form.Group>
-          <Form.Label>Statut:</Form.Label>
-          <Form.Control type="text" value={getStatusName(worksite!.status!)} readOnly />
-        </Form.Group>
-      </Col>
-    </Row>
-    <Row className="mb-3">
-      <Col>
-        <Form.Group>
-          <Form.Label>Date de début :</Form.Label>
-          <Form.Control type="text" value={new Date(worksite!.begin).toLocaleString()} readOnly />
-        </Form.Group>
-      </Col>
-      <Col>
-        <Form.Group>
-          <Form.Label>Date de fin :</Form.Label>
-          <Form.Control type="text" value={new Date(worksite!.end).toLocaleString()} readOnly />
-        </Form.Group>
-      </Col>
-    </Row>
-  </Card.Text>
-  <Button variant="primary" onClick={() => setShowModal(true)}>Déclarer un incident</Button>{' '}
-  <Button variant="secondary" onClick={() => setModalShow(true)} className="float-end">Voir la demande de chantiers</Button>{' '}
-</Card.Body>
-
-
+            <Card.Body>
+              <Card.Title><h2>Détails du chantier</h2></Card.Title>
+              <Card.Text>
+                <Row className="mb-3">
+                  <Col>
+                    <Form.Group>
+                      <Form.Label>Chef de chantier :</Form.Label>
+                      <Form.Control
+                        type="text"
+                        value={(currentworkSiteChief ? currentworkSiteChief.firstName + " " + currentworkSiteChief.lastName : "")}
+                        readOnly
+                      />
+                    </Form.Group>
+                  </Col>
+                  <Col>
+                    <Form.Group>
+                      <Form.Label>Statut:</Form.Label>
+                      <Form.Control type="text" value={getStatusName(worksite!.status!)} readOnly />
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row className="mb-3">
+                  <Col>
+                    <Form.Group>
+                      <Form.Label>Date de début :</Form.Label>
+                      <Form.Control type="text" value={new Date(worksite!.begin).toLocaleString()} readOnly />
+                    </Form.Group>
+                  </Col>
+                  <Col>
+                    <Form.Group>
+                      <Form.Label>Date de fin :</Form.Label>
+                      <Form.Control type="text" value={new Date(worksite!.end).toLocaleString()} readOnly />
+                    </Form.Group>
+                  </Col>
+                </Row>
+              </Card.Text>
+              <Button variant="primary" onClick={() => setShowModal(true)}>Déclarer un incident</Button>{' '}
+              <Button variant="secondary" onClick={() => setModalShow(true)} className="float-end">Voir la demande de chantiers</Button>{' '}
+            </Card.Body>
           </Card>
         </Col>
         <Col lg={6}>
           <Card bg="white" text="dark" className="h-100">
             <Card.Body>
               <Card.Title><h2>Signature</h2></Card.Title>
-              <img 
-                src={`data:image/png;base64, ${worksite!.signature}`}
-              />
+              {DisplaySignature()}
             </Card.Body>
           </Card>
         </Col>
@@ -185,7 +194,7 @@ const WorkSiteDetailPage: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                { tools.map((tool : Tool) => (
+                  {tools.map((tool: Tool) => (
                     <tr key={tool.name}>
                       <td>{tool.name}</td>
                       <td>{tool.quantity}</td>
@@ -226,14 +235,14 @@ const WorkSiteDetailPage: React.FC = () => {
           </Card>
         </Col>
       </Row>
-      <PopupEmergency showModal={showModal} closeModal={closeModal} worksiteId={worksite!.id!}/>
-<WorkSiteRequestPopUp
-  show={modalShow}
-  onHide={() => setModalShow(false)}
-  worksiteRequest={currentstate!}
-  showButtonEditValidate={false}
-  showButtonCreate={false}
-/>
+      <PopupEmergency showModal={showModal} closeModal={closeModal} worksiteId={worksite!.id!} />
+      <WorkSiteRequestPopUp
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        worksiteRequest={currentstate!}
+        showButtonEditValidate={false}
+        showButtonCreate={false}
+      />
     </Container>
   );
 }
