@@ -4,7 +4,7 @@ import { WorkSite, User, Role, Tool, WorkSiteStatus, SatisfactionLevel, ToolName
 import PopupEmergency from './PopupEmergency';
 import { useLocation } from 'react-router-dom';
 import MainApi from '../api/MainApi';
-import { getCategorie, getCivilityName, getCustomerStatus, getEmergency, getRole, getServiceType, getStatusName, getStatusWorksite, getStatusWorksiteRequest, getToolName } from '../common/utils/utils';
+import { getCategorie, getCivility, getCustomerStatus, getEmergency, getRole, getServiceType, getStatusName, getStatusWorksite, getStatusWorksiteRequest, getToolName } from '../common/utils/utils';
 import WorkSiteRequestPopUp from '../components/WorkSiteRequestPopUp';
 import { CustomerJson, WorkSiteJson, WorkSiteRequestJson } from '../api/ModelJson';
 
@@ -38,7 +38,7 @@ const WorkSiteDetailPage: React.FC = () => {
         id: customerjson.id,
         firstName: customerjson.firstName,
         lastName: customerjson.lastName,
-        civility: customerjson.civility ? getCivilityName(customerjson.civility) : undefined,
+        civility: customerjson.civility ? getCivility(customerjson.civility) : undefined,
         email: customerjson.email,
         phoneNumber: customerjson.phoneNumber,
         address: customerjson.address,

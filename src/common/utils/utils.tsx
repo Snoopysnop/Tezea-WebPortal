@@ -328,17 +328,6 @@ export function getToolName(toolname: string) {
     }
 }
 
-export function getCivilityName(civility: string) {
-    switch (civility) {
-        case "Mr":
-            return Civility.Mr;
-        case "Ms":
-            return Civility.Ms;
-        case "Other":
-            return Civility.Other;
-    }
-}
-
 export function getRequestStatusIcon(status: WorkSiteRequestStatus) {
     switch (status) {
         case WorkSiteRequestStatus.Standby:

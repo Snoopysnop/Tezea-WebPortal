@@ -67,6 +67,8 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
       tezeaAffectation: worksiteRequestJson.tezeaAffectation,
     }));
 
+    console.log(worksiteRequestMapper)
+
     navigate("/worksiteRequestList", { state: { worksiteRequestMapper } })
   }
 
@@ -96,13 +98,14 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
       <Modal.Body>
         <Container className=" mt-2" style={{ borderColor: '#f3f3f3', borderStyle: 'solid', borderWidth: '2px', borderRadius: '20px' }}>
           <Row>
+            {JSON.stringify(worksiteRequest)}
             <Col className='m-3'>
               <Row className="mb-4" style={{ color: '#008FE3', fontSize: '25px' }}>Informations du client : </Row>
 
               <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
                 <Col>Nom : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.lastName : ''}</span></Col>
                 <Col>Prénom : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.firstName : ''}</span></Col>
-                <Col>Civilité : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.civility ? getCivility(worksiteRequest.customer.civility) : ' ' : ''}</span></Col>
+                <Col>Civilité : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.civility ? worksiteRequest.customer.civility : ' ' : ''}</span></Col>
               </Row>
 
               <Row className="mb-3" style={{ color: '#008FE3', fontSize: '15px' }}>
@@ -118,7 +121,7 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
               </Row>
 
               <Row className="mb-3" style={{ color: '#008FE3', fontSize: '15px' }}>
-                <Col xs={4}>Status : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.status ? getCustomerStatus(worksiteRequest.customer.status) : '' : ''}</span></Col>
+                <Col xs={4}>Status : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.status ? worksiteRequest.customer.status : '' : ''}</span></Col>
                 <Col xs={8}>Société : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.company : ''}</span></Col>
                 <Col></Col>
               </Row>
@@ -137,7 +140,7 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
               </Row>
 
               <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
-                <Col>Type de service : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.serviceType ? getServiceType(worksiteRequest.serviceType) : '' : ''}</span></Col>
+                <Col>Type de service : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.serviceType ? worksiteRequest.serviceType : '' : ''}</span></Col>
                 <Col>Date : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.estimatedDate ? formatDate(worksiteRequest.estimatedDate) : ''}</span></Col>
               </Row>
 
@@ -153,8 +156,8 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
 
 
               <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
-                <Col >Urgence : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.emergency ? getEmergency(worksiteRequest.emergency) : '' : ''}</span></Col>
-                <Col>Catégorie : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.category ? getCategorie(worksiteRequest.category) : ''}</span></Col>
+                <Col >Urgence : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.emergency ? worksiteRequest.emergency : '' : ''}</span></Col>
+                <Col>Catégorie : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.category ? worksiteRequest.category : ''}</span></Col>
               </Row>
 
               <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
