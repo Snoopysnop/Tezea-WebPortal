@@ -235,17 +235,17 @@ const CreateWorkSitePage: React.FC = () => {
   return (
 
     <Container className='mb-5'>
-      <Row className="mb-5"></Row>
-      
-      <Container className='p-4 mt-4' style={{ backgroundColor: "#ffffff", borderRadius: "20px" }}>
-      <Row>
-        <Col xs={10}></Col>
-        <Col xs={2}>
-          <Button onClick={handlePopUp} style={{ fontSize: '16px' }}>
-            Consulter la demande
-          </Button>
-        </Col>
+      <Row className='mt-4'>
+      <Col lg className='d-flex align-items-center' style={{ fontSize: '2rem' }}>
+        Création d'un chantier
+      </Col>
+      <Col lg={3}>
+        <Button onClick={handlePopUp} style={{ fontSize: '20px' }}>
+          Consulter la demande
+        </Button>
+      </Col>
       </Row>
+      <Container className='p-4 mt-4' style={{ backgroundColor: "#ffffff", borderRadius: "20px" }}>
         <Row>
           <Col xs={12} >
             <Tabs
@@ -289,7 +289,7 @@ const CreateWorkSitePage: React.FC = () => {
                               onChange={e => setStartTime(e.target.value)}
                               style={{ height: '50px', width: '500px', fontSize: '20px', cursor: 'pointer' }}
                               min={new Date().toISOString().split('.')[0]}
-                          />
+                            />
                           </Form.Group>
                         </Col>
                         <Col>
@@ -301,13 +301,13 @@ const CreateWorkSitePage: React.FC = () => {
                               onChange={e => setEndTime(e.target.value)}
                               style={{ height: '50px', width: '500px', fontSize: '20px', cursor: 'pointer' }}
                               min={new Date().toISOString().split('.')[0]}
-                          />
+                            />
                           </Form.Group>
                         </Col>
                       </Row>
                       <Row className="mb-5"></Row>
                       <Row className="mb-5" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        <Button onClick={async () => {await handleSearchDispo(); setActiveTab("personnel");}} variant="primary" style={{ height: '50px', width: '300px', fontSize: '20px' }}>
+                        <Button onClick={async () => { await handleSearchDispo() }} variant="primary" style={{ height: '50px', width: '300px', fontSize: '20px' }}>
                           {isInitialSelection ? 'Sélectionner' : 'Modifier'}
                         </Button>
                       </Row>
@@ -639,7 +639,7 @@ const CreateWorkSitePage: React.FC = () => {
                       <Row className="mb-5"></Row>
                       <Row>
                         <Col className="text-center mt-3">
-                          <Button variant="success" onClick={handleCreateWorkSite} style={{ fontSize: '20px', width: '330px'}}>
+                          <Button variant="success" onClick={handleCreateWorkSite} style={{ fontSize: '20px', width: '330px' }}>
                             Créer le chantier
                           </Button>
                           <Row className="mb-3"></Row>

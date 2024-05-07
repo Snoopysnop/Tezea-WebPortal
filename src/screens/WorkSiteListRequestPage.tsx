@@ -85,7 +85,7 @@ const WorkSiteListRequestPage: React.FC = () => {
   useEffect(() => {
     if (dataFetched) {
       setFilteredTasks(dataFetched.filter(task => (task.title?.toLowerCase() ?? '').includes(filterValue.toLowerCase())))
-
+    
       handleRefreshStatus(dataFetched)
 
     }
@@ -97,22 +97,24 @@ const WorkSiteListRequestPage: React.FC = () => {
     const standbyWorksiteRequestIdsFiltered = standbyWorksiteRequestIds.filter(id => id !== undefined) as number[];
 
     if (standbyWorksiteRequestIdsFiltered.length > 0) {
-      const responseGetWorksiteStatusOfWorkSiteRequest = await MainApi.getInstance().getWorksiteStatusOfWorkSiteRequest(standbyWorksiteRequestIdsFiltered);
+        const responseGetWorksiteStatusOfWorkSiteRequest = await MainApi.getInstance().getWorksiteStatusOfWorkSiteRequest(standbyWorksiteRequestIdsFiltered);
 
-      const entries = Object.entries(responseGetWorksiteStatusOfWorkSiteRequest);
+        const entries = Object.entries(responseGetWorksiteStatusOfWorkSiteRequest);
 
-      for (const [key, value] of entries) {
-        const archiveCount = value.Archive || 0;
-        const doneCount = value.Done || 0;
-        const standbyCount = value.Standby || 0;
-        const inProgressCount = value.InProgress || 0;
+        for (const [key, value] of entries) {
+            const archiveCount = value.Archive || 0;
+            const doneCount = value.Done || 0;
+            const standbyCount = value.Standby || 0;
+            const inProgressCount = value.InProgress || 0;
 
-        if ((archiveCount > 0 || doneCount > 0) && standbyCount === 0 && inProgressCount === 0) {
-          const responseUpdateStatusWorksiteRequest = await MainApi.getInstance().updateStatusWorksiteRequest(Number(key), "Done");
+            if ((archiveCount > 0 || doneCount > 0) && standbyCount === 0 && inProgressCount === 0) {
+                const responseUpdateStatusWorksiteRequest = await MainApi.getInstance().updateStatusWorksiteRequest(Number(key), "Done");
+            }
         }
-      }
     }
-  };
+};
+
+
 
   const handleTaskClick = async (id: number) => {
     const responseWorksiteRequest = await MainApi.getInstance().getWorksiteRequestbyId(id) as WorkSiteRequestJson;
@@ -188,143 +190,142 @@ const WorkSiteListRequestPage: React.FC = () => {
   };
 
   return (
-
-    <Container>
-      <Row className='mt-4'>
-        <Col lg={6}>
-          <Row>
-            <Col>
-              <ReactSearchAutocomplete
-                styling={{ borderRadius: "10px" }}
-                items={dataFetched.map(data => {
-                  return { id: data.id, name: data.title }
-                })}
-                onSearch={handleOnSearch}
-                onSelect={handleOnSelect}
-                autoFocus
-                placeholder="Filtrer par nom de demande..."
-              />
+    <>
+      {dataFetched &&
+        <Container>
+          <Row className='mt-4'></Row>
+      <Col lg className='d-flex align-items-center' style={{fontSize: '2rem'}}>
+              Liste des demandes de chantiers
             </Col>
-            <Col lg className='d-flex align-items-center'>
-              <Dropdown>
-                <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-                  Filtrer
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  {Object.values(WorkSiteRequestStatus).map((status, index) => (
-                    <Dropdown.Item key={index} onClick={() => handleStatusChange(status)}>
-                      <Form.Check
-                        type="checkbox"
-                        label={status}
-                        checked={!!checkboxes[status]}
-                        onChange={() => { }}
-                      />
-                    </Dropdown.Item>
-                  ))}
-                </Dropdown.Menu>
-              </Dropdown>
+          <Row className='mt-4'>
+            <Col lg={6}>
+              <Row>
+                <Col>
+                  <ReactSearchAutocomplete
+                    styling={{ borderRadius: "10px" }}
+                    items={dataFetched.map(data => {
+                      return { id: data.id, name: data.title }
+                    })}
+                    onSearch={handleOnSearch}
+                    onSelect={handleOnSelect}
+                    autoFocus
+                    placeholder="Filtrer par nom de chantier..."
+                  />
+                </Col>
+                <Col lg className='d-flex align-items-center'>
+                  <Dropdown>
+                    <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                      Filtrer
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                      {Object.values(WorkSiteRequestStatus).map((status, index) => (
+                        <Dropdown.Item key={index} onClick={() => handleStatusChange(status)}>
+                          <Form.Check
+                            type="checkbox"
+                            label={status}
+                            checked={!!checkboxes[status]}
+                            onChange={() => { }}
+                          />
+                        </Dropdown.Item>
+                      ))}
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </Col>
+              </Row>
             </Col>
           </Row>
-        </Col>
-      </Row>
-      <Container className="bg-white mt-4" style={{ borderRadius: "20px" }}>
-        <Table>
-          <thead>
-            <tr>
-              {selectedStatus.includes(WorkSiteRequestStatus.ToComplete) && <th className="col-lg-3">{WorkSiteRequestStatus.ToComplete}</th>}
-              {selectedStatus.includes(WorkSiteRequestStatus.Standby) && <th className="col-lg-3">{WorkSiteRequestStatus.Standby}</th>}
-              {selectedStatus.includes(WorkSiteRequestStatus.Done) && <th className="col-lg-3">{WorkSiteRequestStatus.Done}</th>}
-              {selectedStatus.includes(WorkSiteRequestStatus.Archive) && <th className="col-lg-3">{WorkSiteRequestStatus.Archive}</th>}
-            </tr>
-          </thead>
-          <tbody>
-            {selectedStatus.includes(WorkSiteRequestStatus.ToComplete) &&
-              <td>
-                {filteredTasks
-                  .filter(task => task.requestStatus === WorkSiteRequestStatus.ToComplete)
-                  .map(task => (
-                    <Col key={task.id}>
-                      <WorkSiteRequestComponent
-                        id={task.id ?? -1}
-                        name={task.title ?? ''}
-                        date={task.estimatedDate?.toLocaleString() ?? ''}
-                        city={task.city ?? ''}
-                        status={task.requestStatus ?? WorkSiteRequestStatus.ToComplete}
-                        category={Category.CreaPalette}
-                        onClick={() => handleTaskClick(Number(task.id))}
-                      />
-                    </Col>
-                  ))}
-              </td>
-            }
-            {selectedStatus.includes(WorkSiteRequestStatus.Standby) &&
-              <td>
-                {filteredTasks
-                  .filter(task => task.requestStatus === WorkSiteRequestStatus.Standby)
-                  .map(task => (
-                    <Col key={task.id}>
-                      <WorkSiteRequestComponent
-                        id={task.id ?? -1}
-                        name={task.title ?? ''}
-                        date={task.estimatedDate?.toLocaleString() ?? ''}
-                        city={task.city ?? ''}
-                        status={task.requestStatus ?? WorkSiteRequestStatus.Standby}
-                        category={Category.CreaPalette}
-                        onClick={() => handleTaskClick(Number(task.id))}
-                      />
-                    </Col>
-                  ))}
-              </td>
-            }
-            {selectedStatus.includes(WorkSiteRequestStatus.Done) &&
-              <td>
-                {filteredTasks
-                  .filter(task => task.requestStatus === WorkSiteRequestStatus.Done)
-                  .map(task => (
-                    <Col key={task.id}>
-                      <WorkSiteRequestComponent
-                        id={task.id ?? -1}
-                        name={task.title ?? ''}
-                        date={task.estimatedDate?.toLocaleString() ?? ''}
-                        city={task.city ?? ''}
-                        status={task.requestStatus ?? WorkSiteRequestStatus.Done}
-                        category={Category.CreaPalette}
-                        onClick={() => handleTaskClick(Number(task.id))}
-                      />
-                    </Col>
-                  ))}
-              </td>
-            }
-            {selectedStatus.includes(WorkSiteRequestStatus.Archive) &&
-              <td>
-                {filteredTasks
-                  .filter(task => task.requestStatus === WorkSiteRequestStatus.Archive)
-                  .map(task => (
-                    <Col key={task.id}>
-                      <WorkSiteRequestComponent
-                        id={task.id ?? -1}
-                        name={task.title ?? ''}
-                        date={task.estimatedDate?.toLocaleString() ?? ''}
-                        city={task.city ?? ''}
-                        status={task.requestStatus ?? WorkSiteRequestStatus.Archive}
-                        category={Category.CreaPalette}
-                        onClick={() => handleTaskClick(Number(task.id))}
-                      />
-                    </Col>
-                  ))}
-              </td>
-            }
-          </tbody>
-        </Table>
-      </Container>
-      <WorkSiteRequestPopUp
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-        worksiteRequest={worksiteRequestData!}//todo checker le !
-        showButtonEditValidate={true}
-        showButtonCreate={true}
-      />
-    </Container>
+          <Container className="container-xxl bg-white mt-4" style={{borderRadius: "20px"}}>
+            <Table>
+              <thead>
+                <tr>
+                  {selectedStatus.includes(WorkSiteRequestStatus.ToComplete) && <th className="col-lg-2">{WorkSiteRequestStatus.ToComplete}</th>}
+                  {selectedStatus.includes(WorkSiteRequestStatus.Standby) && <th className="col-lg-2">{WorkSiteRequestStatus.Standby}</th>}
+                  {selectedStatus.includes(WorkSiteRequestStatus.Done) && <th className="col-lg-2">{WorkSiteRequestStatus.Done}</th>}
+                  {selectedStatus.includes(WorkSiteRequestStatus.Archive) && <th className="col-lg-2">{WorkSiteRequestStatus.Archive}</th>}
+                </tr>
+              </thead>
+              <tbody>
+                <td className={`col-lg-2 ${!selectedStatus.includes(WorkSiteRequestStatus.ToComplete) && "d-none"}`}>
+                    {filteredTasks
+                      .filter(task => task.requestStatus === WorkSiteRequestStatus.ToComplete)
+                      .map(task => (
+                        <Col key={task.id}>
+                          <WorkSiteRequestComponent
+                            id={task.id ?? -1}
+                            name={task.title ?? ''}
+                            date={task.estimatedDate?.toLocaleString() ?? ''}
+                            city={task.city ?? ''}
+                            status={task.requestStatus ?? WorkSiteRequestStatus.ToComplete}
+                            category={Category.CreaPalette}
+                            onClick={() => handleTaskClick(Number(task.id))}
+                          />
+                        </Col>
+                      ))}
+                </td>
+                <td className={`col-lg-2 ${!selectedStatus.includes(WorkSiteRequestStatus.Standby) && "d-none"}`}>
+                    {filteredTasks
+                      .filter(task => task.requestStatus === WorkSiteRequestStatus.Standby)
+                      .map(task => (
+                        <Col key={task.id}>
+                          <WorkSiteRequestComponent
+                            id={task.id ?? -1}
+                            name={task.title ?? ''}
+                            date={task.estimatedDate?.toLocaleString() ?? ''}
+                            city={task.city ?? ''}
+                            status={task.requestStatus ?? WorkSiteRequestStatus.Standby}
+                            category={Category.CreaPalette}
+                            onClick={() => handleTaskClick(Number(task.id))}
+                          />
+                        </Col>
+                      ))}
+                </td>
+                <td className={`col-lg-2 ${!selectedStatus.includes(WorkSiteRequestStatus.Done) && "d-none"}`}>
+                    {filteredTasks
+                      .filter(task => task.requestStatus === WorkSiteRequestStatus.Done)
+                      .map(task => (
+                        <Col key={task.id}>
+                          <WorkSiteRequestComponent
+                            id={task.id ?? -1}
+                            name={task.title ?? ''}
+                            date={task.estimatedDate?.toLocaleString() ?? ''}
+                            city={task.city ?? ''}
+                            status={task.requestStatus ?? WorkSiteRequestStatus.Done}
+                            category={Category.CreaPalette}
+                            onClick={() => handleTaskClick(Number(task.id))}
+                          />
+                        </Col>
+                      ))}
+                </td>
+                <td className={`col-lg-2 ${!selectedStatus.includes(WorkSiteRequestStatus.Archive) && "d-none"}`}>
+                    {filteredTasks
+                      .filter(task => task.requestStatus === WorkSiteRequestStatus.Archive)
+                      .map(task => (
+                        <Col key={task.id}>
+                          <WorkSiteRequestComponent
+                            id={task.id ?? -1}
+                            name={task.title ?? ''}
+                            date={task.estimatedDate?.toLocaleString() ?? ''}
+                            city={task.city ?? ''}
+                            status={task.requestStatus ?? WorkSiteRequestStatus.Archive}
+                            category={Category.CreaPalette}
+                            onClick={() => handleTaskClick(Number(task.id))}
+                          />
+                        </Col>
+                      ))}
+                </td>
+              </tbody>
+            </Table>
+          </Container>
+          <WorkSiteRequestPopUp
+            show={modalShow}
+            onHide={() => setModalShow(false)}
+            worksiteRequest={worksiteRequestData!}//todo checker le !
+            showButtonEditValidate={true}
+            showButtonCreate={true}
+          />
+        </Container>
+      }
+    </>
   );
 };
 

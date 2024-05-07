@@ -189,6 +189,10 @@ const WorkSiteRequestPage: React.FC = () => {
   return (
     <Form onSubmit={handleSubmit}>
       <Container>
+      <Row className='mt-4'></Row>
+      <Col lg className='d-flex align-items-center' style={{fontSize: '2rem'}}>
+              Création d'une demande de chantiers
+            </Col>
         <Container className="bg-white mt-4 " style={{ borderRadius: "20px" }}>
           <Row>
         <Col className='m-3'>
@@ -272,7 +276,7 @@ const WorkSiteRequestPage: React.FC = () => {
         <Col className='m-3'>
           <Row className="mb-5" style={{ color: '#008FE3', fontSize: '32px' }}>
 
-            Informations sur la demande de chantier :
+            Informations sur la demande de chantiers :
           </Row>
           <Row className="mb-3" style={{ color: '#008FE3', fontSize: '18px' }}>
             <Form.Group as={Col} xs={6} controlId="formGridTitle">

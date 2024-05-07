@@ -106,8 +106,8 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
               </Row>
 
               <Row className="mb-3" style={{ color: '#008FE3', fontSize: '15px' }}>
-                <Col>Téléphone : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.phoneNumber : ''}</span></Col>
-                <Col>Email : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.email : ''}</span></Col>
+                <Col xs={4}>Téléphone : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.phoneNumber : ''}</span></Col>
+                <Col xs={8}>Email : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.email : ''}</span></Col>
                 <Col></Col>
               </Row>
 
@@ -118,8 +118,8 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
               </Row>
 
               <Row className="mb-3" style={{ color: '#008FE3', fontSize: '15px' }}>
-                <Col>Status : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.status ? getCustomerStatus(worksiteRequest.customer.status) : '' : ''}</span></Col>
-                <Col>Société : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.company : ''}</span></Col>
+                <Col xs={4}>Status : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.status ? getCustomerStatus(worksiteRequest.customer.status) : '' : ''}</span></Col>
+                <Col xs={8}>Société : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.company : ''}</span></Col>
                 <Col></Col>
               </Row>
             </Col>
@@ -128,7 +128,8 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
 
         <Container className=" mt-4" style={{ borderColor: '#f3f3f3', borderStyle: 'solid', borderWidth: '2px', borderRadius: '20px' }}>
           <Row>
-            <Col className='m-3'>          <Row className="mb-5" style={{ color: '#008FE3', fontSize: '25px' }}>Informations sur la demande de chantier : </Row>
+            <Col className='m-3'>          
+            <Row className="mb-4" style={{ color: '#008FE3', fontSize: '25px' }}>Informations sur la demande de chantier : </Row>
 
               <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
                 <Col>Nom de la demande : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.title : ''}</span></Col>
@@ -152,7 +153,7 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
 
 
               <Row className="mb-3 " style={{ color: '#008FE3', fontSize: '15px' }}>
-                <Col>Urgence : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.emergency ? getEmergency(worksiteRequest.emergency) : '' : ''}</span></Col>
+                <Col >Urgence : <span style={{ color: '#000000' }}>{worksiteRequest ? worksiteRequest.emergency ? getEmergency(worksiteRequest.emergency) : '' : ''}</span></Col>
                 <Col>Catégorie : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.category ? getCategorie(worksiteRequest.category) : ''}</span></Col>
               </Row>
 

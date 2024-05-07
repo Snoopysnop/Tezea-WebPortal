@@ -127,6 +127,10 @@ const WorkSiteDetailPage: React.FC = () => {
   { console.log(`data:image/png;base64, ${worksite!.signature}`) }
   return (
     <Container>
+      <Row className='mt-4'></Row>
+      <Col lg className='d-flex align-items-center' style={{fontSize: '2rem'}}>
+              Détails du chantier : {worksite!.title}
+            </Col>
       <Row className='mt-4'>
         <Col lg={6}>
           <Card bg="white" text="dark" className="h-100">
