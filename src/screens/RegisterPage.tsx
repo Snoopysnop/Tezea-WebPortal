@@ -49,7 +49,6 @@ const RegisterPage: React.FC = () => {
                     errors,
                     handleChange,
                     handleSubmit,
-
                 }) => (
                     <Form onSubmit={handleSubmit}>
                         <Row className="justify-content-center mt-5">

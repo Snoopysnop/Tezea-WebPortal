@@ -7,7 +7,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import KeycloakApi from '../api/KeycloakApi';
 
-const LoginPage: React.FC = () => {
+const LoginPage: React.FC<{setIsLoggedIn: any}> = ({setIsLoggedIn}) => {
 
   const navigate = useNavigate();
 
@@ -18,6 +18,10 @@ const LoginPage: React.FC = () => {
     password: Yup.string().min(8, 'Le mot de passe doit comporter au moins 8 caractères').required('Ce champ est requis'),
   });
 
+  useEffect(() => {
+    localStorage.removeItem("access-token")
+  }, [])
+
   return (
     <Container >
       <Formik
@@ -27,10 +31,12 @@ const LoginPage: React.FC = () => {
         }}
         onSubmit={async (values) => {
           try {
-            navigate("/worksiteList")
             setApiError(undefined)
-            //await KeycloakApi.getInstance().login(values.email, values.password)
-            
+            console.log("here")
+            await KeycloakApi.getInstance().login(values.email, values.password)
+            setIsLoggedIn(true)
+            navigate("/worksiteList")
+
               
           } catch (err) {
             console.log(err)
@@ -40,12 +46,8 @@ const LoginPage: React.FC = () => {
         validationSchema={validationSchema}
       >
         {({
-         values,
-         errors,
-         touched,
          handleChange,
          handleSubmit,
-
        }) => (
         <Form onSubmit={handleSubmit}>
           <Row className="justify-content-center mt-5">
@@ -91,7 +93,7 @@ const LoginPage: React.FC = () => {
                 <Row className="justify-content-center">
                   <Col md={4}>
                     <div className="d-grid gap-2">
-                      <Button variant="primary" onClick={() => {navigate("/worksiteList")}} type="submit" className="mt-3">
+                      <Button variant="primary" type="submit" className="mt-3">
                         Se connecter
                       </Button>
                     </div>

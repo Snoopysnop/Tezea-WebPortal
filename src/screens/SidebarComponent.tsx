@@ -1,25 +1,19 @@
 import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
-import MainApi from "../api/MainApi";
-import React, { useEffect, useState } from "react"; // Importez useEffect
+import React, { useEffect } from "react"; // Importez useEffect
 import PeopleOutlinedIcon from "@mui/icons-material/ListAltOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/Create";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined"
-import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptLongOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/Warning";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import { LoginOutlined, RequestPageOutlined, RequestQuoteOutlined, SettingsAccessibilityOutlined, SettingsOutlined } from "@mui/icons-material";
-import { Link, useNavigate } from 'react-router-dom';
-import KeycloakApi from "../api/KeycloakApi";
-import { WorkSiteJson, WorkSiteRequestJson, CustomerJson, EmergencyDetailsJson, UserJson } from '../api/ModelJson';
-import { WorkSite, WorkSiteRequest, Customer, WorkSiteStatus, EmergencyDetails, User, IncidentLevel } from '../api/Model';
-import { getIncidentLevel, getStatusWorksite, getStatusWorksiteRequest } from "../common/utils/utils";
+import { LogoutOutlined, RequestQuoteOutlined, SettingsOutlined } from "@mui/icons-material";
+import { Link } from 'react-router-dom';
+import { hasRequieredRoles } from "../common/utils/utils";
+import { Role } from "../api/Model";
 
 
 
-const SidebarComponent: React.FC<{sidebarCollapsed: any, setSidebarCollapsed: any}> = ({sidebarCollapsed, setSidebarCollapsed}) => {
 
-    const navigate = useNavigate();
-
+const SidebarComponent: React.FC<{ setIsLoggedIn: any, sidebarCollapsed: any, setSidebarCollapsed: any }> = ({ setIsLoggedIn, sidebarCollapsed, setSidebarCollapsed }) => {
 
     const handleCollapseSidebar = () => {
         setSidebarCollapsed(!sidebarCollapsed);
@@ -73,18 +67,30 @@ const SidebarComponent: React.FC<{sidebarCollapsed: any, setSidebarCollapsed: an
                 >
                     <h2>{sidebarCollapsed ? null : ''}</h2>
                 </MenuItem>
-                <MenuItem icon={<LoginOutlined />} style={{ backgroundColor: 'white' }} component={<Link to="/login" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
-                    {sidebarCollapsed ? null : 'Connexion'}
+                <MenuItem icon={<LogoutOutlined />}
+                    style={{ backgroundColor: 'white' }}
+                    component={<Link to="/login"
+                        style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />}
+                    onClick={() => {
+                        localStorage.removeItem("access-token")
+                        setIsLoggedIn(false)
+                        handleMenuItemClick()
+                    }}>
+                    {sidebarCollapsed ? null : 'Déconnexion'}
                 </MenuItem>
                 <MenuItem icon={<PeopleOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/worksiteList" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
                     {sidebarCollapsed ? null : 'Liste des chantiers'}
                 </MenuItem>
-                <MenuItem icon={<RequestQuoteOutlined />} style={{ backgroundColor: 'white' }} component={<Link to="/worksiteRequestList" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
-                    {sidebarCollapsed ? null : 'Demandes de chantier'}
-                </MenuItem>
-                <MenuItem icon={<ContactsOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/worksiteRequestCreate" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
-                    {sidebarCollapsed ? null : 'Créer une demande'}
-                </MenuItem>
+                {hasRequieredRoles([Role.SiteChief, Role.Concierge]) &&
+                    <MenuItem icon={<RequestQuoteOutlined />} style={{ backgroundColor: 'white' }} component={<Link to="/worksiteRequestList" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
+                        {sidebarCollapsed ? null : 'Demandes de chantier'}
+                    </MenuItem>
+                }
+                {hasRequieredRoles([Role.Concierge]) &&
+                    <MenuItem icon={<ContactsOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/worksiteRequestCreate" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
+                        {sidebarCollapsed ? null : 'Créer une demande'}
+                    </MenuItem>
+                }
                 <MenuItem icon={<HelpOutlineOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/incidentsList" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
                     {sidebarCollapsed ? null : 'Incidents'}
                 </MenuItem>

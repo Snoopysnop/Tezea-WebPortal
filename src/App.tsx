@@ -1,17 +1,14 @@
 import { BrowserRouter as Router } from 'react-router-dom';
 import './App.css';
 import Navigation from './components/Navigation/Navigation';
-import { Sidebar } from 'react-pro-sidebar';
 import SidebarComponent from './screens/SidebarComponent';
-import { Col, Container, Row } from 'react-bootstrap';
 import KeycloakApi from './api/KeycloakApi';
-import MainApi from './api/MainApi';
 import { useEffect, useState } from 'react';
-import { AuthManager } from './components/Navigation/AuthManager';
 
 function App() {
 
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(KeycloakApi.isTokenValid());
 
   const overlayStyle: React.CSSProperties = {
     position: "fixed",
@@ -23,21 +20,26 @@ function App() {
     zIndex: 999, // Assurez-vous que la superposition est au-dessus de la barre latérale mais en dessous du contenu
     backdropFilter: "blur(8px)", // Floutez le contenu sous l'overlay
     pointerEvents: "none",
-};
+  };
 
   useEffect(() => {
-    MainApi.initInstance()
+    KeycloakApi.initInstance()
   }, [])
 
   return (
     <Router>
-        <SidebarComponent sidebarCollapsed= {sidebarCollapsed} setSidebarCollapsed={setSidebarCollapsed}/>
-        {sidebarCollapsed ? null : (
-                <div
-                    style={overlayStyle}
-                />
-            )}
-        <Navigation />
+      {isLoggedIn &&
+        <>
+          <SidebarComponent setIsLoggedIn={setIsLoggedIn} sidebarCollapsed={sidebarCollapsed} setSidebarCollapsed={setSidebarCollapsed} />
+
+          {sidebarCollapsed ? null : (
+            <div
+              style={overlayStyle}
+            />
+          )}
+        </>
+      }
+      <Navigation setIsLoggedIn={setIsLoggedIn}/>
     </Router>
   );
 }

@@ -4,7 +4,7 @@ import { WorkSite, User, Role, Tool, WorkSiteStatus, SatisfactionLevel, ToolName
 import PopupEmergency from './PopupEmergency';
 import { useLocation } from 'react-router-dom';
 import MainApi from '../api/MainApi';
-import { getCategorie, getCivility, getCustomerStatus, getEmergency, getRole, getServiceType, getStatusName, getStatusWorksite, getStatusWorksiteRequest, getToolName } from '../common/utils/utils';
+import { getCategorie, getCivility, getCustomerStatus, getEmergency, getRole, getServiceType, getStatusName, getStatusWorksite, getStatusWorksiteRequest, getToolName, hasRequieredRoles } from '../common/utils/utils';
 import WorkSiteRequestPopUp from '../components/WorkSiteRequestPopUp';
 import { CustomerJson, WorkSiteJson, WorkSiteRequestJson } from '../api/ModelJson';
 
@@ -119,18 +119,18 @@ const WorkSiteDetailPage: React.FC = () => {
           height={250}
         />
       );
-    } 
+    }
     return null;
   }
-  
+
   const [modalShow, setModalShow] = useState(false);
   { console.log(`data:image/png;base64, ${worksite!.signature}`) }
   return (
     <Container>
       <Row className='mt-4'></Row>
-      <Col lg className='d-flex align-items-center' style={{fontSize: '2rem'}}>
-              Détails du chantier : {worksite!.title}
-            </Col>
+      <Col lg className='d-flex align-items-center' style={{ fontSize: '2rem' }}>
+        Détails du chantier : {worksite!.title}
+      </Col>
       <Row className='mt-4'>
         <Col lg={6}>
           <Card bg="white" text="dark" className="h-100">
@@ -170,8 +170,10 @@ const WorkSiteDetailPage: React.FC = () => {
                   </Col>
                 </Row>
               </Card.Text>
-              <Button variant="danger" onClick={() => setShowModal(true)}>Déclarer un incident</Button>{' '}
-              <Button variant="primary" onClick={() => setModalShow(true)} className="float-end">Voir la demande de chantier</Button>{' '}
+              {hasRequieredRoles([Role.SiteChief, Role.WorkSiteChief]) &&
+                <Button variant="danger" onClick={() => setShowModal(true)}>Déclarer un incident</Button>
+              }
+              <Button variant="primary" onClick={() => setModalShow(true)} className="float-end">Voir la demande de chantier</Button>
             </Card.Body>
 
 

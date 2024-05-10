@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Table, InputGroup, Button, Form, Dropdown } from 'react-bootstrap';
-import { Category, WorkSite, WorkSiteStatus, WorkSiteRequest, Emergency, Customer, WorkSiteRequestStatus } from '../api/Model';
+import { Category, WorkSite, WorkSiteStatus, WorkSiteRequest, Emergency, Customer, WorkSiteRequestStatus, Role } from '../api/Model';
 import { WorkSiteRequestJson, CustomerJson } from '../api/ModelJson';
 
 import '../App.css'
@@ -11,7 +11,7 @@ import WorkSiteComponent from './WorkSiteComponent';
 import MainApi from "../api/MainApi"
 import WorkSiteRequestComponent from './WorkSiteRequestComponent';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getCivility, getCivilityJsonFormat, getCustomerStatus, getCustomerStatusJsonFormat, getEmergency, getIncidentLevel, getStatusWorksiteRequest } from '../common/utils/utils';
+import { getCivility, getCivilityJsonFormat, getCustomerStatus, getCustomerStatusJsonFormat, getEmergency, getIncidentLevel, getStatusWorksiteRequest, hasRequieredRoles } from '../common/utils/utils';
 
 const WorkSiteListRequestPage: React.FC = () => {
 
@@ -238,13 +238,14 @@ const WorkSiteListRequestPage: React.FC = () => {
             <Table>
               <thead>
                 <tr>
-                  {selectedStatus.includes(WorkSiteRequestStatus.ToComplete) && <th className="col-lg-3">{WorkSiteRequestStatus.ToComplete}</th>}
+                  {hasRequieredRoles([Role.Concierge]) && selectedStatus.includes(WorkSiteRequestStatus.ToComplete) && <th className="col-lg-3">{WorkSiteRequestStatus.ToComplete}</th>}
                   {selectedStatus.includes(WorkSiteRequestStatus.Standby) && <th className="col-lg-3">{WorkSiteRequestStatus.Standby}</th>}
                   {selectedStatus.includes(WorkSiteRequestStatus.Done) && <th className="col-lg-3">{WorkSiteRequestStatus.Done}</th>}
                   {selectedStatus.includes(WorkSiteRequestStatus.Archive) && <th className="col-lg-3">{WorkSiteRequestStatus.Archive}</th>}
                 </tr>
               </thead>
               <tbody>
+                {hasRequieredRoles([Role.Concierge]) &&
                 <td className={`col-lg-2 ${!selectedStatus.includes(WorkSiteRequestStatus.ToComplete) && "d-none"}`}>
                     {filteredTasks
                       .filter(task => task.requestStatus === WorkSiteRequestStatus.ToComplete)
@@ -262,6 +263,7 @@ const WorkSiteListRequestPage: React.FC = () => {
                         </Col>
                       ))}
                 </td>
+}
                 <td className={`col-lg-2 ${!selectedStatus.includes(WorkSiteRequestStatus.Standby) && "d-none"}`}>
                     {filteredTasks
                       .filter(task => task.requestStatus === WorkSiteRequestStatus.Standby)

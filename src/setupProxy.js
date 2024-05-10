@@ -4,7 +4,7 @@ module.exports = function(app) {
   app.use(
     '/api',
     createProxyMiddleware({
-      target: 'http://148.60.11.163:80/api',
+      target: 'http://localhost:80/api',
       changeOrigin: true,
     })
   );

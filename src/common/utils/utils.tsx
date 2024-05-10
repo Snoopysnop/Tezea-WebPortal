@@ -108,13 +108,13 @@ export function getIncidentLevelColor(status: IncidentLevel): string {
     }
 }
 
-export function hasRequieredRole(role: Role): boolean {
+export function hasRequieredRoles(allowedRoles: Role[]): boolean {
 
     const token = localStorage.getItem("access-token")
     const decodedToken: any = token ? decodeToken(token) : undefined
     const realmAccess = decodedToken ? decodedToken.realm_access : undefined
     const roles: string[] = realmAccess ? realmAccess.roles : []
-    return KeycloakApi.isTokenValid() && roles.includes(role.toUpperCase())
+    return KeycloakApi.isTokenValid() && allowedRoles.some((r) => roles.includes(r.toUpperCase()))
 }
 
 export function getStatusIcon(status: WorkSiteStatus) {

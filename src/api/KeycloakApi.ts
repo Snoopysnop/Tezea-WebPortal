@@ -27,8 +27,8 @@ class KeycloakApi extends AbstractApi {
         return KeycloakApi.instance
     }
 
-    public static initInstance(token?: string): void {
-        KeycloakApi.instance = new KeycloakApi(process.env.REACT_APP_URL as any, token)
+    public static initInstance(): void {
+        KeycloakApi.instance = new KeycloakApi(process.env.REACT_APP_URL as any)
     }
 
     public static isTokenValid(): boolean {
