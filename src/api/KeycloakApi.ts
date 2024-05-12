@@ -7,7 +7,7 @@ import MainApi from './MainApi';
 import { Role, User } from './Model';
 
 const standaloneInstance = axios.create({
-    baseURL: process.env.REACT_APP_URL,
+    baseURL: process.env.REACT_APP_KEYCLOAK_URL,
     timeout: 60000
 })
 
@@ -28,7 +28,7 @@ class KeycloakApi extends AbstractApi {
     }
 
     public static initInstance(): void {
-        KeycloakApi.instance = new KeycloakApi(process.env.REACT_APP_URL as any)
+        KeycloakApi.instance = new KeycloakApi(process.env.REACT_APP_KEYCLOAK_URL as any)
     }
 
     public static isTokenValid(): boolean {
@@ -78,34 +78,6 @@ class KeycloakApi extends AbstractApi {
             throw AbstractApi.handleError(err)
         }
     }
-
-    public async createUser(email: string, firstname: string, lastname: string, phoneNumber: string, role: Role, password: string): Promise<void> {
-        try {
-            const hashedPassword = hashPassword(password);
-            const user: User = {
-                email: email, 
-                firstName: firstname, 
-                lastName: lastname, 
-                phoneNumber: phoneNumber, 
-                role: getRole(role)
-            }
-            const formData = new FormData();
-            formData.append('user', new Blob([JSON.stringify(user)], { type: "application/json" }));
-            formData.append('password', hashedPassword);
-            const token = await this.getToken()
-            await this.service.post("/api/users/create", formData, {
-                headers: { 
-                    'Content-Type': 'multipart/form-data',
-                    'Authorization': `Bearer ${token}`
-                },
-            });
-            console.log('User created');
-
-        } catch (error) {
-            console.error(error);
-            throw error;
-        }
-    };
 }
 
 export default KeycloakApi

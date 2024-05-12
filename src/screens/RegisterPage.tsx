@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 import KeycloakApi from '../api/KeycloakApi';
 import { Role } from '../api/Model';
+import MainApi from '../api/MainApi';
 
 const RegisterPage: React.FC = () => {
 
@@ -34,7 +35,7 @@ const RegisterPage: React.FC = () => {
                 onSubmit={async (values) => {
                     try {
                         setApiError(undefined)
-                        await KeycloakApi.getInstance().createUser(values.email, values.firstName, values.lastName, values.phoneNumber, values.role, values.password)
+                        await MainApi.getInstance().createUser(values.email, values.firstName, values.lastName, values.phoneNumber, values.role, values.password)
                         navigate("/login")
 
                     } catch (err) {

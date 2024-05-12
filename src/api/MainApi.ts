@@ -2,9 +2,10 @@ import axios, { AxiosInstance } from 'axios'
 import axiosRetry from 'axios-retry'
 import AbstractApi from './AbstractApi'
 import { Role, Customer, User, WorkSiteRequest, WorkSite, TimeLine, Tool } from './Model'
-import { hashPassword } from '../common/utils/utils'
+import { getRole, hashPassword } from '../common/utils/utils'
 import { CustomerJson, UserJson, WorkSiteRequestJson, WorkSiteJson, EmergencyDetailsJson, EmergencyDetailsJsonToSend, WorkSiteJsonChelou } from './ModelJson'
 import { stringify } from 'querystring'
+import KeycloakApi from './KeycloakApi'
 
 const standaloneInstance = axios.create({
     baseURL: process.env.REACT_APP_URL,
@@ -51,6 +52,34 @@ class MainApi extends AbstractApi {
             throw AbstractApi.handleError(err)
         }
     }
+
+    public async createUser(email: string, firstname: string, lastname: string, phoneNumber: string, role: Role, password: string): Promise<void> {
+        try {
+            const hashedPassword = hashPassword(password);
+            const user: User = {
+                email: email, 
+                firstName: firstname, 
+                lastName: lastname, 
+                phoneNumber: phoneNumber, 
+                role: getRole(role)
+            }
+            const formData = new FormData();
+            formData.append('user', new Blob([JSON.stringify(user)], { type: "application/json" }));
+            formData.append('password', hashedPassword);
+            const token = await KeycloakApi.getInstance().getToken()
+            await this.service.post("/api/users/create", formData, {
+                headers: { 
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+            console.log('User created');
+
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    };
 
     //WorksiteRequest-------------------------------------------------------------------------------------------------------------
 
