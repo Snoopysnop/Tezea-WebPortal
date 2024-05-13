@@ -327,9 +327,11 @@ const WorkSiteRequestPage: React.FC = () => {
                   <Form.Label >Catégorie</Form.Label>
                   <Form.Select name="category" value={worksiteRequestFormData.worksiteRequest.category} onChange={handleWorksiteRequestChange} >
                     {Object.keys(Category).map((key) => (
+                      key !== "Undefined" && (
                       <option key={key} value={Category[key as keyof typeof Category]}>
                         {Category[key as keyof typeof Category]}
                       </option>
+                    )
                     ))}
                   </Form.Select>
                 </Form.Group>
