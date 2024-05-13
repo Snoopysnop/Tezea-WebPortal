@@ -3,7 +3,7 @@ import { Button, Modal, Row, Col, Container } from 'react-bootstrap';
 import { WorkSiteRequest, User, Customer, Role, Civility, CustomerStatus, Service, WorkSiteRequestStatus, Category } from '../api/Model';
 import { ReactComponent as ModifyPencil } from 'bootstrap-icons/icons/pencil-square.svg';
 import { Link, useNavigate } from 'react-router-dom';
-import { getCategorie, getCivility, getCustomerStatus, getEmergency, getServiceType, getStatusWorksiteRequest } from '../common/utils/utils';
+import { formatPhoneNumber, getCategorie, getCivility, getCustomerStatus, getEmergency, getServiceType, getStatusWorksiteRequest } from '../common/utils/utils';
 import MainApi from '../api/MainApi';
 import { WorkSiteRequestJson } from '../api/ModelJson';
 
@@ -108,7 +108,7 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
               </Row>
 
               <Row className="mb-3" style={{ color: '#008FE3', fontSize: '15px' }}>
-                <Col xs={4}>Téléphone : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.phoneNumber : ''}</span></Col>
+                <Col xs={4}>Téléphone : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer && worksiteRequest.customer.phoneNumber ? formatPhoneNumber(worksiteRequest.customer.phoneNumber) : ''}</span></Col>
                 <Col xs={8}>Email : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.email : ''}</span></Col>
                 <Col></Col>
               </Row>

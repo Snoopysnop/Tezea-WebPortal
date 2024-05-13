@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Card, Col, Container, Row, Form } from 'react-bootstrap';
 import { User, Role } from '../api/Model';
 import { useLocation } from 'react-router-dom';
-import { getRoleName } from '../common/utils/utils';
+import { formatPhoneNumber, getRoleName } from '../common/utils/utils';
 import MainApi from '../api/MainApi';
 
 const SettingsPage: React.FC = () => {
@@ -64,7 +64,7 @@ const SettingsPage: React.FC = () => {
                     </Form.Group>
                     <Form.Group className="mb-3">
                       <Form.Label>Téléphone:</Form.Label>
-                      <Form.Control type="tel" value={user!.phoneNumber} readOnly />
+                      <Form.Control type="tel" value={formatPhoneNumber(user!.phoneNumber)} readOnly />
                     </Form.Group>
                   </Card.Text>
                 </Card.Body>
