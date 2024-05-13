@@ -1,17 +1,12 @@
 import React from 'react';
-import { Container, Row, Col } from 'react-bootstrap'; // Import des composants Bootstrap
+import { Container, Row, Col } from 'react-bootstrap';
 import { Category, WorkSiteStatus } from '../api/Model';
 import { getCategoryIcon, getStatusColor, getStatusIcon } from '../common/utils/utils';
 import { ReactComponent as ClockIcon } from 'bootstrap-icons/icons/clock.svg'
 import { ReactComponent as AddressIcon } from 'bootstrap-icons/icons/house-door.svg'
-import MainApi from '../api/MainApi';
-import { useNavigate } from 'react-router-dom';
-import { WorkSiteJson } from '../api/ModelJson';
 
 type WorkSiteProps = {
-    id: string
     name: string
-    date: string
     startHours: string
     endHour: string
     address?: string
@@ -23,7 +18,7 @@ type WorkSiteProps = {
 
 
 
-const WorkSiteComponent: React.FC<WorkSiteProps> = ({ id, name, date, startHours, endHour, address, status, category, onClick }) => {
+const WorkSiteComponent: React.FC<WorkSiteProps> = ({ name, startHours, endHour, address, status, category, onClick }) => {
     return (
         <Container style={{ cursor: 'pointer' }} onClick={onClick}>
             <Container style={{ borderColor: '#c2c2c2', borderStyle: 'solid', borderWidth: '2px', borderRadius: '10px', overflow: 'hidden', marginBottom: '10px'}}>
@@ -49,10 +44,10 @@ const WorkSiteComponent: React.FC<WorkSiteProps> = ({ id, name, date, startHours
                     </Col>
                     <Col className='primary ps-2' style={{ fontSize: '11px'}}>
                         <Row>
-                            {startHours}
+                            {startHours.slice(0, -3)}
                         </Row>
                         <Row>
-                            {endHour}
+                            {endHour.slice(0, -3)}
                         </Row>
                     </Col>
                 </Row>

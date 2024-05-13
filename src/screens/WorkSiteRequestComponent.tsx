@@ -41,7 +41,7 @@ const WorkSiteRequestComponent: React.FC<WorkSiteRequestProps> = ({ id, name, da
                     </Col>
                     <Col className='primary ps-2' style={{ fontSize: '11px'}}>
                         <Row>
-                            {date}
+                            {date.slice(0, -3)}
                         </Row>
                     </Col>
                 </Row>

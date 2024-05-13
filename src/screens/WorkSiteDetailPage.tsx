@@ -159,13 +159,13 @@ const WorkSiteDetailPage: React.FC = () => {
                   <Col>
                     <Form.Group>
                       <Form.Label>Date de début :</Form.Label>
-                      <Form.Control type="text" value={new Date(worksite!.begin).toLocaleString()} readOnly />
+                      <Form.Control type="text" value={new Date(worksite!.begin).toLocaleString().slice(0, -3)} readOnly />
                     </Form.Group>
                   </Col>
                   <Col>
                     <Form.Group>
                       <Form.Label>Date de fin :</Form.Label>
-                      <Form.Control type="text" value={new Date(worksite!.end).toLocaleString()} readOnly />
+                      <Form.Control type="text" value={new Date(worksite!.end).toLocaleString().slice(0, -3)} readOnly />
                     </Form.Group>
                   </Col>
                 </Row>
