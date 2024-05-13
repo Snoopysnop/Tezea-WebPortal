@@ -3,7 +3,7 @@ import { Button, Modal, Row, Col, Container } from 'react-bootstrap';
 import { WorkSiteRequest, User, Customer, Role, Civility, CustomerStatus, Service, WorkSiteRequestStatus, Category } from '../api/Model';
 import { ReactComponent as ModifyPencil } from 'bootstrap-icons/icons/pencil-square.svg';
 import { Link, useNavigate } from 'react-router-dom';
-import { formatPhoneNumber, getCategorie, getCivility, getCustomerStatus, getEmergency, getServiceType, getStatusWorksiteRequest, hasRequieredRoles } from '../common/utils/utils';
+import { getCategorie, getCivility, getCustomerStatus, getEmergency, getServiceType, getStatusWorksiteRequest } from '../common/utils/utils';
 import MainApi from '../api/MainApi';
 import { WorkSiteRequestJson } from '../api/ModelJson';
 
@@ -67,8 +67,6 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
       tezeaAffectation: worksiteRequestJson.tezeaAffectation,
     }));
 
-    console.log(worksiteRequestMapper)
-
     navigate("/worksiteRequestList", { state: { worksiteRequestMapper } })
   }
 
@@ -98,6 +96,7 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
       <Modal.Body>
         <Container className=" mt-2" style={{ borderColor: '#f3f3f3', borderStyle: 'solid', borderWidth: '2px', borderRadius: '20px' }}>
           <Row>
+            {JSON.stringify(worksiteRequest)}
             <Col className='m-3'>
               <Row className="mb-4" style={{ color: '#008FE3', fontSize: '25px' }}>Informations du client : </Row>
 
@@ -108,7 +107,7 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
               </Row>
 
               <Row className="mb-3" style={{ color: '#008FE3', fontSize: '15px' }}>
-                <Col xs={4}>Téléphone : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer && worksiteRequest.customer.phoneNumber ? formatPhoneNumber(worksiteRequest.customer.phoneNumber) : ''}</span></Col>
+                <Col xs={4}>Téléphone : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.phoneNumber : ''}</span></Col>
                 <Col xs={8}>Email : <span style={{ color: '#000000' }}>{worksiteRequest && worksiteRequest.customer ? worksiteRequest.customer.email : ''}</span></Col>
                 <Col></Col>
               </Row>
@@ -176,7 +175,7 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
           </Row>
         </Container>
 
-        {hasRequieredRoles([Role.SiteChief]) && showButtonCreate && worksiteRequest && worksiteRequest.requestStatus && worksiteRequest.requestStatus === WorkSiteRequestStatus.Standby && (
+        {showButtonCreate && worksiteRequest && worksiteRequest.requestStatus && worksiteRequest.requestStatus === WorkSiteRequestStatus.Standby && (
           <div className="CreateWorkSitButton mt-3" style={{ display: 'flex', justifyContent: 'center' }}>
             <Button onClick={() => { onHide(); handleCreateWorksite(); }}>Créer un chantier</Button>
           </div>

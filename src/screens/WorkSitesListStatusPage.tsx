@@ -51,7 +51,10 @@ const WorkSitesListStatusPage: React.FC = () => {
       title: worksiteJson.title ? worksiteJson.title : '',
       address: worksiteJson.address ? worksiteJson.address : ''
     }));
-    setDataFetched(worksiteMapper);
+
+    const reversedData = worksiteMapper.reverse();
+
+    setDataFetched(reversedData);
   }
 
   useEffect(() => {

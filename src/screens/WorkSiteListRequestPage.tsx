@@ -74,7 +74,9 @@ const WorkSiteListRequestPage: React.FC = () => {
       tezeaAffectation: worksiteRequestJson.tezeaAffectation,
     }));
 
-    setDataFetched(worksiteRequestMapper);
+    const reversedData = worksiteRequestMapper.reverse();
+
+    setDataFetched(reversedData);
   }
 
   useEffect(() => {
