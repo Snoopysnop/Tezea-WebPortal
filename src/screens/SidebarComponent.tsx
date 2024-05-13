@@ -54,53 +54,60 @@ const SidebarComponent: React.FC<{ setIsLoggedIn: any, sidebarCollapsed: any, se
                 position: "fixed",
                 top: 0,
                 left: 0,
-                height: "100vh",
+                right:0,
+                height: "100%",
                 zIndex: 1000,
-                backgroundColor: "#008FE3"
+                border:"none"
             }}
             id="sidebar"
         >
-            <Menu>
-                <MenuItem
-                    icon={<MenuOutlinedIcon />}
-                    onClick={handleCollapseSidebar}
-                >
-                    <h2>{sidebarCollapsed ? null : ''}</h2>
-                </MenuItem>
-                <MenuItem icon={<LogoutOutlined />}
-                    style={{ backgroundColor: 'white' }}
-                    component={<Link to="/login"
-                        style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />}
-                    onClick={() => {
-                        localStorage.removeItem("access-token")
-                        setIsLoggedIn(false)
-                        handleMenuItemClick()
-                    }}>
-                    {sidebarCollapsed ? null : 'Déconnexion'}
-                </MenuItem>
-                <MenuItem icon={<PeopleOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/worksiteList" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
-                    {sidebarCollapsed ? null : 'Liste des chantiers'}
-                </MenuItem>
-                {hasRequieredRoles([Role.SiteChief, Role.Concierge]) &&
-                    <MenuItem icon={<RequestQuoteOutlined />} style={{ backgroundColor: 'white' }} component={<Link to="/worksiteRequestList" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
-                        {sidebarCollapsed ? null : 'Demandes de chantier'}
+            <div style={{ display: 'flex', flexDirection:"column", alignItems:"center", height:"100%",backgroundColor: "#789fc0"}}>
+                <Menu style={{ display: 'flex',flexDirection:"column", width:"100%"}}>
+                    <MenuItem
+                        icon={<MenuOutlinedIcon />}
+                        onClick={handleCollapseSidebar}
+                    >
+                        <h2>{sidebarCollapsed ? null : ''}</h2>
                     </MenuItem>
-                }
-                {hasRequieredRoles([Role.Concierge]) &&
-                    <MenuItem icon={<ContactsOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/worksiteRequestCreate" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
-                        {sidebarCollapsed ? null : 'Créer une demande'}
+                    
+                    <MenuItem icon={<PeopleOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/worksiteList" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
+                        {sidebarCollapsed ? null : 'Liste des chantiers'}
                     </MenuItem>
-                }
-                <MenuItem icon={<HelpOutlineOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/incidentsList" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
-                    {sidebarCollapsed ? null : 'Incidents'}
-                </MenuItem>
-                <MenuItem icon={<CalendarTodayOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/planning" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
-                    {sidebarCollapsed ? null : 'Planning'}
-                </MenuItem>
-                <MenuItem icon={<SettingsOutlined />} style={{ backgroundColor: 'white' }} component={<Link to="/settings" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleSettingsItemClick}>
-                    {sidebarCollapsed ? null : 'Paramètres'}
-                </MenuItem>
-            </Menu>
+                    {hasRequieredRoles([Role.SiteChief, Role.Concierge]) &&
+                        <MenuItem icon={<RequestQuoteOutlined />} style={{ backgroundColor: 'white' }} component={<Link to="/worksiteRequestList" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
+                            {sidebarCollapsed ? null : 'Demandes de chantier'}
+                        </MenuItem>
+                    }
+                    {hasRequieredRoles([Role.Concierge]) &&
+                        <MenuItem icon={<ContactsOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/worksiteRequestCreate" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
+                            {sidebarCollapsed ? null : 'Créer une demande'}
+                        </MenuItem>
+                    }
+                    <MenuItem icon={<HelpOutlineOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/incidentsList" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
+                        {sidebarCollapsed ? null : 'Incidents'}
+                    </MenuItem>
+                    <MenuItem icon={<CalendarTodayOutlinedIcon />} style={{ backgroundColor: 'white' }} component={<Link to="/planning" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none' }} />} onClick={handleMenuItemClick}>
+                        {sidebarCollapsed ? null : 'Planning'}
+                    </MenuItem>
+                    <MenuItem icon={<SettingsOutlined />} style={{ backgroundColor: 'white' }} component={<Link to="/settings" style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none'}} />} onClick={handleSettingsItemClick}>
+                        {sidebarCollapsed ? null : 'Paramètres'}
+                    </MenuItem>
+                </Menu>
+                <Menu style={{ marginTop: 'auto', display: 'flex',flexDirection:"column", width:"100%"}}>
+                    <MenuItem icon={<LogoutOutlined />}
+                        style={{ backgroundColor: 'white' }}
+                        component={<Link to="/login"
+                            style={{ display: 'flex', alignItems: 'center', color: 'black', textDecoration: 'none', width:"100%" }} />}
+                        onClick={() => {
+                            localStorage.removeItem("access-token")
+                            setIsLoggedIn(false)
+                            handleMenuItemClick()
+                        }}>
+                        {sidebarCollapsed ? null : 'Déconnexion'}
+                    </MenuItem>
+
+                </Menu>
+            </div>
         </Sidebar >
     )
 }

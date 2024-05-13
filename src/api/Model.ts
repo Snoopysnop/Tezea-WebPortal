@@ -161,7 +161,8 @@ export interface WorkSite {
     request?: WorkSiteRequest ; 
     satisfaction?: SatisfactionLevel;
     signature?: String;
-    title: string;
+    title:string;
+    category?:Category;
 }
 
 export interface User {

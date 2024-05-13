@@ -109,12 +109,14 @@ const WorkSiteDetailPage: React.FC = () => {
   const closeModal = () => {
     setShowModal(false);
   };
-
+  
   const DisplaySignature = () => {
     if (worksite!.signature !== null) {
+      const signatureSubbed:string = worksite!.signature!.substring(1,worksite!.signature!.length-1);
+
       return (
         <img
-          src={`data:image/jpeg;charset=utf-8;base64,${worksite!.signature}`}
+          src={`data:image/jpeg;charset=utf-8;base64,${signatureSubbed}`}
           width={400}
           height={250}
         />
@@ -124,7 +126,6 @@ const WorkSiteDetailPage: React.FC = () => {
   }
 
   const [modalShow, setModalShow] = useState(false);
-  { console.log(`data:image/png;base64, ${worksite!.signature}`) }
   return (
     <Container>
       <Row className='mt-4'></Row>
@@ -135,7 +136,7 @@ const WorkSiteDetailPage: React.FC = () => {
         <Col lg={6}>
           <Card bg="white" text="dark" className="h-100">
             <Card.Body>
-              <Card.Title><h2>Détails du chantier</h2></Card.Title>
+              <Card.Title><h2>Informations générales</h2></Card.Title>
               <Card.Text>
                 <Row className="mb-3">
                   <Col>

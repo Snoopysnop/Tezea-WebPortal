@@ -85,7 +85,7 @@ const LoginPage: React.FC<{setIsLoggedIn: any}> = ({setIsLoggedIn}) => {
                   </InputGroup>
                 </Form.Group>
                 {apiError &&
-                <Container>
+                <Container style={{color:"red"}}>
                  Invalid email or password
 
                 </Container>
