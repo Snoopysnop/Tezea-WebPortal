@@ -166,8 +166,14 @@ const CreateWorkSitePage: React.FC = () => {
   const handleSearchDispo = async () => {
     const currentDate = new Date().toISOString().split('T')[0]; // Date actuelle
 
+    if(title === ''){
+      setError('Veuillez saisir un titre pour le chantier');
+      setIsInitialSelection(true);
+      return;
+    }
+
     if (startTime === '' || endTime === '') {
-      setError('Selectionnez une date de début et une date de fin de chantier');
+      setError('Sélectionnez une date de début et une date de fin de chantier');
       setIsInitialSelection(true);
       return;
     }
@@ -177,7 +183,7 @@ const CreateWorkSitePage: React.FC = () => {
       return;
     }
 
-    if(currentDate > endTime){
+    if(currentDate > endTime){ // possiblement à supprimer ne sert à rien
       setError('La date de fin du chantier doit être postérieure à la date du jour.');
       return;
     }
