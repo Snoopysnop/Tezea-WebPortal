@@ -93,6 +93,19 @@ class MainApi extends AbstractApi {
         }
     }
 
+    public async getUserbyRole(role: string): Promise<User[]> {
+        try {
+            const response = await this.service.get(`/api/users/role`, {
+                params: {
+                    role: role,
+                }
+            });
+            return response.data as User[]
+        } catch (err) {
+            throw AbstractApi.handleError(err)
+        }
+    }
+
     //WorksiteRequest-------------------------------------------------------------------------------------------------------------
 
     public async createWorkSiteRequest(workSiteRequest: WorkSiteRequestJson): Promise<WorkSiteRequestJson> {
@@ -127,6 +140,15 @@ class MainApi extends AbstractApi {
     public async getRandomConcierge(): Promise<User> {
         try {
             const response = await this.service.get(`/api/users/Concierge`)
+            return response.data as User
+        } catch (err) {
+            throw AbstractApi.handleError(err)
+        }
+    }
+
+    public async getRandomSiteChief(): Promise<User> {
+        try {
+            const response = await this.service.get(`/api/users/SiteChief`)
             return response.data as User
         } catch (err) {
             throw AbstractApi.handleError(err)

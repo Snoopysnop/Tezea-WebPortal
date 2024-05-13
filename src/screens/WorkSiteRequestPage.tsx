@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Col, Row, Button, Container } from 'react-bootstrap';
 import { User, WorkSiteRequest, Civility, CustomerStatus, Service, Emergency, Category } from '../api/Model';
 import MainApi from "../api/MainApi"
@@ -13,6 +13,8 @@ const WorkSiteRequestPage: React.FC = () => {
 
   const location = useLocation();
   const updateWorksiteRequest = location.state ? (location.state as any).worksiteRequest as WorkSiteRequest : null;
+
+  const [availableSiteChief, setAvailableSiteChief] = useState<User[]>([]);
 
 
   const [customerFormData, customerSetFormData] = useState({
@@ -104,6 +106,15 @@ const WorkSiteRequestPage: React.FC = () => {
   };
 
 
+  const fetchSiteChiefs = async () => {
+    const response = await MainApi.getInstance().getUserbyRole("SiteChief");
+    setAvailableSiteChief(response);
+  };
+
+  useEffect(() => {
+    fetchSiteChiefs();
+  }, []);
+
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -123,7 +134,10 @@ const WorkSiteRequestPage: React.FC = () => {
       company: customerFormData.customer.company,
     };
 
-    const responseConcierge = await MainApi.getInstance().getRandomConcierge() as User; //todo si on a l'info du user connecté
+    const responseConcierge = await MainApi.getInstance().getRandomConcierge() as User;
+
+    const responseWorksiteChief = await MainApi.getInstance().getRandomSiteChief() as User;
+
 
     if (updateWorksiteRequest) {
       if (updateWorksiteRequest.id && updateWorksiteRequest.customer && updateWorksiteRequest.customer.id !== undefined) {
@@ -132,7 +146,7 @@ const WorkSiteRequestPage: React.FC = () => {
         const worksiteRequestJson: WorkSiteRequestJson = {
           id: undefined,
           concierge: responseConcierge.id,
-          siteChief: updateWorksiteRequest.siteChief ? updateWorksiteRequest.siteChief.id : undefined,
+          siteChief: responseWorksiteChief ? responseWorksiteChief.id : undefined,
           customer: responseCustomer ? responseCustomer.id : '',
           city: worksiteRequestFormData.worksiteRequest.city,
           serviceType: worksiteRequestFormData.worksiteRequest.serviceType ? getServiceJsonFormat(worksiteRequestFormData.worksiteRequest.serviceType) : undefined,
@@ -152,7 +166,6 @@ const WorkSiteRequestPage: React.FC = () => {
           tezeaAffectation: worksiteRequestFormData.worksiteRequest.tezeaAffectation
         };
         const responseWorksiteRequest = await MainApi.getInstance().updateWorksiteRequest(updateWorksiteRequest.id, worksiteRequestJson) as WorkSiteRequestJson;
-
       }
     } else {
 
@@ -161,7 +174,7 @@ const WorkSiteRequestPage: React.FC = () => {
       const worksiteRequestJson: WorkSiteRequestJson = {
         id: undefined,
         concierge: responseConcierge.id,
-        siteChief: undefined,
+        siteChief: responseWorksiteChief ? responseWorksiteChief.id : undefined,
         customer: responseCustomer ? responseCustomer.id : '',
         city: worksiteRequestFormData.worksiteRequest.city,
         serviceType: worksiteRequestFormData.worksiteRequest.serviceType ? getServiceJsonFormat(worksiteRequestFormData.worksiteRequest.serviceType) : undefined,
@@ -180,7 +193,7 @@ const WorkSiteRequestPage: React.FC = () => {
         provider: worksiteRequestFormData.worksiteRequest.provider,
         tezeaAffectation: worksiteRequestFormData.worksiteRequest.tezeaAffectation
       };
-      await MainApi.getInstance().createWorkSiteRequest(worksiteRequestJson) as WorkSiteRequestJson;
+      const rep = await MainApi.getInstance().createWorkSiteRequest(worksiteRequestJson) as WorkSiteRequestJson;
     }
 
     navigate("/worksiteRequestList")
@@ -366,6 +379,20 @@ const WorkSiteRequestPage: React.FC = () => {
                   <Form.Control type="text" placeholder="Entrez le prestataire" value={worksiteRequestFormData.worksiteRequest.provider} onChange={(e) => worksiteRequestSetFormData({ ...worksiteRequestFormData, worksiteRequest: { ...worksiteRequestFormData.worksiteRequest, provider: e.target.value } })} />
                 </Form.Group>
 
+                <Form.Group as={Col} controlId="formGridSiteChief">
+                  <Form.Label>Chef de site</Form.Label>
+                  <Form.Select
+                    name="siteChief"
+                    onChange={handleWorksiteRequestChange}
+                  >
+                    <option value="">Sélectionner un chef de site</option>
+                    {availableSiteChief.map((siteChief) => (
+                      <option key={siteChief.id} value={siteChief.id}>
+                        {siteChief.firstName} {siteChief.lastName}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Form.Group>
 
               </Row>
               <Row className="mb-3" style={{ color: '#008FE3', fontSize: '18px' }}>
