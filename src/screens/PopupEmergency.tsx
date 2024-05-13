@@ -56,12 +56,12 @@ const PopupEmergency: React.FC<PopupEmergencyProps> = ({ showModal, closeModal, 
       <Form onSubmit={handleSubmit}>
   <Form.Group controlId="emergencyName">
     <Form.Label>Nom de l'incident</Form.Label>
-    <Form.Control type="text" placeholder="Entrez le nom de l'urgence" value={emergencyName} onChange={handleEmergencyNameChange} />
+    <Form.Control type="text" placeholder="Entrez le nom de l'incident" value={emergencyName} onChange={handleEmergencyNameChange} />
   </Form.Group>
 
   <Form.Group controlId="description" style={{ marginTop: '15px' }}>
     <Form.Label>Description de l'incident</Form.Label>
-    <Form.Control type="text" placeholder="Entrez la description de l'incident" value={description} onChange={handleDescriptionChange} />
+    <Form.Control type="text" placeholder="Entrez la description de l'urgence" value={description} onChange={handleDescriptionChange} />
   </Form.Group>
 
   <Form.Group controlId="formGridCategorie" style={{ marginTop: '15px' }}>

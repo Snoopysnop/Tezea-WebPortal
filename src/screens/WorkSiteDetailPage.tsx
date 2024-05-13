@@ -4,7 +4,7 @@ import { WorkSite, User, Role, Tool, WorkSiteStatus, SatisfactionLevel, ToolName
 import PopupEmergency from './PopupEmergency';
 import { useLocation } from 'react-router-dom';
 import MainApi from '../api/MainApi';
-import { getCategorie, getCivility, getCustomerStatus, getEmergency, getRole, getServiceType, getStatusName, getStatusWorksite, getStatusWorksiteRequest, getToolName, hasRequieredRoles } from '../common/utils/utils';
+import { formatPhoneNumber, getCategorie, getCivility, getCustomerStatus, getEmergency, getRole, getServiceType, getStatusName, getStatusWorksite, getStatusWorksiteRequest, getToolName, hasRequieredRoles } from '../common/utils/utils';
 import WorkSiteRequestPopUp from '../components/WorkSiteRequestPopUp';
 import { CustomerJson, WorkSiteJson, WorkSiteRequestJson } from '../api/ModelJson';
 
@@ -159,13 +159,13 @@ const WorkSiteDetailPage: React.FC = () => {
                   <Col>
                     <Form.Group>
                       <Form.Label>Date de début :</Form.Label>
-                      <Form.Control type="text" value={new Date(worksite!.begin).toLocaleString()} readOnly />
+                      <Form.Control type="text" value={new Date(worksite!.begin).toLocaleString().slice(0, -3)} readOnly />
                     </Form.Group>
                   </Col>
                   <Col>
                     <Form.Group>
                       <Form.Label>Date de fin :</Form.Label>
-                      <Form.Control type="text" value={new Date(worksite!.end).toLocaleString()} readOnly />
+                      <Form.Control type="text" value={new Date(worksite!.end).toLocaleString().slice(0, -3)} readOnly />
                     </Form.Group>
                   </Col>
                 </Row>
@@ -234,7 +234,7 @@ const WorkSiteDetailPage: React.FC = () => {
                       <td>{user.lastName}</td>
                       <td>{getRole(user.role)}</td>
                       <td>{user.email}</td>
-                      <td>{user.phoneNumber}</td>
+                      <td>{formatPhoneNumber(user.phoneNumber)}</td>
                     </tr>
                   ))}
                 </tbody>

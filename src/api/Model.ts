@@ -12,7 +12,8 @@ export enum Category {
     LeBioAVotrePorte = "Le Bio A Votre Porte",
     DonDePlasmaEtDeSang = "Don De Plasma Et De Sang",
     RelaisColis = "Relais Colis",
-    LocationVelosElectriques = "Location Velos Electriques"
+    LocationVelosElectriques = "Location Velos Electriques",
+    Undefined = "Undefined"
 }
 
 export enum ToolName{

@@ -495,3 +495,14 @@ export function hashPassword(password: string): string {
     return CryptoJS.SHA256(password).toString();
 }
 
+export function formatPhoneNumber(phoneNumber: string) {
+    phoneNumber = phoneNumber.replace(/\D/g, '');
+    let formattedNumber = '';
+    for (let i = 0; i < phoneNumber.length; i++) {
+        if (i > 0 && i % 2 === 0) {
+            formattedNumber += '.';
+        }
+        formattedNumber += phoneNumber.charAt(i);
+    }
+    return formattedNumber;
+}

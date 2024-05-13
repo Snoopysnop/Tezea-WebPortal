@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Row, Col, Table, InputGroup, Button, Form, Dropdown } from 'react-bootstrap';
+import { Container, Row, Col, Table, Form, Dropdown } from 'react-bootstrap';
 import { Category, WorkSite, WorkSiteStatus } from '../api/Model';
-import TaskComponent from './WorkSiteComponent';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 import WorkSiteComponent from './WorkSiteComponent';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import MainApi from '../api/MainApi';
 import { getStatusWorksite } from '../common/utils/utils';
 import { WorkSiteJson } from '../api/ModelJson';
-
-
 
 
 const WorkSitesListStatusPage: React.FC = () => {
@@ -31,8 +28,6 @@ const WorkSitesListStatusPage: React.FC = () => {
   };
 
   const [modalShow, setModalShow] = useState(false);
-
-
 
   const [filteredTasks, setFilteredTasks] = useState<WorkSite[]>([]);
 
@@ -169,9 +164,7 @@ const WorkSitesListStatusPage: React.FC = () => {
                   .filter(task => task.status === WorkSiteStatus.Standby)
                   .map(task => (
                     <WorkSiteComponent
-                      id={task.id}
                       name={task.title}
-                      date={task.begin.toLocaleString()}
                       startHours={task.begin.toLocaleString()}
                       endHour={task.end.toLocaleString()}
                       status={task.status}
@@ -187,9 +180,7 @@ const WorkSitesListStatusPage: React.FC = () => {
                   .filter(task => task.status === WorkSiteStatus.InProgress)
                   .map(task => (
                     <WorkSiteComponent
-                      id={task.id}
                       name={task.title}
-                      date={task.begin.toLocaleString()}
                       startHours={task.begin.toLocaleString()}
                       endHour={task.end.toLocaleString()}
                       status={task.status}
@@ -205,9 +196,7 @@ const WorkSitesListStatusPage: React.FC = () => {
                   .filter(task => task.status === WorkSiteStatus.Done)
                   .map(task => (
                     <WorkSiteComponent
-                      id={task.id}
                       name={task.title}
-                      date={task.begin.toLocaleString()}
                       startHours={task.begin.toLocaleString()}
                       endHour={task.end.toLocaleString()}
                       status={task.status}
@@ -223,9 +212,7 @@ const WorkSitesListStatusPage: React.FC = () => {
                   .filter(task => task.status === WorkSiteStatus.Archive)
                   .map(task => (
                     <WorkSiteComponent
-                      id={task.id}
                       name={task.title}
-                      date={task.begin.toLocaleString()}
                       startHours={task.begin.toLocaleString()}
                       endHour={task.end.toLocaleString()}
                       status={task.status}

@@ -25,10 +25,10 @@ const WorkSiteListRequestPage: React.FC = () => {
     }
   }, [location.state])
 
-
   const [filterValue, setFilterValue] = useState<string>("");
 
   const allStatus: WorkSiteRequestStatus[] = Object.values(WorkSiteRequestStatus);
+
   const [selectedStatus, setSelectedStatus] = useState<WorkSiteRequestStatus[]>([]);
 
   const [checkboxes, setCheckboxes] = useState<{ [key in WorkSiteRequestStatus]?: boolean }>({});
@@ -39,7 +39,6 @@ const WorkSiteListRequestPage: React.FC = () => {
 
     setSelectedStatus(Object.keys(updatedCheckboxes).filter(key => updatedCheckboxes[key as WorkSiteRequestStatus]) as WorkSiteRequestStatus[]);
   };
-
 
   const [modalShow, setModalShow] = useState(false);
   const [worksiteRequestData, setWorksiteRequestData] = useState<WorkSiteRequest>();
@@ -62,7 +61,7 @@ const WorkSiteListRequestPage: React.FC = () => {
       description: worksiteRequestJson.description,
       emergency: worksiteRequestJson.emergency ? getEmergency(worksiteRequestJson.emergency) : undefined,
       title: worksiteRequestJson.title,
-      category: undefined,
+      category: worksiteRequestJson.category as Category,
       removal: worksiteRequestJson.removal,
       delivery: worksiteRequestJson.delivery,
       removalRecycling: worksiteRequestJson.removalRecycling,
@@ -84,6 +83,7 @@ const WorkSiteListRequestPage: React.FC = () => {
 
   useEffect(() => {
     if (dataFetched) {
+      console.log(dataFetched)
       setFilteredTasks(dataFetched.filter(task => (task.title?.toLowerCase() ?? '').includes(filterValue.toLowerCase())))
     
       handleRefreshStatus(dataFetched)
@@ -257,7 +257,7 @@ const WorkSiteListRequestPage: React.FC = () => {
                             date={task.estimatedDate?.toLocaleString() ?? ''}
                             city={task.city ?? ''}
                             status={task.requestStatus ?? WorkSiteRequestStatus.ToComplete}
-                            category={Category.CreaPalette}
+                            category={task.category ? task.category : Category.Undefined}
                             onClick={() => handleTaskClick(Number(task.id))}
                           />
                         </Col>
@@ -275,7 +275,7 @@ const WorkSiteListRequestPage: React.FC = () => {
                             date={task.estimatedDate?.toLocaleString() ?? ''}
                             city={task.city ?? ''}
                             status={task.requestStatus ?? WorkSiteRequestStatus.Standby}
-                            category={Category.CreaPalette}
+                            category={task.category ? task.category : Category.Undefined}
                             onClick={() => handleTaskClick(Number(task.id))}
                           />
                         </Col>
@@ -292,7 +292,7 @@ const WorkSiteListRequestPage: React.FC = () => {
                             date={task.estimatedDate?.toLocaleString() ?? ''}
                             city={task.city ?? ''}
                             status={task.requestStatus ?? WorkSiteRequestStatus.Done}
-                            category={Category.CreaPalette}
+                            category={task.category ? task.category : Category.Undefined}
                             onClick={() => handleTaskClick(Number(task.id))}
                           />
                         </Col>
@@ -309,7 +309,7 @@ const WorkSiteListRequestPage: React.FC = () => {
                             date={task.estimatedDate?.toLocaleString() ?? ''}
                             city={task.city ?? ''}
                             status={task.requestStatus ?? WorkSiteRequestStatus.Archive}
-                            category={Category.CreaPalette}
+                            category={task.category ? task.category : Category.Undefined}
                             onClick={() => handleTaskClick(Number(task.id))}
                           />
                         </Col>
