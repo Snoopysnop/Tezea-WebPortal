@@ -6,7 +6,7 @@ export interface EmergencyDetailsJson {
     id?: string ,
     level: string,
     title: string,
-    evidences? : any[],
+    evidences? : string[],
     workSiteId? : string
 }
 

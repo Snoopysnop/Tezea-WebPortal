@@ -102,6 +102,7 @@ export interface EmergencyDetails {
     level: IncidentLevel,
     worksite?: WorkSite
     title: string,
+    evidences? : string[],
 }
 
 

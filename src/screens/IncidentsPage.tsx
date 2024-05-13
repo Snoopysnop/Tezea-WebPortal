@@ -29,6 +29,7 @@ const IncidentsPage: React.FC = () => {
       title: emergencyDetailsJson.title,
       id: emergencyDetailsJson.id ? emergencyDetailsJson.id : '',
       level: emergencyDetailsJson ? getIncidentLevel(emergencyDetailsJson.level) : IncidentLevel.Minor,
+      evidences: emergencyDetailsJson.evidences,
       worksite: undefined
     }));
 
@@ -100,6 +101,7 @@ const IncidentsPage: React.FC = () => {
       title: emergencyDetailsJson.title,
       id: emergencyDetailsJson.id || '', 
       level: getIncidentLevel(emergencyDetailsJson.level),
+      evidences: emergencyDetailsJson.evidences,
       worksite: undefined
     }));
     // Mise à jour de l'état avec les données transformées
@@ -176,6 +178,7 @@ const IncidentsPage: React.FC = () => {
                         emergency={IncidentLevel.Minor}
                         category={Category.CreaPalette}
                         title={task.title}
+                        evidences={task.evidences}
                       />
                     ))}
                 </td>
@@ -191,6 +194,7 @@ const IncidentsPage: React.FC = () => {
                         emergency={IncidentLevel.Medium}
                         category={Category.CreaPalette}
                         title={task.title}
+                        evidences={task.evidences}
                       />
                     ))}
                 </td>
@@ -206,6 +210,7 @@ const IncidentsPage: React.FC = () => {
                         emergency={IncidentLevel.Severe}
                         category={Category.CreaPalette}
                         title={task.title}
+                        evidences={task.evidences}
                       />
                     ))}
                 </td>
@@ -221,6 +226,7 @@ const IncidentsPage: React.FC = () => {
                         emergency={IncidentLevel.Blocking}
                         category={Category.CreaPalette}
                         title={task.title}
+                        evidences={task.evidences}
                       />
                     ))}
                 </td>

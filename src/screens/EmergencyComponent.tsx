@@ -9,10 +9,11 @@ type EmergencyProps = {
     description: string;
     emergency: IncidentLevel;
     category: Category;
-    title: string
+    title: string;
+    evidences: string[] | undefined
 };
 
-const EmergencyComponent: React.FC<EmergencyProps> = ({ description, emergency, title }) => {
+const EmergencyComponent: React.FC<EmergencyProps> = ({ description, emergency, title, evidences }) => {
     const [showModal, setShowModal] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
 
@@ -21,6 +22,14 @@ const EmergencyComponent: React.FC<EmergencyProps> = ({ description, emergency, 
 
     const handleMouseEnter = () => setIsHovered(true);
     const handleMouseLeave = () => setIsHovered(false);
+
+
+
+
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const handleImageClick = (image: string) => {
+        setSelectedImage(image);
+    };
 
     const handleClick = () => {
         setIsHovered(false);
@@ -45,7 +54,7 @@ const EmergencyComponent: React.FC<EmergencyProps> = ({ description, emergency, 
             <Row onClick={handleModalOpen}>
                 <Col lg={6}>
                     <Row>
-                        <Col lg={1} className='pe-1' style={{minHeight: '40px', backgroundColor: getIncidentLevelColor(emergency)}}>
+                        <Col lg={1} className='pe-1' style={{ minHeight: '40px', backgroundColor: getIncidentLevelColor(emergency) }}>
                         </Col>
                         <Col lg={10} className='primary d-flex justify-content-center align-items-center ps-3 pe-0' style={{ fontSize: '12px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                             {title}
@@ -72,6 +81,7 @@ const EmergencyComponent: React.FC<EmergencyProps> = ({ description, emergency, 
 
 
 
+
             <Modal show={showModal} onHide={handleModalClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>{title}</Modal.Title>
@@ -79,12 +89,47 @@ const EmergencyComponent: React.FC<EmergencyProps> = ({ description, emergency, 
                 <Modal.Body>
                     <p>{description}</p>
                 </Modal.Body>
+                
+
+                <Modal.Body>
+                    
+                    <Row>
+                        {evidences &&
+                            evidences.map((image, index) => (
+                                
+                                <Col key={index} xs={4}>
+                                    <img
+                                        src={`data:image/jpeg;charset=utf-8;base64,${image.substring(1, image.length - 1)}`}
+                                        alt={`Image ${index}`}
+                                        onClick={() => handleImageClick(image)}
+                                        style={{ width: '140px', height: '100px', cursor: 'pointer', marginBottom: '20px' }}
+                                    />
+                                </Col>
+                            ))}
+                    </Row>
+                    {selectedImage && (
+                        <Modal
+                            show={!!selectedImage}
+                            onHide={() => setSelectedImage(null)}
+                            centered
+                        >
+                            <Modal.Body className="d-flex justify-content-center align-items-center">
+                                <img
+                                    src={`data:image/jpeg;charset=utf-8;base64,${selectedImage.substring(1, selectedImage.length - 1)}`}
+                                    alt="Selected Image"
+                                    style={{ maxWidth: '200%', maxHeight: '200%' }}
+                                />
+                            </Modal.Body>
+                        </Modal>
+                    )}
+                </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleModalClose}>
                         Fermer
                     </Button>
                 </Modal.Footer>
             </Modal>
+
         </Container>
     );
 }
