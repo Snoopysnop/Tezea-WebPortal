@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Table, Form, Dropdown } from 'react-bootstrap';
-import { Category, WorkSite, WorkSiteStatus } from '../api/Model';
+import { Category, WorkSite, WorkSiteRequest, WorkSiteStatus } from '../api/Model';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 import WorkSiteComponent from './WorkSiteComponent';
 import { useNavigate } from 'react-router-dom';
 import MainApi from '../api/MainApi';
-import { getStatusWorksite } from '../common/utils/utils';
-import { WorkSiteJson } from '../api/ModelJson';
+import { getStatusWorksite, getCategorie} from '../common/utils/utils';
+import { WorkSiteJson, WorkSiteRequestJson } from '../api/ModelJson';
 
 
 const WorkSitesListStatusPage: React.FC = () => {
@@ -36,7 +36,7 @@ const WorkSitesListStatusPage: React.FC = () => {
 
   const handleListWorksite = async () => {
     const responseWorksite = await MainApi.getInstance().getWorkSites() as WorkSiteJson[];
-
+    
     const worksiteMapper: WorkSite[] = responseWorksite.map(worksiteJson => ({
       id: worksiteJson.id!,
       workSiteChief: undefined,
@@ -49,13 +49,15 @@ const WorkSitesListStatusPage: React.FC = () => {
       satisfaction: worksiteJson.satisfaction,
       signature: worksiteJson.signature,
       title: worksiteJson.title ? worksiteJson.title : '',
-      address: worksiteJson.address ? worksiteJson.address : ''
+      address: worksiteJson.address ? worksiteJson.address : '',
+      category: worksiteJson.category ? getCategorie(worksiteJson.category) : Category.Undefined,
     }));
 
     const reversedData = worksiteMapper.reverse();
 
     setDataFetched(reversedData);
   }
+  
 
   useEffect(() => {
     handleListWorksite()
@@ -67,17 +69,15 @@ const WorkSitesListStatusPage: React.FC = () => {
     }
   }, [dataFetched, filterValue])
 
-
-
   // Fonction pour gérer le clic sur un élément
   const handleTaskClick = async (task: any) => {
 
     const worksiteData = await MainApi.getInstance().getWorksitebyId(task.id) as WorkSiteJson;
     navigate("/worksiteDetails", { state: { worksiteData } })
 
-
     setModalShow(true);
   };
+
   //Use effect pour refresh les checkbox en temps réel
   useEffect(() => {
     const updatedCheckboxes: { [key in WorkSiteStatus]?: boolean } = {};
@@ -171,7 +171,7 @@ const WorkSitesListStatusPage: React.FC = () => {
                       startHours={task.begin.toLocaleString()}
                       endHour={task.end.toLocaleString()}
                       status={task.status}
-                      category={Category.CreaPalette}
+                      category={task.category!}
                       onClick={() => handleTaskClick(task)}
                     />
                   ))}
@@ -187,7 +187,7 @@ const WorkSitesListStatusPage: React.FC = () => {
                       startHours={task.begin.toLocaleString()}
                       endHour={task.end.toLocaleString()}
                       status={task.status}
-                      category={Category.CreaPalette}
+                      category={task.category!}
                       onClick={() => handleTaskClick(task)}
                     />
                   ))}
@@ -203,7 +203,7 @@ const WorkSitesListStatusPage: React.FC = () => {
                       startHours={task.begin.toLocaleString()}
                       endHour={task.end.toLocaleString()}
                       status={task.status}
-                      category={Category.CreaPalette}
+                      category={task.category!}
                       onClick={() => handleTaskClick(task)}
                     />
                   ))}
@@ -219,7 +219,7 @@ const WorkSitesListStatusPage: React.FC = () => {
                       startHours={task.begin.toLocaleString()}
                       endHour={task.end.toLocaleString()}
                       status={task.status}
-                      category={Category.CreaPalette}
+                      category={task.category!}
                       onClick={() => handleTaskClick(task)}
                     />
                   ))}

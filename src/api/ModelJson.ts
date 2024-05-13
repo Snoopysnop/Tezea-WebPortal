@@ -70,7 +70,7 @@ export interface WorkSiteJsonChelou {
     status?: WorkSiteStatus;
     workSiteRequest?: number | undefined; 
     satisfaction?: SatisfactionLevel;
-    signature?: String;
+    signature?: string;
     title?: string;
     address?:string
 }
@@ -85,9 +85,10 @@ export interface WorkSiteJson {
     status?: WorkSiteStatus;
     workSiteRequest?: number | undefined; //todo a voir si on laisse undefined
     satisfaction?: SatisfactionLevel;
-    signature?: String;
+    signature?: string;
     title?: string;
-    address?:string
+    address?:string;
+    category?:string;
 }
 
 export interface UserJson {

@@ -19,7 +19,6 @@ function App() {
     backgroundColor: "rgba(0, 0, 0, 0.2)", // Réduisez l'opacité pour abaisser la luminosité
     zIndex: 999, // Assurez-vous que la superposition est au-dessus de la barre latérale mais en dessous du contenu
     backdropFilter: "blur(8px)", // Floutez le contenu sous l'overlay
-    pointerEvents: "none",
   };
 
   useEffect(() => {
