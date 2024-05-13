@@ -7,7 +7,7 @@ import MainApi from './MainApi';
 import { Role, User } from './Model';
 
 const standaloneInstance = axios.create({
-    baseURL: process.env.REACT_APP_KEYCLOAK_URL,
+    baseURL: process.env.REACT_APP_URL,
     timeout: 60000
 })
 
@@ -28,7 +28,7 @@ class KeycloakApi extends AbstractApi {
     }
 
     public static initInstance(): void {
-        KeycloakApi.instance = new KeycloakApi(process.env.REACT_APP_KEYCLOAK_URL as any)
+        KeycloakApi.instance = new KeycloakApi(process.env.REACT_APP_URL as any)
     }
 
     public static isTokenValid(): boolean {
