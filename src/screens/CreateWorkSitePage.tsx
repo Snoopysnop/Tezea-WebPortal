@@ -164,17 +164,30 @@ const CreateWorkSitePage: React.FC = () => {
 
 
   const handleSearchDispo = async () => {
+    const currentDate = new Date().toISOString().split('T')[0]; // Date actuelle
 
-    if (new Date(startTime) > new Date(endTime)) {
-      setError('La date de début doit être antérieure à la date de fin.');
-      setIsInitialSelection(true);
-      return;
-    }
     if (startTime === '' || endTime === '') {
       setError('Selectionnez une date de début et une date de fin de chantier');
       setIsInitialSelection(true);
       return;
     }
+
+    if(startTime < currentDate){
+      setError('La date de début du chantier doit être postérieure à la date du jour.');
+      return;
+    }
+
+    if(currentDate > endTime){
+      setError('La date de fin du chantier doit être postérieure à la date du jour.');
+      return;
+    }
+
+    if (new Date(startTime) >= new Date(endTime)) {
+      setError('La date de début doit être antérieure à la date de fin.');
+      setIsInitialSelection(true);
+      return;
+    }
+   
     setError('')
 
     setSelectedStaff([]);
@@ -229,7 +242,7 @@ const CreateWorkSitePage: React.FC = () => {
     const minutes = parseInt(parts[1]);
     const formattedHours = hours < 10 ? `0${hours}` : hours;
     const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-    return `${formattedHours}H${formattedMinutes}`;
+    return `${formattedHours}h${formattedMinutes}`;
   }
 
   return (
@@ -274,7 +287,7 @@ const CreateWorkSitePage: React.FC = () => {
                 <Row className="mb-5"></Row>
 
                 <Row className="mb-5">
-                  <h2>Selectionner une période pour le chantier :</h2>
+                  <h2>Sélectionner une période pour le chantier :</h2>
                 </Row>
                 <Row className="justify-content-md-center">
                   <Col md="auto">
@@ -284,11 +297,11 @@ const CreateWorkSitePage: React.FC = () => {
                           <Form.Group controlId="startTime">
                             <Form.Label>Début du chantier</Form.Label>
                             <Form.Control
+                              as="input"
                               type="datetime-local"
                               value={startTime}
-                              onChange={e => setStartTime(e.target.value)}
+                              onChange={(e) => setStartTime(e.target.value)}
                               style={{ height: '50px', width: '500px', fontSize: '20px', cursor: 'pointer' }}
-                              min={new Date().toISOString().split('.')[0]}
                             />
                           </Form.Group>
                         </Col>
@@ -296,11 +309,11 @@ const CreateWorkSitePage: React.FC = () => {
                           <Form.Group controlId="endTime">
                             <Form.Label>Fin du chantier</Form.Label>
                             <Form.Control
+                              as="input"
                               type="datetime-local"
                               value={endTime}
-                              onChange={e => setEndTime(e.target.value)}
+                              onChange={(e) => setEndTime(e.target.value)}
                               style={{ height: '50px', width: '500px', fontSize: '20px', cursor: 'pointer' }}
-                              min={new Date().toISOString().split('.')[0]}
                             />
                           </Form.Group>
                         </Col>
@@ -324,7 +337,7 @@ const CreateWorkSitePage: React.FC = () => {
                 <Tab eventKey="personnel" title={'Sélectionner le personnel'} style={{ width: '100%' }}>
                   <Row className="mb-3"></Row>
                   <Row className="mb-5">
-                    <h2>Selectionner le personnel nécessaire au chantier :</h2>
+                    <h2>Sélectionner le personnel nécessaire au chantier :</h2>
                   </Row>
                   <Container style={{ height: '300px' }}>
                     <Row className="mt-3">
@@ -442,7 +455,7 @@ const CreateWorkSitePage: React.FC = () => {
                 <Tab eventKey="outilage" title={'Sélectionner l\'outillage'} style={{ width: '100%' }}>
                   <Row className="mb-3"></Row>
                   <Row className="mb-5">
-                    <h2>Selectionner les outils nécessaires au chantier :</h2>
+                    <h2>Sélectionner les outils nécessaires au chantier :</h2>
                   </Row>
                   <div className="autocomplete-container" style={{ position: "relative", zIndex: 2 }}>
                     <ReactSearchAutocomplete
