@@ -86,7 +86,6 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      {/*TODO fix le css ici*/}
       <Modal.Header closeButton>
         <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
           <Modal.Title style={{ display: "flex", alignItems: "center", justifyContent: "center" }} id="contained-modal-title-vcenter">Recapitulatif demande n° {worksiteRequest?.id} </Modal.Title>
@@ -96,7 +95,6 @@ const WorkSiteRequestPopUp: React.FC<ModalProps> = (props) => {
       <Modal.Body>
         <Container className=" mt-2" style={{ borderColor: '#f3f3f3', borderStyle: 'solid', borderWidth: '2px', borderRadius: '20px' }}>
           <Row>
-            {JSON.stringify(worksiteRequest)}
             <Col className='m-3'>
               <Row className="mb-4" style={{ color: '#008FE3', fontSize: '25px' }}>Informations du client : </Row>
 
