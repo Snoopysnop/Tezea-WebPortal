@@ -1,11 +1,8 @@
-import { Outlet, Navigate, Link } from 'react-router-dom'
+import { Outlet, Navigate } from 'react-router-dom'
 import KeycloakApi from '../../api/KeycloakApi'
 import { Role } from '../../api/Model'
-import { jwtDecode } from "jwt-decode";
-import { decodeToken } from 'react-jwt';
 import { Container } from 'react-bootstrap';
 import { hasRequieredRoles } from '../../common/utils/utils';
-import { isTokenExpired } from 'react-jwt/dist/jwt';
 
 interface ProtectedRouteProps {
     roles: Role[]

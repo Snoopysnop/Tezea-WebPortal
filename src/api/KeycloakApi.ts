@@ -78,6 +78,34 @@ class KeycloakApi extends AbstractApi {
             throw AbstractApi.handleError(err)
         }
     }
+
+    public async createUser(email: string, firstname: string, lastname: string, phoneNumber: string, role: Role, password: string): Promise<void> {
+        try {
+            const hashedPassword = hashPassword(password);
+            const user: User = {
+                email: email, 
+                firstName: firstname, 
+                lastName: lastname, 
+                phoneNumber: phoneNumber, 
+                role: getRole(role)
+            }
+            const formData = new FormData();
+            formData.append('user', new Blob([JSON.stringify(user)], { type: "application/json" }));
+            formData.append('password', hashedPassword);
+            const token = await KeycloakApi.getInstance().getToken()
+            await this.service.post("/api/users/create", formData, {
+                headers: { 
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': 'Bearer ' + token
+                },
+            });
+            console.log('User created');
+
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    };
 }
 
 export default KeycloakApi

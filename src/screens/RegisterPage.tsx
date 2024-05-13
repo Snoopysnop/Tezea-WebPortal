@@ -35,7 +35,7 @@ const RegisterPage: React.FC = () => {
                 onSubmit={async (values) => {
                     try {
                         setApiError(undefined)
-                        await MainApi.getInstance().createUser(values.email, values.firstName, values.lastName, values.phoneNumber, values.role, values.password)
+                        await KeycloakApi.getInstance().createUser(values.email, values.firstName, values.lastName, values.phoneNumber, values.role, values.password)
                         navigate("/login")
 
                     } catch (err) {
