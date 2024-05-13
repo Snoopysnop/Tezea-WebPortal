@@ -56,7 +56,7 @@ const SidebarComponent: React.FC<{ setIsLoggedIn: any, sidebarCollapsed: any, se
                 left: 0,
                 height: "100vh",
                 zIndex: 1000,
-                backgroundColor: "#fff"
+                backgroundColor: "#008FE3"
             }}
             id="sidebar"
         >

@@ -4,16 +4,27 @@ import { User, Role } from '../api/Model';
 import { useLocation } from 'react-router-dom';
 import { formatPhoneNumber, getRoleName } from '../common/utils/utils';
 import MainApi from '../api/MainApi';
+import { decodeToken } from 'react-jwt';
 
 const SettingsPage: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [user, setUser] = useState<User | undefined>(undefined);
 
+  const token = () => {
+   
+  }
+
   useEffect(() => {
     const fetchUser = async () => {
-      const user = await MainApi.getInstance().getRandomConcierge() as User;
-      console.log(user)
-      if (user) setUser(user)
+      const item = localStorage.getItem("access-token")
+      if(item){
+        const decodedItem = decodeToken(item) as { [key: string]: any };
+        const email = decodedItem["preferred_username"] as string;
+        const user = await MainApi.getInstance().getUserbyEmail(email) as User;
+        if (user) setUser(user)
+
+      }
+      
     }
     fetchUser()
   }, [])

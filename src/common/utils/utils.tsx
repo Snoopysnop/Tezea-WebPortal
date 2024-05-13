@@ -25,7 +25,7 @@ export function getStatusColor(status: WorkSiteStatus): string {
         case WorkSiteStatus.InProgress:
             return '#24a6d1';
         case WorkSiteStatus.Done:
-            return '#6bc238';
+            return '#8FBE40';
         case WorkSiteStatus.Archive:
             return '#FFB6C1';
         default:
@@ -53,7 +53,7 @@ export function getRequestStatusColor(status: WorkSiteRequestStatus): string {
         case WorkSiteRequestStatus.Standby:
             return '#ebab34';
         case WorkSiteRequestStatus.Done:
-            return '#6bc238';
+            return '#8FBE40';
         case WorkSiteRequestStatus.Archive:
             return '#d12424';
         case WorkSiteRequestStatus.ToComplete:
@@ -96,11 +96,11 @@ export function getRoleName(role: string): string {
 export function getIncidentLevelColor(status: IncidentLevel): string {
     switch (status) {
         case IncidentLevel.Minor:
-            return '#008000';
+            return '#8FBE40';
         case IncidentLevel.Medium:
-            return '#FFFF00';
+            return '#FFED8A';
         case IncidentLevel.Severe:
-            return '#FF0000';
+            return '#E15656';
         case IncidentLevel.Blocking:
             return '#000000';
         default:
@@ -171,8 +171,8 @@ export function getRole(status: string) {
             return Role.Employee;
         case "Concierge":
             return Role.Concierge;
-        case "Chef de site":
-            return Role.WorkSiteChief;
+        case "SiteChief":
+            return Role.SiteChief;
         case "Commercial":
             return Role.Commercial;
         default:

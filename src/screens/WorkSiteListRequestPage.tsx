@@ -11,7 +11,7 @@ import WorkSiteComponent from './WorkSiteComponent';
 import MainApi from "../api/MainApi"
 import WorkSiteRequestComponent from './WorkSiteRequestComponent';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getCivility, getCivilityJsonFormat, getCustomerStatus, getCustomerStatusJsonFormat, getEmergency, getIncidentLevel, getStatusWorksiteRequest, hasRequieredRoles } from '../common/utils/utils';
+import { getCategorie, getCivility, getCivilityJsonFormat, getCustomerStatus, getCustomerStatusJsonFormat, getEmergency, getIncidentLevel, getServiceType, getStatusWorksiteRequest, hasRequieredRoles } from '../common/utils/utils';
 
 const WorkSiteListRequestPage: React.FC = () => {
 
@@ -141,11 +141,11 @@ const WorkSiteListRequestPage: React.FC = () => {
       customer: customerMapper,
       city: responseWorksiteRequest.city,
       workSites: undefined,
-      serviceType: undefined,
+      serviceType: responseWorksiteRequest.serviceType ? getServiceType(responseWorksiteRequest.serviceType) : undefined,
       description: responseWorksiteRequest.description,
       emergency: responseWorksiteRequest.emergency ? getEmergency(responseWorksiteRequest.emergency) : undefined,
       title: responseWorksiteRequest.title,
-      category: undefined,
+      category: responseWorksiteRequest.category ? getCategorie(responseWorksiteRequest.category) : undefined,
       removal: responseWorksiteRequest.removal,
       delivery: responseWorksiteRequest.delivery,
       removalRecycling: responseWorksiteRequest.removalRecycling,

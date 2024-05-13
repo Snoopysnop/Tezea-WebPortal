@@ -6,7 +6,7 @@ import { User, Tool, WorkSiteStatus, SatisfactionLevel, TimeLine, WorkSiteReques
 import { Envelope, Telephone, Search } from 'react-bootstrap-icons';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 import MainApi from '../api/MainApi';
-import { getToolName } from '../common/utils/utils';
+import { getRole, getRoleName, getToolName } from '../common/utils/utils';
 import WorkSiteRequestPopUp from '../components/WorkSiteRequestPopUp';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { WorkSiteJson, WorkSiteJsonChelou } from '../api/ModelJson';
@@ -345,7 +345,7 @@ const CreateWorkSitePage: React.FC = () => {
                               <Card.Body className="text-center" style={{ color: '#0D6EFD' }}>
                                 <Card.Title>{selectedWorksiteChief.firstName} {selectedWorksiteChief.lastName}</Card.Title>
                                 <Card.Text>
-                                  {selectedWorksiteChief.role}
+                                  {getRoleName(selectedWorksiteChief.role)}
                                 </Card.Text>
                               </Card.Body>
                             </Container>
@@ -383,11 +383,12 @@ const CreateWorkSitePage: React.FC = () => {
                       <Col xs={1}></Col>
                       <Col xs={3} className="d-flex justify-content-between align-items-end">
                         <div>
-                          <h4>Sélection aléatoire :</h4>
+                          <h4>Sélection rapide :</h4>
                           <Form.Group controlId="numRandomStaff" style={{ width: '200px' }}>
                             <Form.Control
                               type="number"
                               min={1}
+                              max={availableStaff.length}
                               value={numRandomStaff}
                               onChange={(e) => setNumRandomStaff(parseInt(e.target.value))}
                             />
@@ -407,7 +408,7 @@ const CreateWorkSitePage: React.FC = () => {
                                     <Card.Body className="text-center" style={{ color: '#0D6EFD' }}>
                                       <Card.Title>{user.firstName} {user.lastName}</Card.Title>
                                       <Card.Text>
-                                        {user.role}
+                                        {getRoleName(user.role)}
                                       </Card.Text>
                                     </Card.Body>
                                   </Container>
@@ -639,7 +640,7 @@ const CreateWorkSitePage: React.FC = () => {
                       <Row className="mb-5"></Row>
                       <Row>
                         <Col className="text-center mt-3">
-                          <Button variant="success" onClick={handleCreateWorkSite} style={{ fontSize: '20px', width: '330px' }}>
+                          <Button variant="primary" onClick={handleCreateWorkSite} style={{ fontSize: '20px', width: '330px' }}>
                             Créer le chantier
                           </Button>
                           <Row className="mb-3"></Row>

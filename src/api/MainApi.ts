@@ -80,6 +80,19 @@ class MainApi extends AbstractApi {
         }
     };
 
+    public async getUserbyEmail(email: string): Promise<User> {
+        try {
+            const response = await this.service.get(`/api/users/email`, {
+                params: {
+                    email: email,
+                }
+            });
+            return response.data as User
+        } catch (err) {
+            throw AbstractApi.handleError(err)
+        }
+    }
+
     //WorksiteRequest-------------------------------------------------------------------------------------------------------------
 
     public async createWorkSiteRequest(workSiteRequest: WorkSiteRequestJson): Promise<WorkSiteRequestJson> {

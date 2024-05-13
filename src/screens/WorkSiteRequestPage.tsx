@@ -253,7 +253,7 @@ const WorkSiteRequestPage: React.FC = () => {
               </Row>
               <Row className="mb-3" style={{ color: '#008FE3', fontSize: '18px' }}>
                 <Form.Group as={Col} controlId="formGridStatus">
-                  <Form.Label >Status</Form.Label>
+                  <Form.Label >Statut</Form.Label>
                   <Form.Select name="status" value={customerFormData.customer.status} onChange={handleCustomerChange} >
                     {Object.keys(CustomerStatus).map((key) => (
                       <option key={key} value={CustomerStatus[key as keyof typeof CustomerStatus]}>
@@ -284,7 +284,7 @@ const WorkSiteRequestPage: React.FC = () => {
                   <Form.Control type="title" placeholder="Entrez le nom de la demande de chantier" value={worksiteRequestFormData.worksiteRequest.title} onChange={handleWorksiteRequestChange} name="title" required />
                 </Form.Group>
                 <Form.Group as={Col} xs={4} controlId="formGridCity">
-                  <Form.Label >Lieu (ville)</Form.Label>
+                  <Form.Label >Ville</Form.Label>
                   <Form.Control type="city" placeholder="Entrez le nom du lieu" value={worksiteRequestFormData.worksiteRequest.city} onChange={handleWorksiteRequestChange} name="city" />
                 </Form.Group>
                 <Form.Group as={Col} xs={2} controlId="formGridEmergency">
@@ -385,7 +385,7 @@ const WorkSiteRequestPage: React.FC = () => {
         </Container>
         <Row className="mb-5"></Row>
         <Row className="mb-5" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <Button variant="success" type="submit" style={{ width: '600px', alignItems: 'center' }}>
+          <Button variant="primary" type="submit" style={{ width: '600px', alignItems: 'center' }}>
             {updateWorksiteRequest ? 'Soumettre la modification' : 'Soumettre la création'}
           </Button>
         </Row>
