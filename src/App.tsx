@@ -4,6 +4,7 @@ import Navigation from './components/Navigation/Navigation';
 import SidebarComponent from './screens/SidebarComponent';
 import KeycloakApi from './api/KeycloakApi';
 import { useEffect, useState } from 'react';
+import MainApi from './api/MainApi';
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
 
   useEffect(() => {
     KeycloakApi.initInstance()
+    MainApi.initInstance()
   }, [])
 
   return (

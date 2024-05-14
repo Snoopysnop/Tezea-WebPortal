@@ -32,7 +32,6 @@ const LoginPage: React.FC<{setIsLoggedIn: any}> = ({setIsLoggedIn}) => {
         onSubmit={async (values) => {
           try {
             setApiError(undefined)
-            console.log("here")
             await KeycloakApi.getInstance().login(values.email, values.password)
             setIsLoggedIn(true)
             navigate("/worksiteList")
